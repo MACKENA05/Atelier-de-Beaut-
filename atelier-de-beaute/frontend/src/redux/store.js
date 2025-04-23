@@ -1,1 +1,10 @@
-// store.js - part of Atelier de Beauté e-commerce frontend
+import { configureStore } from '@reduxjs/toolkit';
+import cartReducer from './cartSlice';
+
+const store = configureStore({
+  reducer: {
+    cart: cartReducer,
+  },
+});
+
+export default store;

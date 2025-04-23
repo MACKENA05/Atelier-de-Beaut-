@@ -1,42 +1,53 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import CartItem from '../components/CartItem';
 import './Cart.css';
-
-const mockCartItems = [
-  {
-    id: 1,
-    name: 'Luxury Face Cream',
-    price: 49.99,
-    quantity: 2,
-    image: 'https://via.placeholder.com/100',
-  },
-  {
-    id: 2,
-    name: 'Silk Hair Serum',
-    price: 29.99,
-    quantity: 1,
-    image: 'https://via.placeholder.com/100',
-  },
-];
+import {
+  removeFromCart,
+  updateQuantity,
+  clearCart,
+  applyDiscount,
+} from '../redux/cartSlice';
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState(mockCartItems);
+  const cartItems = useSelector((state) => state.cart.items);
+  const discount = useSelector((state) => state.cart.discount);
+  const dispatch = useDispatch();
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountError, setDiscountError] = useState('');
 
-  const updateQuantity = (id, quantity) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
-      )
-    );
+  const handleRemove = (id) => {
+    dispatch(removeFromCart(id));
   };
 
-  const removeItem = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const handleQuantityChange = (id, quantity) => {
+    if (quantity < 1) return;
+    dispatch(updateQuantity({ id, quantity }));
   };
 
-  const totalPrice = cartItems.reduce(
+  const handleClearCart = () => {
+    dispatch(clearCart());
+  };
+
+  const handleApplyDiscount = () => {
+    // Simple example: accept code "SAVE10" for 10% discount
+    if (discountCode === 'SAVE10') {
+      dispatch(applyDiscount(0.1));
+      setDiscountError('');
+    } else {
+      setDiscountError('Invalid discount code');
+    }
+  };
+
+  const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+  const tax = subtotal * 0.07; // 7% tax example
+  const shipping = subtotal > 0 ? 5.99 : 0;
+  const discountAmount = subtotal * discount;
+  const total = subtotal + tax + shipping - discountAmount;
 
   return (
     <div className="container">
@@ -45,45 +56,45 @@ const Cart = () => {
         <p className="emptyMessage">Your cart is empty.</p>
       ) : (
         <>
-          <table className="table">
-            <thead>
-              <tr>
-                <th className="th">Product</th>
-                <th className="th">Price</th>
-                <th className="th">Quantity</th>
-                <th className="th">Total</th>
-                <th className="th">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cartItems.map(({ id, name, price, quantity, image }) => (
-                <tr key={id} className="tr">
-                  <td className="tdProduct">
-                    <img src={image} alt={name} className="image" />
-                    <span>{name}</span>
-                  </td>
-                  <td className="td">${price.toFixed(2)}</td>
-                  <td className="td">
-                    <input
-                      type="number"
-                      min="1"
-                      value={quantity}
-                      onChange={(e) => updateQuantity(id, parseInt(e.target.value))}
-                      className="quantityInput"
-                    />
-                  </td>
-                  <td className="td">${(price * quantity).toFixed(2)}</td>
-                  <td className="td">
-                    <button className="removeButton" onClick={() => removeItem(id)}>
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="totalContainer">
-            <strong>Total: ${totalPrice.toFixed(2)}</strong>
+          <div className="cart-items">
+            {cartItems.map((item) => (
+              <CartItem
+                key={item.id}
+                item={item}
+                onRemove={handleRemove}
+                onQuantityChange={handleQuantityChange}
+              />
+            ))}
+          </div>
+          <div className="cart-actions">
+            <button className="clear-cart-button" onClick={handleClearCart}>
+              Clear Cart
+            </button>
+          </div>
+          <div className="discount-section">
+            <input
+              type="text"
+              placeholder="Discount code"
+              value={discountCode}
+              onChange={(e) => setDiscountCode(e.target.value)}
+              className="discount-input"
+            />
+            <button onClick={handleApplyDiscount} className="apply-discount-button">
+              Apply
+            </button>
+            {discountError && <p className="discount-error">{discountError}</p>}
+          </div>
+          <div className="price-summary">
+            <p>Subtotal: ${subtotal.toFixed(2)}</p>
+            <p>Tax (7%): ${tax.toFixed(2)}</p>
+            <p>Shipping: ${shipping.toFixed(2)}</p>
+            {discount > 0 && <p>Discount: -${discountAmount.toFixed(2)}</p>}
+            <strong>Total: ${total.toFixed(2)}</strong>
+          </div>
+          <div className="checkout-section">
+            <Link to="/checkout" className="checkout-button">
+              Proceed to Checkout
+            </Link>
           </div>
         </>
       )}
