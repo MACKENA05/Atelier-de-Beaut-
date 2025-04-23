@@ -1,0 +1,31 @@
+.category-filter {
+  background-color: #f4e1d2; /* light beige */
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Georgia', serif;
+  color: #3a0ca3; /* deep purple */
+  max-width: 200px;
+  margin-bottom: 2rem;
+}
+
+.category-filter h4 {
+  margin-bottom: 1rem;
+}
+
+.category-filter ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-filter ul li {
+  padding: 0.5rem 0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.category-filter ul li:hover,
+.category-filter ul li.active {
+  color: #ffb703; /* gold */
+  font-weight: bold;
+}

@@ -1,0 +1,9 @@
+.footer {
+  background-color: #3a0ca3; /* deep purple */
+  color: #f4e1d2; /* light beige */
+  text-align: center;
+  padding: 1rem 0;
+  font-family: 'Georgia', serif;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+  margin-top: 2rem;
+}
