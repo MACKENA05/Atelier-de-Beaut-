@@ -1,0 +1,168 @@
+.container {
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff; /* white background */
+  color: #3a0ca3; /* deep purple text */
+  min-height: 100vh;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  letter-spacing: 0.1rem;
+}
+
+.tabContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.tabButton {
+  padding: 0.5rem 1rem;
+  margin: 0 0.25rem;
+  background-color: #f4e1d2; /* cream */
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #3a0ca3;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.activeTabButton {
+  padding: 0.5rem 1rem;
+  margin: 0 0.25rem;
+  background-color: #ffb703; /* gold */
+  color: #3a0ca3;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.logoutButton {
+  padding: 0.5rem 1rem;
+  background-color: #f44336;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.input {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: 1px solid #3a0ca3;
+  background-color: #f4e1d2; /* cream */
+  color: #3a0ca3;
+}
+
+.button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #ffb703; /* gold */
+  color: #3a0ca3;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card {
+  flex: 1;
+  background-color: #f4e1d2; /* cream */
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 12px #f4e1d2;
+  margin-right: 1rem;
+  color: #3a0ca3;
+}
+
+.cardTitle {
+  margin-bottom: 0.75rem;
+  color: #3a0ca3;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.walletBalance {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4caf50;
+}
+
+.actionButton {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #ffb703; /* gold */
+  color: #3a0ca3;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ordersTitle {
+  margin-bottom: 1rem;
+  color: #3a0ca3;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.th {
+  text-align: left;
+  border-bottom: 2px solid #3a0ca3;
+  padding: 0.75rem;
+  color: #3a0ca3;
+  font-weight: 700;
+}
+
+.tr {
+  border-bottom: 1px solid #3a0ca3;
+}
+
+.td {
+  padding: 0.75rem;
+  color: #3a0ca3;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+}

@@ -12,6 +12,19 @@ import UserAccount from './pages/UserAccount';
 import Login from './pages/Login';
 import AdminPanel from './pages/AdminPanel';
 import Contact from './pages/Contact';
+import LandingPage from './pages/LandingPage';
+import ProductManagerPage from './pages/ProductManagerPage';
+import DeliveryManagerPage from './pages/DeliveryManagerPage';
+import { Navigate } from 'react-router-dom';
+
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const role = sessionStorage.getItem('userRole');
+  if (allowedRoles.includes(role)) {
+    return children;
+  } else {
+    return <Navigate to="/login" replace />;
+  }
+};
 
 function App() {
   return (
@@ -27,7 +40,31 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/account" element={<UserAccount />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/landing" element={<LandingPage />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute allowedRoles={['administrator']}>
+                  <AdminPanel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/product-manager"
+              element={
+                <ProtectedRoute allowedRoles={['product_manager']}>
+                  <ProductManagerPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/delivery-manager"
+              element={
+                <ProtectedRoute allowedRoles={['delivery_manager']}>
+                  <DeliveryManagerPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
