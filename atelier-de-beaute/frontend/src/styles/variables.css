@@ -1,0 +1,15 @@
+:root {
+  /* Color palette */
+  --color-primary: #3a0ca3; /* deep purple */
+  --color-secondary: #ffb703; /* gold */
+  --color-background: #ffffff; /* white */
+  --color-cream: #f4e1d2; /* cream */
+  --color-text: var(--color-primary);
+
+  /* Fonts */
+  --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-secondary: 'Georgia', serif;
+
+  /* Border radius */
+  --border-radius: 12px;
+}

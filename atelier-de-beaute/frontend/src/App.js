@@ -16,6 +16,7 @@ import LandingPage from './pages/LandingPage';
 import ProductManagerPage from './pages/ProductManagerPage';
 import DeliveryManagerPage from './pages/DeliveryManagerPage';
 import { Navigate } from 'react-router-dom';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const role = sessionStorage.getItem('userRole');
@@ -41,6 +42,9 @@ function App() {
             <Route path="/account" element={<UserAccount />} />
             <Route path="/login" element={<Login />} />
             <Route path="/landing" element={<LandingPage />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            
+
             <Route
               path="/admin"
               element={

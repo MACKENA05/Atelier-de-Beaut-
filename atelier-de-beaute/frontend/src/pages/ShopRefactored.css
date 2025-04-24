@@ -1,16 +1,18 @@
+@import '../styles/variables.css';
+
 .container-with-sidebar {
   display: flex;
   gap: 2rem;
   padding: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #ffffff;
-  color: #3a0ca3;
+  font-family: var(--font-primary);
+  background-color: var(--color-background);
+  color: var(--color-primary);
   min-height: 100vh;
 }
 
 .sidebar {
   flex: 0 0 250px;
-  background-color: #f4e1d2;
+  background-color: var(--color-cream);
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(58, 12, 163, 0.2);
@@ -51,7 +53,7 @@
 }
 
 .card {
-  background-color: #f4e1d2;
+  background-color: var(--color-cream);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(58, 12, 163, 0.2);
   padding: 1rem;
@@ -84,8 +86,8 @@
   padding: 0.5rem 1rem;
   border-radius: 24px;
   border: none;
-  background-color: #ffb703;
-  color: #3a0ca3;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(58, 12, 163, 0.3);

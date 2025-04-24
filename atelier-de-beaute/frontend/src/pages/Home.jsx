@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const featuredProducts = [
   {
@@ -21,20 +21,38 @@ const featuredProducts = [
   },
 ];
 
-const testimonials = [
-  {
-    id: 1,
-    name: 'Alice Johnson',
-    comment: 'Amazing products and fantastic customer service!',
-  },
-  {
-    id: 2,
-    name: 'Bob Smith',
-    comment: 'I love the quality and fast shipping.',
-  },
-];
-
 const Home = () => {
+  const [testimonials, setTestimonials] = useState([]);
+
+  useEffect(() => {
+    // Simulate fetching reviews asynchronously
+    const fetchTestimonials = () => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([
+            {
+              id: 1,
+              name: 'Alice Johnson',
+              comment: 'Amazing products and fantastic customer service!',
+            },
+            {
+              id: 2,
+              name: 'Bob Smith',
+              comment: 'I love the quality and fast shipping.',
+            },
+            {
+              id: 3,
+              name: 'Catherine Lee',
+              comment: 'Highly recommend this store for beauty essentials.',
+            },
+          ]);
+        }, 1000);
+      });
+    };
+
+    fetchTestimonials().then((data) => setTestimonials(data));
+  }, []);
+
   return (
     <div style={styles.container}>
       <section style={styles.hero}>
@@ -62,12 +80,16 @@ const Home = () => {
       <section style={styles.testimonialsSection}>
         <h2 style={styles.sectionTitle}>What Our Customers Say</h2>
         <div style={styles.testimonialsGrid}>
-          {testimonials.map(({ id, name, comment }) => (
-            <div key={id} style={styles.testimonialCard}>
-              <p style={styles.testimonialComment}>"{comment}"</p>
-              <p style={styles.testimonialName}>- {name}</p>
-            </div>
-          ))}
+          {testimonials.length === 0 ? (
+            <p>Loading testimonials...</p>
+          ) : (
+            testimonials.map(({ id, name, comment }) => (
+              <div key={id} style={styles.testimonialCard}>
+                <p style={styles.testimonialComment}>"{comment}"</p>
+                <p style={styles.testimonialName}>- {name}</p>
+              </div>
+            ))
+          )}
         </div>
       </section>
     </div>
