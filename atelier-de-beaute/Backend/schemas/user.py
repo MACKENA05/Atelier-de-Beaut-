@@ -12,7 +12,7 @@ class RegisterSchema(Schema):
         validate.Regexp(r'^[a-zA-Z0-9_]+$', 
                       error="Only letters, numbers and underscores allowed")
     ])
-     email = fields.Str(required=True)
+    email = fields.Str(required=True)
     password = fields.Str(required=True, validate=[
         validate.Length(min=8),
         validate.Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$',
@@ -20,3 +20,12 @@ class RegisterSchema(Schema):
     ], load_only=True)
     first_name = fields.Str()
     last_name = fields.Str()
+    
+    @validates('email')
+    def validate_email(self, value):
+        try:
+            valid = validate_email(value).email.lower()
+            if User.query.filter_by(email=valid).first():
+                raise ValidationError("Email already registered")
+        except EmailNotValidError as e:
+            raise ValidationError(str(e))
