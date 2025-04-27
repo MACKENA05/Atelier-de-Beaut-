@@ -60,3 +60,11 @@ class AdminUserCreateSchema(Schema):
     def validate_username_unique(self, value):
         if User.query.filter_by(username=value).first():
             raise ValidationError("Username already taken")
+
+class UserResponseSchema(Schema):
+    id = fields.Int(dump_only=True)
+    username = fields.Str(dump_only=True)
+    email = fields.Email(dump_only=True)
+    first_name = fields.Str(dump_only=True)
+    last_name = fields.Str(dump_only=True)
+    role = fields.Str(dump_only=True)
