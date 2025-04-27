@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_caching import Cache
 from utils.validators import handle_404, handle_500
+from config import Config 
 
 
 db = SQLAlchemy()
@@ -28,7 +29,8 @@ def create_app(config_class='config.Config'):
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
    
-    
+    with app.app_context():
+        db.create_all()
 
     app.register_error_handler(404, handle_404)
     app.register_error_handler(500, handle_500)

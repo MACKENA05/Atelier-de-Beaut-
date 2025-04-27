@@ -15,4 +15,3 @@ def handle_500(error):
         "message": "Something went wrong on the server."
     }
     return jsonify(response), 500
-

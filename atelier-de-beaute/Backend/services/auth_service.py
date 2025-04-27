@@ -6,7 +6,7 @@ from app import db
 from email_validator import validate_email, EmailNotValidError
 from schemas.user import LoginSchema, RegisterSchema, UserResponseSchema
 
-# login users
+
 def login_user(data: dict):
     """Authenticate user with enhanced validation"""
     schema = LoginSchema()
@@ -38,7 +38,6 @@ def login_user(data: dict):
         "user": UserResponseSchema().dump(user)
     }), 200
 
-# registering new customers
 def register_user(data: dict):
     """Register user with comprehensive validation"""
     schema = RegisterSchema()

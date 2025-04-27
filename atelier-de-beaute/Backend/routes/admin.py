@@ -45,3 +45,45 @@ def admin_login_route():
 
 
 
+
+# # Product Management Endpoints
+# @admin_bp.route('/products', methods=['POST'])
+# @manager_required  # Both admin and manager can access
+# def create_product():
+#     """Create new product (Admin or Manager)"""
+#     data = request.get_json()
+#     # ... product creation logic ...
+#     return jsonify({"message": "Product created"}), 201
+
+# @admin_bp.route('/products', methods=['POST'])
+# @manager_required
+# def create_product():
+#     """Create product (Admin/Manager)"""
+#     try:
+#         data = product_schema.load(request.get_json())
+#     except ValidationError as err:
+#         return jsonify({"error": err.messages}), 400
+    
+#     new_product = Product(**data)
+#     db.session.add(new_product)
+#     db.session.commit()
+#     return jsonify(product_schema.dump(new_product)), 201
+
+# # Order Management Endpoints
+# @admin_bp.route('/orders', methods=['GET'])
+# @sales_rep_required  # Admin, manager, and sales-rep can access
+# def get_all_orders():
+#     """Get all orders (Admin/Manager/Sales Rep)"""
+#     # ... order retrieval logic ...
+#     return jsonify({"orders": []}), 200
+
+# # System Settings Endpoint
+# @admin_bp.route('/settings', methods=['PUT'])
+# @admin_required  # Admin only
+# def update_system_settings():
+#     """Update system settings (Admin only)"""
+#     data = request.get_json()
+#     # ... settings update logic ...
+#     return jsonify({"message": "Settings updated"}), 200
+
+
