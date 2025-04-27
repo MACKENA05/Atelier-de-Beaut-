@@ -50,3 +50,13 @@ class AdminUserCreateSchema(Schema):
     last_name = fields.Str()
     is_active = fields.Boolean(load_default=True)
     password = fields.Str(validate=validate.Length(min=8))   
+
+    @validates('email')
+    def validate_email_unique(self, value):
+        if User.query.filter_by(email=value.lower()).first():
+            raise ValidationError("Email already registered")
+
+    @validates('username')
+    def validate_username_unique(self, value):
+        if User.query.filter_by(username=value).first():
+            raise ValidationError("Username already taken")
