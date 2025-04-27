@@ -28,3 +28,9 @@ def role_required(required_role: str):
         return wrapper
     return decorator
 
+# Specific role decorators
+admin_required = role_required('admin')
+manager_required = role_required('manager')
+sales_rep_required = role_required('sales-representative')
+customer_required = role_required('customer')
+
