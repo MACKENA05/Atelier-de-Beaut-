@@ -29,3 +29,12 @@ class RegisterSchema(Schema):
                 raise ValidationError("Email already registered")
         except EmailNotValidError as e:
             raise ValidationError(str(e))
+        
+        @validates('username')
+        def validate_username(self, value):
+         if User.query.filter_by(username=value).first():
+            raise ValidationError("Username already taken")
+        
+class AdminLoginSchema(Schema):
+    username = fields.Str(required=True)
+    password = fields.Str(required=True, load_only=True)
