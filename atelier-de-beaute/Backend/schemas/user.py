@@ -38,3 +38,15 @@ class RegisterSchema(Schema):
 class AdminLoginSchema(Schema):
     username = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
+
+class AdminUserCreateSchema(Schema):
+    username = fields.Str(required=True, validate=[
+        validate.Length(min=3, max=80),
+        validate.Regexp(r'^[a-zA-Z0-9_]+$')
+    ])
+    email = fields.Email(required=True)
+    role = fields.Str(required=True, validate=lambda x: UserRole.validate(x))
+    first_name = fields.Str()
+    last_name = fields.Str()
+    is_active = fields.Boolean(load_default=True)
+    password = fields.Str(validate=validate.Length(min=8))   
