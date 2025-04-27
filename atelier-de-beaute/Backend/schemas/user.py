@@ -12,3 +12,11 @@ class RegisterSchema(Schema):
         validate.Regexp(r'^[a-zA-Z0-9_]+$', 
                       error="Only letters, numbers and underscores allowed")
     ])
+     email = fields.Str(required=True)
+    password = fields.Str(required=True, validate=[
+        validate.Length(min=8),
+        validate.Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$',
+                      error="Must contain uppercase, lowercase and numbers")
+    ], load_only=True)
+    first_name = fields.Str()
+    last_name = fields.Str()
