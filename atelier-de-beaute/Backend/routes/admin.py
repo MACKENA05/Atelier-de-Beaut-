@@ -1,19 +1,13 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,make_response
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import User
-from services.adminuser_service import create_user_as_admin
+from services.adminuser_service import AdminUserService
 from services.admin_service import admin_login
-from utils.decorators import admin_required,manager_required,sales_rep_required
+from schemas.user import UserUpdateSchema, UserDeleteSchema
+from utils.decorators import admin_required
 
 
 admin_bp = Blueprint('admin', __name__)
-
-@admin_bp.route('/users', methods=['GET'])
-@admin_required
-def get_all_users():
-    """Get all users (Admin only)"""
-    users = User.query.all()
-    return jsonify([user.to_dict() for user in users]), 200
 
 @admin_bp.route('/users', methods=['POST'])
 @jwt_required()
@@ -21,11 +15,11 @@ def get_all_users():
 def admin_create_user():
     creator = User.query.get(get_jwt_identity()['id'])
     data = request.get_json()
-    result, status_code = create_user_as_admin(creator, data)
-    return jsonify(result), status_code
+    result, status_code = AdminUserService.create_user_as_admin(creator, data)
+    return make_response(result), status_code
 
 
-@admin_bp.route('/admin/dashboard')
+@admin_bp.route('/dashboard')
 @jwt_required()
 @admin_required
 def admin_dashboard():
@@ -43,47 +37,56 @@ def admin_login_route():
         return jsonify({"error": "JSON content type required"}), 415
     return admin_login()
 
+@admin_bp.route('/users', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_all_users():
+    try:
+        current_user = User.query.get(get_jwt_identity()['id'])
+        if not current_user:
+            return jsonify({"error": "User not found"}), 404
+            
+        result, status_code = AdminUserService.get_all_users(current_user, request.args)
+        return jsonify(result), status_code
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
+@admin_bp.route('/users/<int:user_id>', methods=['PUT'])
+@jwt_required()
+@admin_required
+def update_user(user_id):
+    # Get current user object
+    current_user = User.query.get(get_jwt_identity()['id'])
+    if not current_user:
+        return jsonify({"error": "Current user not found"}), 404
 
-# # Product Management Endpoints
-# @admin_bp.route('/products', methods=['POST'])
-# @manager_required  # Both admin and manager can access
-# def create_product():
-#     """Create new product (Admin or Manager)"""
-#     data = request.get_json()
-#     # ... product creation logic ...
-#     return jsonify({"message": "Product created"}), 201
+    # Validate request
+    if not request.is_json:
+        return jsonify({"error": "Request must be JSON"}), 400
 
-# @admin_bp.route('/products', methods=['POST'])
-# @manager_required
-# def create_product():
-#     """Create product (Admin/Manager)"""
-#     try:
-#         data = product_schema.load(request.get_json())
-#     except ValidationError as err:
-#         return jsonify({"error": err.messages}), 400
+    # Call service
+    result, status_code = AdminUserService.update_user(
+        current_user=current_user,
+        user_id=user_id,
+        data=request.get_json()
+    )
+    return jsonify(result), status_code
+
+@admin_bp.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+@admin_required
+def delete_user(user_id):
+    current_user = User.query.get(get_jwt_identity()['id'])
+    if not current_user:
+        return jsonify({"error": "User not found"}), 404
     
-#     new_product = Product(**data)
-#     db.session.add(new_product)
-#     db.session.commit()
-#     return jsonify(product_schema.dump(new_product)), 201
+    if not request.is_json:
+        return jsonify({"error": "Missing JSON in request"}), 400
+        
+    result, status_code = AdminUserService.delete_user(current_user, user_id, request.get_json())
+    return jsonify(result), status_code
 
-# # Order Management Endpoints
-# @admin_bp.route('/orders', methods=['GET'])
-# @sales_rep_required  # Admin, manager, and sales-rep can access
-# def get_all_orders():
-#     """Get all orders (Admin/Manager/Sales Rep)"""
-#     # ... order retrieval logic ...
-#     return jsonify({"orders": []}), 200
 
-# # System Settings Endpoint
-# @admin_bp.route('/settings', methods=['PUT'])
-# @admin_required  # Admin only
-# def update_system_settings():
-#     """Update system settings (Admin only)"""
-#     data = request.get_json()
-#     # ... settings update logic ...
-#     return jsonify({"message": "Settings updated"}), 200
 
 
