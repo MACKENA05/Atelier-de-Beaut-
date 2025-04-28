@@ -28,6 +28,10 @@ class RegisterSchema(Schema):
         validate.Regexp(r'^[a-zA-Z\- ]+$',
                        error="Only letters, spaces and hyphens allowed")
     ])
+    phone = fields.Str(validate=[
+        validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
+        validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
+    ])
     
     @validates('email')
     def validate_email(self, value):
@@ -67,6 +71,12 @@ class AdminUserCreateSchema(Schema):
         validate.Length(max=50),
         validate.Regexp(r'^[a-zA-Z\- ]+$')
     ])
+
+    phone = fields.Str(validate=[
+        validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
+        validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
+    ])
+
     is_active = fields.Boolean(load_default=True)
     password = fields.Str(validate=validate.Length(min=8))
 
@@ -84,6 +94,7 @@ class AdminUserCreateSchema(Schema):
     def validate_username_unique(self, value):
         if User.query.filter_by(username=value).first():
             raise ValidationError("Username already taken")
+        
 
 class UserResponseSchema(Schema):
     id = fields.Int(dump_only=True)
@@ -91,4 +102,5 @@ class UserResponseSchema(Schema):
     email = fields.Email(dump_only=True)
     first_name = fields.Str(dump_only=True)
     last_name = fields.Str(dump_only=True)
+    phone = fields.Str(dump_only=True)
     role = fields.Str(dump_only=True)

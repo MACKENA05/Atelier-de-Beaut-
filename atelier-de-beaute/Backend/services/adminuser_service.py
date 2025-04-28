@@ -31,6 +31,12 @@ def create_user_as_admin(creator: User, user_data: dict) -> Tuple[Dict[str, Any]
         requested_role = UserRole.validate(user_data['role'])
         if requested_role == UserRole.ADMIN and creator.role != UserRole.ADMIN:
             return {"error": "Only super admins can create admin users"}, 403
+        
+        # Validate phone number if provided
+        phone = user_data.get('phone')
+        if phone:
+            if not phone.isdigit() or len(phone) != 10:
+                return {"error": "Phone number must be 10 digits"}, 400
 
         # Create user
         new_user = User(
@@ -38,9 +44,11 @@ def create_user_as_admin(creator: User, user_data: dict) -> Tuple[Dict[str, Any]
             email=user_data['email'].lower(),
             first_name=user_data.get('first_name', ''),
             last_name=user_data.get('last_name', ''),
+            phone=phone,
             role=requested_role,
             is_active=user_data.get('is_active', True)
         )
+
 
         # Handle password generation
         password = user_data.get('password') or generate_temp_password()
@@ -56,6 +64,7 @@ def create_user_as_admin(creator: User, user_data: dict) -> Tuple[Dict[str, Any]
                 "id": new_user.id,
                 "username": new_user.username,
                 "email": new_user.email,
+                "phone": new_user.phone,
                 "role": new_user.role.value,
                 "is_active": new_user.is_active
             }

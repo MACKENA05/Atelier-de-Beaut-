@@ -5,7 +5,10 @@ from models.user import User, UserRole
 from app import db
 from email_validator import validate_email, EmailNotValidError
 from schemas.user import LoginSchema, RegisterSchema, UserResponseSchema
+import logging
 
+# Set up logging fo debugging
+logger = logging.getLogger(__name__)
 
 def login_user(data: dict):
     """Authenticate user with enhanced validation"""
@@ -50,17 +53,30 @@ def register_user(data: dict):
         new_user = User(
             username=data['username'],
             email=valid_email,
-            first_name=data.get('first_name', ''),
-            last_name=data.get('last_name', ''),
+            first_name=data.get('first_name', '').strip(),
+            last_name=data.get('last_name', '').strip(),
+            phone=data.get('phone', '').strip() or None,  # Store as NULL if empty
             role=UserRole.CUSTOMER
         )
+
         new_user.set_password(data['password'])
         
         db.session.add(new_user)
         db.session.commit()
         
+        logger.info(f"New user registered: {new_user.username}")
+        
+        # Create access token for immediate login
+        access_token = create_access_token(identity={
+            "id": new_user.id,
+            "username": new_user.username,
+            "role": new_user.role.value,
+            "fresh": True
+        })
+        
         return jsonify({
             "message": "User created successfully",
+            "access_token": access_token,
             "user": UserResponseSchema().dump(new_user)
         }), 201
         
