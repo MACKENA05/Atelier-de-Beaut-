@@ -47,11 +47,6 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     
 
-    # Relationships
-    # addresses = db.relationship('Address', backref='user', lazy=True, cascade='all, delete-orphan')
-    # orders = db.relationship('Order', backref='user', lazy='dynamic')
-    # reviews = db.relationship('Review', backref='user', lazy=True)
-    # cart_items = db.relationship('CartItem', backref='user', lazy=True)
 
     __table_args__ = (
         Index('ix_user_email_lower', func.lower(email)),  # Case-insensitive email index
@@ -60,7 +55,7 @@ class User(db.Model):
     @validates('email')
     def validate_email(self, key, email):
         try:
-            # Validate and normalize the email address
+            # Validate the email address
             valid = validate_email(email)
             return valid.email.lower()  # Normalize email
         except EmailNotValidError as e:
