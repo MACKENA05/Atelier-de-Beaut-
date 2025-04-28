@@ -4,10 +4,10 @@ from flask import jsonify
 
 # Role hierarchy mapping
 ROLE_HIERARCHY = {
-    'admin': ['admin'],
-    'manager': ['admin', 'manager'],
-    'sales-representative': ['admin', 'manager', 'sales-representative'],
-    'customer': ['admin', 'manager', 'sales-representative', 'customer']
+    'admin': ['admin', 'manager', 'sales-representative', 'customer'],
+    'manager': ['manager', 'sales-representative', 'customer'],
+    'sales-representative': ['sales-representative', 'customer'],
+    'customer': ['customer']
 }
 
 def role_required(required_role: str):
