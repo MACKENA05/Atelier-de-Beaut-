@@ -13,12 +13,21 @@ admin_bp = Blueprint('admin', __name__)
 @jwt_required()
 @admin_required
 def admin_create_user():
-    creator = User.query.get(get_jwt_identity()['id'])
-    data = request.get_json()
-    result, status_code = AdminUserService.create_user_as_admin(creator, data)
-    return make_response(result), status_code
-
-
+    def admin_create_user():
+    # Get identity and ensure proper type handling
+        identity = get_jwt_identity()
+        if not identity or 'id' not in identity:
+            return jsonify({"error": "Invalid token format"}), 401
+        
+        # Convert ID to string if needed
+        creator = User.query.get(str(identity['id']))
+        if not creator:
+            return jsonify({"error": "User not found"}), 404
+            
+        data = request.get_json()
+        result, status_code = AdminUserService.create_user_as_admin(creator, data)
+        return make_response(result), status_code
+    
 @admin_bp.route('/dashboard')
 @jwt_required()
 @admin_required

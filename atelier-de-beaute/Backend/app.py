@@ -5,12 +5,14 @@ from flask_jwt_extended import JWTManager
 from flask_caching import Cache
 from utils.validators import handle_404, handle_500
 from config import Config 
+from flask_cors import CORS
 
 
 db = SQLAlchemy()
 migrate = Migrate()
 jwt = JWTManager()
 cache = Cache()
+cors = CORS()
 
 def create_app(config_class='config.Config'):
     app = Flask(__name__)
@@ -20,20 +22,22 @@ def create_app(config_class='config.Config'):
     migrate.init_app(app, db)
     jwt.init_app(app)
     cache.init_app(app)
+    cors.init_app(app)
 
 
     from routes.auth import auth_bp
     from routes.admin import admin_bp
 
 
-    app.register_blueprint(auth_bp, url_prefix='/api/auth')
-    app.register_blueprint(admin_bp, url_prefix='/api/admin')
-   
-    with app.app_context():
-        db.create_all()
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+
 
     app.register_error_handler(404, handle_404)
     app.register_error_handler(500, handle_500)
+
+    with app.app_context():
+        db.create_all()
 
     return app
 

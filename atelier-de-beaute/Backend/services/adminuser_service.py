@@ -192,7 +192,7 @@ class AdminUserService:
                 current_user.role != UserRole.SUPER_ADMIN):
                 return {"error": "Cannot delete admin accounts"}, 403
 
-            # soft delete
+            # Instead of db.session.delete(user)
             user.is_active = False
             user.deleted_at = datetime.utcnow()
             db.session.commit()
