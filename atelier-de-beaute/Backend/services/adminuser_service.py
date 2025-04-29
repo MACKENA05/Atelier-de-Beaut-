@@ -5,6 +5,7 @@ from app import db
 from typing import Tuple, Dict, Any
 from flask import request, jsonify, current_app
 from flask_jwt_extended import get_jwt_identity
+import jwt
 from schemas.user import AdminUserCreateSchema, AdminUserUpdateSchema, UserResponseSchema
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
@@ -20,20 +21,27 @@ def generate_temp_password(length: int = 12) -> str:
 
 def create_user_as_admin(creator: User, user_data: dict) -> Tuple[Dict[str, Any], int]:
     """Admin creates user with role management and temp passwords."""
-    schema = AdminUserCreateSchema()
-    errors = schema.validate(user_data)
-    if errors:
-        return {"error": "Validation failed", "details": errors}, 400
-
     try:
+        if creator is None:
+            logger.warning(f"Invalid user creation attempt from {request.remote_addr}: No user found for JWT identity")
+            return {"error": "Invalid or missing authentication token", "details": {}, "status": 401}, 401
+
         if creator.role != UserRole.ADMIN:
-            return {"error": "Admin privileges required"}, 403
+            logger.warning(f"Unauthorized user creation attempt by {creator.username} from {request.remote_addr}")
+            return {"error": "Only admins can add users", "details": {}, "status": 403}, 403
+
+        schema = AdminUserCreateSchema()
+        errors = schema.validate(user_data)
+        if errors:
+            logger.warning(f"Validation failed for user creation by {creator.username} from {request.remote_addr}: {errors}")
+            return {"error": "Validation failed", "details": errors, "status": 400}, 400
 
         requested_role = UserRole.validate(user_data['role'])
         
         phone = user_data.get('phone')
         if phone and (not phone.isdigit() or len(phone) != 10):
-            return {"error": "Phone number must be 10 digits"}, 400
+            logger.warning(f"Invalid phone number in user creation by {creator.username} from {request.remote_addr}")
+            return {"error": "Phone number must be 10 digits", "details": {}, "status": 400}, 400
 
         new_user = User(
             username=user_data['username'],
@@ -66,31 +74,34 @@ def create_user_as_admin(creator: User, user_data: dict) -> Tuple[Dict[str, Any]
         if 'password' not in user_data:
             response['temporary_password'] = password
 
-        logger.info(f"User {creator.username} created user {new_user.username}")
+        logger.info(f"User {creator.username} created user {new_user.username} from {request.remote_addr}")
         return response, 201
 
+    except jwt.InvalidTokenError:
+        logger.warning(f"Invalid token in user creation attempt from {request.remote_addr}")
+        return {"error": "Invalid or missing authentication token", "details": {}, "status": 401}, 401
     except ValueError as e:
-        return {"error": str(e)}, 400
+        return {"error": str(e), "details": {}, "status": 400}, 400
     except SQLAlchemyError as e:
         db.session.rollback()
-        logger.error(f"Create user error: {str(e)}", exc_info=True)
-        return {"error": "Database error", "details": str(e)}, 500
+        logger.error(f"Database error in user creation by {creator.username} from {request.remote_addr}: {str(e)}", exc_info=True)
+        return {"error": "Database error", "details": str(e), "status": 500}, 500
     except Exception as e:
         db.session.rollback()
-        logger.error(f"Create user error: {str(e)}", exc_info=True)
-        return {"error": f"Server error: {str(e)}"}, 500
+        logger.error(f"Server error in user creation by {creator.username} from {request.remote_addr}: {str(e)}", exc_info=True)
+        return {"error": "Server error", "details": str(e), "status": 500}, 500
 
-@staticmethod
 def get_all_users(current_user: User, query_args: dict) -> Tuple[Dict[str, Any], int]:
-    """Get paginated list of all users"""
+    """Get paginated list of all active users (excluding soft-deleted)"""
     try:
         if current_user.role != UserRole.ADMIN:
-            return {"error": "Admin privileges required"}, 403
+            logger.warning(f"Unauthorized user list access attempt by {current_user.username} from {request.remote_addr}")
+            return {"error": "Only admins can view user lists", "details": {}, "status": 403}, 403
 
         page = query_args.get('page', 1, type=int)
         per_page = min(query_args.get('per_page', 10, type=int), 100)
 
-        users = User.query.order_by(User.created_at.desc()).paginate(
+        users = User.query.filter(User.deleted_at == None).order_by(User.created_at.desc()).paginate(
             page=page,
             per_page=per_page,
             error_out=False
@@ -106,32 +117,57 @@ def get_all_users(current_user: User, query_args: dict) -> Tuple[Dict[str, Any],
             }
         }
 
-        logger.debug(f"User {current_user.username} retrieved {users.total} users for page {page}")
+        logger.debug(f"User {current_user.username} retrieved {users.total} users for page {page} from {request.remote_addr}")
         return response, 200
 
     except Exception as e:
-        logger.error(f"Error in get_all_users: {str(e)}", exc_info=True)
-        return {"error": "Server error", "details": str(e)}, 500
+        logger.error(f"Error in get_all_users by {current_user.username} from {request.remote_addr}: {str(e)}", exc_info=True)
+        return {"error": "Server error", "details": str(e), "status": 500}, 500
 
-@staticmethod
+def get_user(current_user: User, user_id: int) -> Tuple[Dict[str, Any], int]:
+    """Get a single active user by ID (excluding soft-deleted)"""
+    try:
+        if current_user.role != UserRole.ADMIN:
+            logger.warning(f"Unauthorized user access attempt by {current_user.username} for user ID {user_id} from {request.remote_addr}")
+            return {"error": "Only admins can view user details", "details": {}, "status": 403}, 403
+
+        user = User.query.filter(User.id == user_id, User.deleted_at == None).first()
+        if not user:
+            logger.warning(f"User ID {user_id} not found or deleted, requested by {current_user.username} from {request.remote_addr}")
+            return {"error": "User not found or deleted", "details": {}, "status": 404}, 404
+
+        logger.info(f"User {current_user.username} retrieved user ID {user_id} from {request.remote_addr}")
+        return {
+            "user": UserResponseSchema().dump(user)
+        }, 200
+
+    except Exception as e:
+        logger.error(f"Error retrieving user ID {user_id} by {current_user.username} from {request.remote_addr}: {str(e)}", exc_info=True)
+        return {"error": "Server error", "details": str(e), "status": 500}, 500
+
 def update_user(current_user: User, user_id: int, data: dict) -> Tuple[Dict[str, Any], int]:
     """Update user information"""
     try:
         user = User.query.get_or_404(user_id)
 
         if current_user.role != UserRole.ADMIN:
-            return {"error": "Admin privileges required"}, 403
+            logger.warning(f"Unauthorized user update attempt by {current_user.username} from {request.remote_addr}")
+            return {"error": "Only admins can update users", "details": {}, "status": 403}, 403
 
-        # Check Marshmallow version for context support
-        if int(marshmallow.__version__.split('.')[0]) < 3:
-            return {"error": "Marshmallow version 3.0.0 or higher required for context support"}, 500
+        try:
+            version = getattr(marshmallow, '__version__', '0.0.0')
+            major_version = int(version.split('.')[0]) if version != '0.0.0' else 0
+            if major_version < 3:
+                return {"error": "Marshmallow version 3.0.0 or higher required for context support", "details": {}, "status": 500}, 500
+        except Exception as e:
+            logger.error(f"Failed to check Marshmallow version from {request.remote_addr}: {str(e)}")
+            return {"error": "Marshmallow version check failed", "details": str(e), "status": 500}, 500
 
-        # Validate input with context
         schema = AdminUserUpdateSchema()
-        schema.context = {'user_id': user_id}  # Set context directly
+        schema.context = {'user_id': user_id}
         errors = schema.validate(data)
         if errors:
-            return {"error": "Validation failed", "details": errors}, 400
+            return {"error": "Validation failed", "details": errors, "status": 400}, 400
 
         for field in ['username', 'email', 'is_active', 'first_name', 'last_name', 'phone']:
             if field in data:
@@ -143,7 +179,7 @@ def update_user(current_user: User, user_id: int, data: dict) -> Tuple[Dict[str,
 
         db.session.commit()
 
-        logger.info(f"User {current_user.username} updated user ID {user_id}")
+        logger.info(f"User {current_user.username} updated user ID {user_id} from {request.remote_addr}")
         return {
             "message": "User updated successfully",
             "user": UserResponseSchema().dump(user)
@@ -151,37 +187,44 @@ def update_user(current_user: User, user_id: int, data: dict) -> Tuple[Dict[str,
 
     except ValueError as e:
         db.session.rollback()
-        logger.error(f"Update user error: {str(e)}", exc_info=True)
-        return {"error": "Invalid data", "details": str(e)}, 400
+        logger.error(f"Invalid data in user update by {current_user.username} from {request.remote_addr}: {str(e)}")
+        return {"error": "Invalid data", "details": str(e), "status": 400}, 400
     except SQLAlchemyError as e:
         db.session.rollback()
-        logger.error(f"Update user error: {str(e)}", exc_info=True)
-        return {"error": "Database error", "details": str(e)}, 500
+        logger.error(f"Database error in user update by {current_user.username} from {request.remote_addr}: {str(e)}", exc_info=True)
+        return {"error": "Database error", "details": str(e), "status": 500}, 500
     except Exception as e:
         db.session.rollback()
-        logger.error(f"Update user error: {str(e)}", exc_info=True)
-        return {"error": "Server error", "details": str(e)}, 500
+        logger.error(f"Server error in user update by {current_user.username} from {request.remote_addr}: {str(e)}", exc_info=True)
+        return {"error": "Server error", "details": str(e), "status": 500}, 500
 
-@staticmethod
 def delete_user(current_user: User, user_id: int, data: dict = None) -> Tuple[Dict[str, Any], int]:
-    """Delete a user account"""
+    """Soft-delete a user account and return updated user details"""
     try:
         if current_user.role != UserRole.ADMIN:
-            return {"error": "Admin privileges required"}, 403
+            logger.warning(f"Unauthorized user deletion attempt by {current_user.username} from {request.remote_addr}")
+            return {"error": "Only admins can delete users", "details": {}, "status": 403}, 403
 
-        user = User.query.get_or_404(user_id)
+        user = User.query.filter(User.id == user_id, User.deleted_at == None).first()
+        if not user:
+            logger.warning(f"User ID {user_id} not found or already deleted, deletion attempted by {current_user.username} from {request.remote_addr}")
+            return {"error": "User not found or already deleted", "details": {}, "status": 404}, 404
 
         if user.id == current_user.id:
-            return {"error": "Cannot delete your own account"}, 403
+            logger.warning(f"Self-deletion attempt by {current_user.username} from {request.remote_addr}")
+            return {"error": "Cannot delete your own account", "details": {}, "status": 403}, 403
 
         user.is_active = False
         user.deleted_at = datetime.utcnow()
         db.session.commit()
 
-        logger.info(f"User {current_user.username} deleted user ID {user_id}")
-        return {"message": "User deleted successfully"}, 200
+        logger.info(f"User {current_user.username} deleted user ID {user_id} from {request.remote_addr}")
+        return {
+            "message": "User deleted successfully",
+            "user": UserResponseSchema().dump(user)
+        }, 200
 
     except Exception as e:
         db.session.rollback()
-        logger.error(f"Delete user error: {str(e)}", exc_info=True)
-        return {"error": "Server error", "details": str(e)}, 500
+        logger.error(f"Error in user deletion by {current_user.username} from {request.remote_addr}: {str(e)}", exc_info=True)
+        return {"error": "Server error", "details": str(e), "status": 500}, 500
