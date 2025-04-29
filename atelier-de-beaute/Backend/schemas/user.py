@@ -34,28 +34,19 @@ class RegisterSchema(Schema):
     ])
     
     @validates('email')
-    def validate_email(self, value):
-        """Validate email format and uniqueness"""
+    def validate_email(self, value, **kwargs):
         try:
-            # Validate email format
             validate_email(value)
         except EmailNotValidError as e:
             raise ValidationError(str(e))
-        
-        # Check for uniqueness
         if User.query.filter_by(email=value.lower()).first():
             raise ValidationError("Email already registered")
 
     @validates('username')
-    def validate_username(self, value):
-        """Validate username uniqueness"""
+    def validate_username(self, value, **kwargs):
         if User.query.filter_by(username=value).first():
             raise ValidationError("Username already taken")
 
-class AdminLoginSchema(Schema):
-    username = fields.Str(required=True)
-    password = fields.Str(required=True, load_only=True)
-    
 class AdminUserCreateSchema(Schema):
     username = fields.Str(required=True, validate=[
         validate.Length(min=3, max=80),
@@ -71,30 +62,63 @@ class AdminUserCreateSchema(Schema):
         validate.Length(max=50),
         validate.Regexp(r'^[a-zA-Z\- ]+$')
     ])
+    phone = fields.Str(validate=[
+        validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
+        validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
+    ])
+    is_active = fields.Boolean(load_default=True)
+    password = fields.Str(validate=validate.Length(min=8))
 
+    @validates('email')
+    def validate_email_unique(self, value, **kwargs):
+        try:
+            validate_email(value)
+        except EmailNotValidError as e:
+            raise ValidationError(str(e))
+        if User.query.filter_by(email=value.lower()).first():
+            raise ValidationError("Email already registered")
+
+    @validates('username')
+    def validate_username_unique(self, value, **kwargs):
+        if User.query.filter_by(username=value).first():
+            raise ValidationError("Username already taken")
+
+class AdminUserUpdateSchema(Schema):
+    username = fields.Str(validate=[
+        validate.Length(min=3, max=80),
+        validate.Regexp(r'^[a-zA-Z0-9_]+$')
+    ])
+    email = fields.Email()
+    role = fields.Str(validate=lambda x: UserRole.validate(x))
+    is_active = fields.Boolean()
+    first_name = fields.Str(validate=[
+        validate.Length(max=50),
+        validate.Regexp(r'^[a-zA-Z\- ]+$')
+    ])
+    last_name = fields.Str(validate=[
+        validate.Length(max=50),
+        validate.Regexp(r'^[a-zA-Z\- ]+$')
+    ])
     phone = fields.Str(validate=[
         validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
         validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
     ])
 
-    is_active = fields.Boolean(load_default=True)
-    password = fields.Str(validate=validate.Length(min=8))
-
     @validates('email')
-    def validate_email_unique(self, value):
+    def validate_email_unique(self, value, **kwargs):
         try:
             validate_email(value)
         except EmailNotValidError as e:
             raise ValidationError(str(e))
-            
-        if User.query.filter_by(email=value.lower()).first():
+        existing_user = User.query.filter_by(email=value.lower()).first()
+        if existing_user and existing_user.id != self.context.get('user_id'):
             raise ValidationError("Email already registered")
 
     @validates('username')
-    def validate_username_unique(self, value):
-        if User.query.filter_by(username=value).first():
+    def validate_username_unique(self, value, **kwargs):
+        existing_user = User.query.filter_by(username=value).first()
+        if existing_user and existing_user.id != self.context.get('user_id'):
             raise ValidationError("Username already taken")
-        
 
 class UserResponseSchema(Schema):
     id = fields.Int(dump_only=True)

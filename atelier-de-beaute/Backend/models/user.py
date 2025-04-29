@@ -45,6 +45,7 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     last_login = db.Column(db.DateTime)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
+    deleted_at = db.Column(db.DateTime)
     
 
 

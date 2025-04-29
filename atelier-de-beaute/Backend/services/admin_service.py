@@ -1,7 +1,7 @@
 from flask import request, jsonify, current_app
 from flask_jwt_extended import create_access_token
 from models.user import User, UserRole
-from datetime import datetime, timezone,timedelta
+from datetime import datetime, timezone, timedelta
 from app import db
 from schemas.user import AdminLoginSchema
 
@@ -15,17 +15,14 @@ def admin_login():
     data = request.get_json()
     
     try:
-        # Find admin user by username or email
         user = User.query.filter(
             (User.username == data['username']) | 
             (User.email == data['username'].lower())
         ).first()
 
-        # Authentication checks
         if not user or not user.check_password(data['password']):
             return jsonify({"error": "Invalid credentials"}), 401
 
-        # Role verification
         if user.role != UserRole.ADMIN:
             return jsonify({
                 "error": "Admin privileges required",
@@ -38,18 +35,21 @@ def admin_login():
                 "hint": "Contact super admin for account reactivation"
             }), 403
 
-        # Update last login timestamp
         user.update_last_login()
 
-        # Generate JWT token with admin claims
+        # Log the identity and claims
+        identity = str(user.id)
+        claims = {
+            "username": user.username,
+            "role": user.role.value,
+            "is_admin": True
+        }
+        current_app.logger.debug(f"Generating token with identity: {identity}, claims: {claims}")
+
         access_token = create_access_token(
-            identity={
-                "id": user.id,
-                "username": user.username,
-                "role": user.role.value,
-                "is_admin": True
-            },
-            expires_delta=timedelta(hours=1)  # Shorter expiry for admin tokens
+            identity=identity,
+            additional_claims=claims,
+            expires_delta=timedelta(hours=1)
         )
 
         return jsonify({
@@ -65,7 +65,6 @@ def admin_login():
         }), 200
 
     except Exception as e:
-        # Log the error for security monitoring
         current_app.logger.error(f"Admin login error: {str(e)}")
         return jsonify({
             "error": "Authentication service unavailable",
