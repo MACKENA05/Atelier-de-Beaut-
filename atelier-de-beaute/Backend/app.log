@@ -2,3 +2,4 @@
 2025-04-29 21:12:28,121 - app - WARNING - Invalid token from 127.0.0.1: Signature verification failed
 2025-04-29 21:12:42,037 - app - WARNING - Invalid token from 127.0.0.1: Signature verification failed
 2025-04-29 23:28:06,489 - app - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-04-29 23:35:49,096 - app - WARNING - Missing token from 127.0.0.1: Missing Authorization Header
