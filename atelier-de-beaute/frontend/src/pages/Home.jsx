@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import luxuryCreamImage from '../assets/images/Luxury cream.jpg';
+import silkHairSerumImage from '../assets/images/silk hair serum.jpg';
 
 const featuredProducts = [
   {
     id: 1,
     name: 'Luxury Face Cream',
-    image: 'https://via.placeholder.com/200',
+    image: luxuryCreamImage,
     price: 49.99,
   },
   {
     id: 2,
     name: 'Silk Hair Serum',
-    image: 'https://via.placeholder.com/200',
+    image: silkHairSerumImage,
     price: 29.99,
   },
   {

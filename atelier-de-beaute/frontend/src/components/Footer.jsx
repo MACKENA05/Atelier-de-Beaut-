@@ -17,6 +17,7 @@ const Footer = () => {
             <li><a href="/account">Account</a></li>
             <li><a href="/contact">Contact</a></li>
             <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/admin">Login as Admin</a></li>
           </ul>
         </div>
         <div className="footer-section social">

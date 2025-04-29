@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const mockUsers = [
-  { email: 'admin@example.com', password: 'admin123', role: 'administrator' },
-  { email: 'productmanager@example.com', password: 'product123', role: 'product_manager' },
-  { email: 'deliverymanager@example.com', password: 'delivery123', role: 'delivery_manager' },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux/authSlice';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const [error, setError] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
+  const { user, loading, error } = auth;
+
+  useEffect(() => {
+    if (user) {
+      // Save user role in sessionStorage or context for access in landing page
+      // Assuming user object has a role property, if not adjust accordingly
+      sessionStorage.setItem('userRole', user.role || 'user');
+      navigate('/landing');
+    }
+  }, [user, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,17 +29,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const user = mockUsers.find(
-      (u) => u.email === formData.email && u.password === formData.password
-    );
-    if (user) {
-      setError('');
-      // Save user role in sessionStorage or context for access in landing page
-      sessionStorage.setItem('userRole', user.role);
-      navigate('/landing');
-    } else {
-      setError('Invalid email or password');
-    }
+    dispatch(login(formData));
   };
 
   return (
@@ -48,6 +44,7 @@ const Login = () => {
           value={formData.email}
           onChange={handleInputChange}
           required
+          disabled={loading}
         />
         <input
           style={styles.input}
@@ -57,9 +54,10 @@ const Login = () => {
           value={formData.password}
           onChange={handleInputChange}
           required
+          disabled={loading}
         />
-        <button type="submit" style={styles.button}>
-          Log In
+        <button type="submit" style={styles.button} disabled={loading}>
+          {loading ? 'Logging in...' : 'Log In'}
         </button>
         {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
       </form>

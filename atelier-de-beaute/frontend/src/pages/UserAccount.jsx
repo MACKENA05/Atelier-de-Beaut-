@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { login, signup, logout, fetchCurrentUser } from '../redux/authSlice';
 import './UserAccount.css';
-
-const mockUser = {
-  name: 'Kairu Maina',
-  email: 'kairu.maina@example.com',
-  walletBalance: 150.75,
-  orders: [
-    { id: 1, date: '2024-05-01', total: 99.99, status: 'Delivered' },
-    { id: 2, date: '2024-05-15', total: 49.99, status: 'Processing' },
-  ],
-};
+import luxuryCreamImage from '../assets/images/Luxury cream.jpg';
 
 const UserAccount = () => {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const { user, loading, error } = useSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState('login');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signUpData, setSignUpData] = useState({ name: '', email: '', password: '' });
+
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      setActiveTab('account');
+    } else {
+      setActiveTab('login');
+    }
+  }, [user]);
 
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
@@ -29,27 +35,31 @@ const UserAccount = () => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    // Mock login success
-    setUser(mockUser);
-    setActiveTab('account');
+    dispatch(login(loginData));
   };
 
   const handleSignUpSubmit = (e) => {
     e.preventDefault();
-    // Mock sign up success
-    setUser({ ...signUpData, walletBalance: 0, orders: [] });
-    setActiveTab('account');
+    dispatch(signup(signUpData));
   };
 
   const handleLogout = () => {
-    setUser(null);
-    setActiveTab('login');
+    dispatch(logout());
     setLoginData({ email: '', password: '' });
     setSignUpData({ name: '', email: '', password: '' });
   };
 
   return (
-    <div className="container">
+    <div
+      className="container"
+      style={{
+        backgroundImage: `url(${luxuryCreamImage})`,
+        backgroundColor: 'transparent',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+      }}
+    >
       <h1 className="title">User Account</h1>
       <div className="tabContainer">
         {!user && (
@@ -74,6 +84,9 @@ const UserAccount = () => {
           </button>
         )}
       </div>
+
+      {loading && <p>Loading...</p>}
+      {error && <p className="errorMessage">{error}</p>}
 
       {!user && activeTab === 'login' && (
         <form className="form" onSubmit={handleLoginSubmit}>
@@ -146,7 +159,7 @@ const UserAccount = () => {
             </div>
             <div className="card">
               <h2 className="cardTitle">Wallet Balance</h2>
-              <p className="walletBalance">${user.walletBalance.toFixed(2)}</p>
+              <p className="walletBalance">${user.walletBalance ? user.walletBalance.toFixed(2) : '0.00'}</p>
               <button className="actionButton">Add Funds</button>
             </div>
           </div>
@@ -161,16 +174,22 @@ const UserAccount = () => {
               </tr>
             </thead>
             <tbody>
-              {user.orders.map(({ id, date, total, status }) => (
-                <tr key={id} className="tr">
-                  <td className="td">{id}</td>
-                  <td className="td">{date}</td>
-                  <td className="td">${total.toFixed(2)}</td>
-                  <td className="td">
-                    <StatusBadge status={status} />
-                  </td>
+              {user.orders && user.orders.length > 0 ? (
+                user.orders.map(({ id, date, total, status }) => (
+                  <tr key={id} className="tr">
+                    <td className="td">{id}</td>
+                    <td className="td">{date}</td>
+                    <td className="td">${total.toFixed(2)}</td>
+                    <td className="td">
+                      <StatusBadge status={status} />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td className="td" colSpan="4">No orders found.</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </>
