@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../redux/authSlice';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 const CreateAccount = () => {
   const dispatch = useDispatch();
@@ -13,10 +14,17 @@ const CreateAccount = () => {
 
   React.useEffect(() => {
     if (user) {
+      toast.success('Account created successfully!');
       sessionStorage.setItem('userRole', user.role || 'user');
       navigate('/landing');
     }
   }, [user, navigate]);
+
+  React.useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const initialValues = {
     email: '',

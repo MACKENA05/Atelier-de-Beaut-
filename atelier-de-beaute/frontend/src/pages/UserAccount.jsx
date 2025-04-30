@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { login, signup, logout, fetchCurrentUser } from '../redux/authSlice';
+import { login, signup, logout, fetchCurrentUser, addFunds } from '../redux/authSlice';
 import './UserAccount.css';
 import luxuryCreamImage from '../assets/images/Luxury cream.jpg';
 
@@ -9,7 +9,18 @@ const UserAccount = () => {
   const { user, loading, error } = useSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState('login');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [signUpData, setSignUpData] = useState({ username: '', email: '', password: '', first_name: '', last_name: '', phone: '' });
+  const [signUpData, setSignUpData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    first_name: '',
+    last_name: '',
+    phone: '',
+  });
+
+  const [amountToAdd, setAmountToAdd] = useState('');
+  const [addFundsError, setAddFundsError] = useState(null);
+  const [localError, setLocalError] = useState(null);
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -30,7 +41,6 @@ const UserAccount = () => {
 
   const handleSignUpChange = (e) => {
     const { name, value } = e.target;
-    // Trim phone input to remove spaces and all non-digit characters
     const newValue = name === 'phone' ? value.replace(/\D/g, '') : value;
     setSignUpData((prev) => ({ ...prev, [name]: newValue }));
   };
@@ -48,7 +58,29 @@ const UserAccount = () => {
   const handleLogout = () => {
     dispatch(logout());
     setLoginData({ email: '', password: '' });
-    setSignUpData({ username: '', email: '', password: '', first_name: '', last_name: '', phone: '' });
+    setSignUpData({
+      username: '',
+      email: '',
+      password: '',
+      first_name: '',
+      last_name: '',
+      phone: '',
+    });
+  };
+  
+  const handleAddFunds = async () => {
+    setAddFundsError(null);
+    setLocalError(null);
+    if (!amountToAdd || Number(amountToAdd) <= 0) {
+      setLocalError('Please enter a valid amount');
+      return;
+    }
+    try {
+      await dispatch(addFunds(Number(amountToAdd))).unwrap();
+      setAmountToAdd('');
+    } catch (err) {
+      setAddFundsError(err || 'Failed to add funds');
+    }
   };
 
   return (
@@ -95,9 +127,9 @@ const UserAccount = () => {
           <input
             className="input"
             type="text"
-            name="username"
-            placeholder="Username"
-            value={loginData.username}
+            name="email"
+            placeholder="Email"
+            value={loginData.email}
             onChange={handleLoginChange}
             required
           />
@@ -185,10 +217,31 @@ const UserAccount = () => {
             </div>
             <div className="card">
               <h2 className="cardTitle">Wallet Balance</h2>
-              <p className="walletBalance">${user.walletBalance ? user.walletBalance.toFixed(2) : '0.00'}</p>
-              <button className="actionButton">Add Funds</button>
+              <p className="walletBalance">
+                ${user.walletBalance ? user.walletBalance.toFixed(2) : '0.00'}
+              </p>
+              <div className="addFundsContainer">
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="Amount to add"
+                  value={amountToAdd}
+                  onChange={(e) => setAmountToAdd(e.target.value)}
+                  className="addFundsInput"
+                />
+                <button
+                  className="actionButton"
+                  onClick={handleAddFunds}
+                  disabled={loading || !amountToAdd || Number(amountToAdd) <= 0}
+                >
+                  {loading ? 'Adding...' : 'Add Funds'}
+                </button>
+                {error && <p className="errorMessage">{error}</p>}
+              </div>
             </div>
           </div>
+
           <h2 className="ordersTitle">Order History</h2>
           <table className="table">
             <thead>

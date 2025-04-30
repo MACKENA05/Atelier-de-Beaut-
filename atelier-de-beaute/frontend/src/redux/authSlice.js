@@ -38,6 +38,19 @@ export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async 
   }
 });
 
+// Add funds to wallet
+export const addFunds = createAsyncThunk(
+  'auth/addFunds',
+  async (amount, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}/wallet/add-funds`, { amount });
+      return response.data.user;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || 'Add funds failed');
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -91,6 +104,19 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.user = null;
+      })
+      // addFunds
+      .addCase(addFunds.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addFunds.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(addFunds.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

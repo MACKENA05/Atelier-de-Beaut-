@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/authSlice';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -13,10 +14,17 @@ const Login = () => {
 
   React.useEffect(() => {
     if (user) {
+      toast.success('Login successful!');
       sessionStorage.setItem('userRole', user.role || 'user');
       navigate('/landing');
     }
   }, [user, navigate]);
+
+  React.useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const initialValues = {
     email: '',
