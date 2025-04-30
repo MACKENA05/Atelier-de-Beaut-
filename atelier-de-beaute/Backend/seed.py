@@ -1,3 +1,4 @@
+
 import logging
 from sqlalchemy.sql import text
 from extensions import db
@@ -973,3 +974,6 @@ if __name__ == "__main__":
         except Exception as e:
             logger.error(f"Seeding failed: {e}")
             raise
+
+
+

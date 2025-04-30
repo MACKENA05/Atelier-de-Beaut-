@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from app import db
+from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import Index, func
 from sqlalchemy.dialects.postgresql import ENUM as PGEnum
@@ -40,16 +40,14 @@ class User(db.Model):
     username= db.Column(db.String(100),  nullable=False)
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
+    phone = db.Column(db.String(20))
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     last_login = db.Column(db.DateTime)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
+    deleted_at = db.Column(db.DateTime)
+    
 
-    # Relationships
-    # addresses = db.relationship('Address', backref='user', lazy=True, cascade='all, delete-orphan')
-    # orders = db.relationship('Order', backref='user', lazy='dynamic')
-    # reviews = db.relationship('Review', backref='user', lazy=True)
-    # cart_items = db.relationship('CartItem', backref='user', lazy=True)
 
     __table_args__ = (
         Index('ix_user_email_lower', func.lower(email)),  # Case-insensitive email index
@@ -58,7 +56,7 @@ class User(db.Model):
     @validates('email')
     def validate_email(self, key, email):
         try:
-            # Validate and normalize the email address
+            # Validate the email address
             valid = validate_email(email)
             return valid.email.lower()  # Normalize email
         except EmailNotValidError as e:
