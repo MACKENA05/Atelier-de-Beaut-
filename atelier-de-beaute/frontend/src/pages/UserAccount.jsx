@@ -27,6 +27,12 @@ const UserAccount = () => {
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [popupAmount, setPopupAmount] = useState('');
+  const [mpesaNumber, setMpesaNumber] = useState('');
+  const [paypalEmail, setPaypalEmail] = useState('');
+
+  // New state for profile picture upload
+  const [profilePictureFile, setProfilePictureFile] = useState(null);
+  const [uploadingProfilePicture, setUploadingProfilePicture] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -74,6 +80,46 @@ const UserAccount = () => {
     });
   };
 
+  // Profile picture upload handler
+  const handleProfilePictureChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setProfilePictureFile(e.target.files[0]);
+    }
+  };
+
+  const handleUploadProfilePicture = async () => {
+    if (!profilePictureFile) {
+      toast.error('Please select a file to upload');
+      return;
+    }
+    setUploadingProfilePicture(true);
+    try {
+      // Assuming an API endpoint exists for uploading profile picture
+      const formData = new FormData();
+      formData.append('profilePicture', profilePictureFile);
+
+      const response = await fetch('http://localhost:5000/auth/upload-profile-picture', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+      // Assuming the response contains updated user data with new profile picture URL
+      dispatch(fetchCurrentUser());
+      toast.success('Profile picture updated successfully!');
+      setProfilePictureFile(null);
+    } catch (err) {
+      toast.error(err.message || 'Failed to upload profile picture');
+    } finally {
+      setUploadingProfilePicture(false);
+    }
+  };
+
   // Open popup on add funds button click
   const openPaymentPopup = () => {
     if (!amountToAdd || Number(amountToAdd) <= 0) {
@@ -82,6 +128,8 @@ const UserAccount = () => {
     }
     setPopupAmount(amountToAdd);
     setSelectedPaymentMethod('');
+    setMpesaNumber('');
+    setPaypalEmail('');
     setAddFundsError(null);
     setLocalError(null);
     setShowPaymentPopup(true);
@@ -91,15 +139,43 @@ const UserAccount = () => {
     setShowPaymentPopup(false);
     setPopupAmount('');
     setSelectedPaymentMethod('');
+    setMpesaNumber('');
+    setPaypalEmail('');
+  };
+
+  const validatePaymentDetails = () => {
+    if (selectedPaymentMethod === 'Mpesa') {
+      const mpesaRegex = /^\d{10}$/;
+      if (!mpesaRegex.test(mpesaNumber)) {
+        setAddFundsError('Please enter a valid 10-digit Mpesa number');
+        return false;
+      }
+    } else if (selectedPaymentMethod === 'PayPal') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(paypalEmail)) {
+        setAddFundsError('Please enter a valid PayPal email address');
+        return false;
+      }
+    } else {
+      setAddFundsError('Please select a payment method');
+      return false;
+    }
+    setAddFundsError(null);
+    return true;
   };
 
   const handleConfirmPayment = async () => {
-    if (!selectedPaymentMethod) {
-      setAddFundsError('Please select a payment method');
+    if (!validatePaymentDetails()) {
       return;
     }
     try {
-      await dispatch(addFunds({ amount: Number(popupAmount), method: selectedPaymentMethod })).unwrap();
+      const paymentDetails = {
+        amount: Number(popupAmount),
+        method: selectedPaymentMethod,
+        ...(selectedPaymentMethod === 'Mpesa' ? { mpesaNumber } : {}),
+        ...(selectedPaymentMethod === 'PayPal' ? { paypalEmail } : {}),
+      };
+      await dispatch(addFunds(paymentDetails)).unwrap();
       toast.success('Funds added successfully!');
       setAmountToAdd('');
       closePaymentPopup();
@@ -245,7 +321,20 @@ const UserAccount = () => {
                 ) : (
                   <div className="profilePicturePlaceholder">No Profile Picture</div>
                 )}
-                {/* Optionally add upload button or functionality here */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProfilePictureChange}
+                  disabled={uploadingProfilePicture}
+                  className="profilePictureInput"
+                />
+                <button
+                  className="button"
+                  onClick={handleUploadProfilePicture}
+                  disabled={uploadingProfilePicture || !profilePictureFile}
+                >
+                  {uploadingProfilePicture ? 'Uploading...' : 'Upload'}
+                </button>
               </div>
               <p><strong>Name:</strong> {user.name}</p>
               <p><strong>Email:</strong> {user.email}</p>
@@ -306,6 +395,26 @@ const UserAccount = () => {
                     PayPal
                   </label>
                 </div>
+                {/* Conditional inputs */}
+                {selectedPaymentMethod === 'Mpesa' && (
+                  <input
+                    type="text"
+                    placeholder="Enter 10-digit Mpesa number"
+                    value={mpesaNumber}
+                    onChange={(e) => setMpesaNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    maxLength={10}
+                    className="paymentDetailInput"
+                  />
+                )}
+                {selectedPaymentMethod === 'PayPal' && (
+                  <input
+                    type="email"
+                    placeholder="Enter PayPal email"
+                    value={paypalEmail}
+                    onChange={(e) => setPaypalEmail(e.target.value)}
+                    className="paymentDetailInput"
+                  />
+                )}
                 {addFundsError && <p className="errorMessage">{addFundsError}</p>}
                 <div className="popupButtons">
                   <button className="button" onClick={handleConfirmPayment} disabled={loading}>
