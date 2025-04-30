@@ -1,7 +1,7 @@
 import logging
+from sqlalchemy.sql import text
 from extensions import db
 from app import create_app
-from sqlalchemy.sql import text
 from models.category import Category
 from models.product import Product
 
@@ -17,12 +17,8 @@ def seed_data():
     try:
         # Clear existing data
         logger.info("Clearing existing data from product_category, Product, and Category tables...")
-        
-        # Step 1: Clear the product_category join table
-        db.session.execute(text("DELETE FROM product_category"))  # Wrap the query in text()
+        db.session.execute(text("DELETE FROM product_category"))
         logger.info("Cleared product_category join table.")
-        
-        # Step 2: Delete products and categories
         Product.query.delete()
         Category.query.delete()
         db.session.commit()
@@ -321,6 +317,10 @@ def seed_data():
         hair_masks.generate_slug()
         db.session.add(hair_masks)
 
+        oils = Category(name="Oils", description="Nourishing hair oils", image_urls=["https://images.unsplash.com/photo-1608248543855-435f913d73a9"], parent_id=hair_treatments.id, display_order=2)
+        oils.generate_slug()
+        db.session.add(oils)
+
         # Haircare -> Hair Styling
         hair_spray = Category(name="Hair Spray", description="Hold and shine sprays", image_urls=["https://images.unsplash.com/photo-1608248543855-435f913d73a9"], parent_id=hair_styling.id, display_order=1)
         hair_spray.generate_slug()
@@ -336,6 +336,10 @@ def seed_data():
         day_cream.generate_slug()
         db.session.add(day_cream)
 
+        night_cream = Category(name="Night Cream", description="Overnight moisturizers", image_urls=["https://images.unsplash.com/photo-1596755938965-6a769b598113"], parent_id=moisturizers.id, display_order=2)
+        night_cream.generate_slug()
+        db.session.add(night_cream)
+
         # Skincare -> Serums
         hyaluronic_serum = Category(name="Hyaluronic Acid Serum", description="Hydrating serums", image_urls=["https://images.unsplash.com/photo-1596755938965-6a769b598113"], parent_id=serums_skincare.id, display_order=1)
         hyaluronic_serum.generate_slug()
@@ -345,6 +349,10 @@ def seed_data():
         sheet_masks = Category(name="Sheet Masks", description="Hydrating sheet masks", image_urls=["https://images.unsplash.com/photo-1596755938965-6a769b598113"], parent_id=masks.id, display_order=1)
         sheet_masks.generate_slug()
         db.session.add(sheet_masks)
+
+        clay_masks = Category(name="Clay Masks", description="Purifying clay masks", image_urls=["https://images.unsplash.com/photo-1596755938965-6a769b598113"], parent_id=masks.id, display_order=2)
+        clay_masks.generate_slug()
+        db.session.add(clay_masks)
 
         # Skincare -> Sunscreen
         spf_50 = Category(name="SPF 50", description="High SPF protection", image_urls=["https://images.unsplash.com/photo-1596755938965-6a769b598113"], parent_id=sunscreen.id, display_order=1)
@@ -356,15 +364,27 @@ def seed_data():
         necklaces.generate_slug()
         db.session.add(necklaces)
 
+        earrings = Category(name="Earrings", description="Elegant earrings", image_urls=["https://images.unsplash.com/photo-1606760227091-3dd44d7f5878"], parent_id=jewelry.id, display_order=2)
+        earrings.generate_slug()
+        db.session.add(earrings)
+
         # Accessories -> Bags
         handbags = Category(name="Handbags", description="Fashionable handbags", image_urls=["https://images.unsplash.com/photo-1606760227091-3dd44d7f5878"], parent_id=bags.id, display_order=1)
         handbags.generate_slug()
         db.session.add(handbags)
 
+        crossbody_bags = Category(name="Crossbody Bags", description="Chic crossbody bags", image_urls=["https://images.unsplash.com/photo-1606760227091-3dd44d7f5878"], parent_id=bags.id, display_order=2)
+        crossbody_bags.generate_slug()
+        db.session.add(crossbody_bags)
+
         # Accessories -> Beauty Tools
         makeup_brushes = Category(name="Makeup Brushes", description="Professional makeup brushes", image_urls=["https://images.unsplash.com/photo-1606760227091-3dd44d7f5878"], parent_id=beauty_tools.id, display_order=1)
         makeup_brushes.generate_slug()
         db.session.add(makeup_brushes)
+
+        hair_dryers = Category(name="Hair Dryers", description="High-performance hair dryers", image_urls=["https://images.unsplash.com/photo-1606760227091-3dd44d7f5878"], parent_id=beauty_tools.id, display_order=2)
+        hair_dryers.generate_slug()
+        db.session.add(hair_dryers)
 
         db.session.commit()
         logger.info("Third-level categories added successfully.")
@@ -422,8 +442,6 @@ def seed_data():
         loreal_mascara.categories.extend([loreal, eye_makeup, mascara])
         db.session.add(loreal_mascara)
 
-        # New Products
-        # Makeup
         fenty_highlighter = Product(
             name="Fenty Killawatt Highlighter",
             description="Radiant highlighter by Fenty Beauty",
@@ -483,7 +501,6 @@ def seed_data():
         estee_lauder_concealer.categories.extend([estee_lauder, face_makeup, concealer])
         db.session.add(estee_lauder_concealer)
 
-        # Fragrance
         chanel_floral_perfume = Product(
             name="Chanel Chance Eau Tendre",
             description="Floral perfume for women by Chanel",
@@ -528,7 +545,6 @@ def seed_data():
         fenty_unisex_fragrance.categories.extend([fenty, unisex_fragrance, citrus_u])
         db.session.add(fenty_unisex_fragrance)
 
-        # Haircare
         loreal_dry_shampoo = Product(
             name="L’Oréal Elvive Dry Shampoo",
             description="Revitalizing shampoo for dry hair",
@@ -571,7 +587,6 @@ def seed_data():
         fenty_hair_spray.categories.extend([fenty, hair_styling, hair_spray])
         db.session.add(fenty_hair_spray)
 
-        # Skincare
         estee_lauder_gel_cleanser = Product(
             name="Estée Lauder Perfectly Clean Gel",
             description="Refreshing gel cleanser",
@@ -630,7 +645,6 @@ def seed_data():
         fenty_spf_50.categories.extend([fenty, sunscreen, spf_50])
         db.session.add(fenty_spf_50)
 
-        # Accessories
         chanel_necklace = Product(
             name="Chanel Pearl Necklace",
             description="Elegant pearl necklace",
@@ -674,6 +688,274 @@ def seed_data():
         fenty_handbag.generate_slug()
         fenty_handbag.categories.extend([fenty, bags, handbags])
         db.session.add(fenty_handbag)
+
+        # Additional Products
+        # Makeup
+        maybelline_eyeliner = Product(
+            name="Maybelline Hyper Easy Eyeliner",
+            description="Liquid eyeliner with precision tip by Maybelline",
+            price=9.99,
+            stock_quantity=60,
+            sku="MAYBELLINE-EYE-002",
+            brand="Maybelline",
+            image_urls=["https://images.unsplash.com/photo-1512496015851-a90fb38ba796"],
+            is_active=True
+        )
+        maybelline_eyeliner.generate_slug()
+        maybelline_eyeliner.categories.extend([maybelline, eye_makeup, eyeliner])
+        db.session.add(maybelline_eyeliner)
+
+        loreal_blush = Product(
+            name="L’Oréal True Match Blush",
+            description="Natural glow blush by L’Oréal",
+            price=11.99,
+            discount_price=9.99,
+            stock_quantity=45,
+            sku="LOREAL-BLS-001",
+            brand="L’Oréal",
+            image_urls=["https://images.unsplash.com/photo-1512496015851-a90fb38ba796"],
+            is_active=True,
+            is_featured=True
+        )
+        loreal_blush.generate_slug()
+        loreal_blush.categories.extend([loreal, face_makeup, blush, discounted_items])
+        db.session.add(loreal_blush)
+
+        fenty_lip_balm = Product(
+            name="Fenty Skin Plush Puddin Lip Balm",
+            description="Hydrating lip balm by Fenty Beauty",
+            price=16.00,
+            stock_quantity=30,
+            sku="FENTY-LIP-002",
+            brand="Fenty Beauty",
+            image_urls=["https://images.unsplash.com/photo-1600585154340-be6161a56a0c"],
+            is_active=True
+        )
+        fenty_lip_balm.generate_slug()
+        fenty_lip_balm.categories.extend([fenty, lip_makeup, lip_balm])
+        db.session.add(fenty_lip_balm)
+
+        chanel_setting_powder = Product(
+            name="Chanel Poudre Universelle",
+            description="Translucent setting powder by Chanel",
+            price=52.00,
+            stock_quantity=15,
+            sku="CHANEL-PWD-001",
+            brand="Chanel",
+            image_urls=["https://images.unsplash.com/photo-1512496015851-a90fb38ba796"],
+            is_active=True
+        )
+        chanel_setting_powder.generate_slug()
+        chanel_setting_powder.categories.extend([chanel, face_makeup, setting_powder])
+        db.session.add(chanel_setting_powder)
+
+        mac_brow_pencil = Product(
+            name="MAC Veluxe Brow Pencil",
+            description="Precision brow pencil by MAC",
+            price=22.00,
+            stock_quantity=25,
+            sku="MAC-BRW-001",
+            brand="MAC Cosmetics",
+            image_urls=["https://images.unsplash.com/photo-1512496015851-a90fb38ba796"],
+            is_active=True
+        )
+        mac_brow_pencil.generate_slug()
+        mac_brow_pencil.categories.extend([mac, eye_makeup, brow_products])
+        db.session.add(mac_brow_pencil)
+
+        estee_lauder_lip_liner = Product(
+            name="Estée Lauder Double Wear Lip Liner",
+            description="Long-lasting lip liner by Estée Lauder",
+            price=27.00,
+            discount_price=20.00,
+            stock_quantity=20,
+            sku="ESTEE-LIP-001",
+            brand="Estée Lauder",
+            image_urls=["https://images.unsplash.com/photo-1600585154340-be6161a56a0c"],
+            is_active=True
+        )
+        estee_lauder_lip_liner.generate_slug()
+        estee_lauder_lip_liner.categories.extend([estee_lauder, lip_makeup, lip_liner, clearance_items])
+        db.session.add(estee_lauder_lip_liner)
+
+        # Fragrance
+        estee_lauder_fruity_perfume = Product(
+            name="Estée Lauder Beautiful Belle",
+            description="Fruity floral perfume for women by Estée Lauder",
+            price=95.00,
+            stock_quantity=12,
+            sku="ESTEE-PRF-001",
+            brand="Estée Lauder",
+            image_urls=["https://images.unsplash.com/photo-1587017977600-5866789dadf8"],
+            is_active=True,
+            is_featured=True
+        )
+        estee_lauder_fruity_perfume.generate_slug()
+        estee_lauder_fruity_perfume.categories.extend([estee_lauder, women_fragrance, fruity_w])
+        db.session.add(estee_lauder_fruity_perfume)
+
+        mac_woody_cologne = Product(
+            name="MAC Shade Woody Cologne",
+            description="Rich woody cologne for men by MAC",
+            price=65.00,
+            stock_quantity=18,
+            sku="MAC-COL-001",
+            brand="MAC Cosmetics",
+            image_urls=["https://images.unsplash.com/photo-1587017977600-5866789dadf8"],
+            is_active=True
+        )
+        mac_woody_cologne.generate_slug()
+        mac_woody_cologne.categories.extend([mac, men_fragrance, woody_m])
+        db.session.add(mac_woody_cologne)
+
+        maybelline_unisex_fragrance = Product(
+            name="Maybelline Fresh Breeze",
+            description="Citrus unisex fragrance by Maybelline",
+            price=40.00,
+            discount_price=32.00,
+            stock_quantity=25,
+            sku="MAYBELLINE-FRG-001",
+            brand="Maybelline",
+            image_urls=["https://images.unsplash.com/photo-1587017977600-5866789dadf8"],
+            is_active=True
+        )
+        maybelline_unisex_fragrance.generate_slug()
+        maybelline_unisex_fragrance.categories.extend([maybelline, unisex_fragrance, citrus_u, discounted_items])
+        db.session.add(maybelline_unisex_fragrance)
+
+        # Haircare
+        chanel_hydrating_conditioner = Product(
+            name="Chanel Coco Nourish Conditioner",
+            description="Hydrating conditioner for all hair types",
+            price=48.00,
+            stock_quantity=20,
+            sku="CHANEL-CND-001",
+            brand="Chanel",
+            image_urls=["https://images.unsplash.com/photo-1608248543855-435f913d73a9"],
+            is_active=True
+        )
+        chanel_hydrating_conditioner.generate_slug()
+        chanel_hydrating_conditioner.categories.extend([chanel, conditioners, hydrating_cond])
+        db.session.add(chanel_hydrating_conditioner)
+
+        estee_lauder_curly_shampoo = Product(
+            name="Estée Lauder Curl Perfect Shampoo",
+            description="Shampoo for curly hair by Estée Lauder",
+            price=30.00,
+            stock_quantity=25,
+            sku="ESTEE-SHM-001",
+            brand="Estée Lauder",
+            image_urls=["https://images.unsplash.com/photo-1608248543855-435f913d73a9"],
+            is_active=True
+        )
+        estee_lauder_curly_shampoo.generate_slug()
+        estee_lauder_curly_shampoo.categories.extend([estee_lauder, shampoos, curly_hair])
+        db.session.add(estee_lauder_curly_shampoo)
+
+        mac_hair_oil = Product(
+            name="MAC Smooth Shine Oil",
+            description="Nourishing hair oil by MAC",
+            price=35.00,
+            discount_price=28.00,
+            stock_quantity=15,
+            sku="MAC-OIL-001",
+            brand="MAC Cosmetics",
+            image_urls=["https://images.unsplash.com/photo-1608248543855-435f913d73a9"],
+            is_active=True
+        )
+        mac_hair_oil.generate_slug()
+        mac_hair_oil.categories.extend([mac, hair_treatments, oils, clearance_items])
+        db.session.add(mac_hair_oil)
+
+        # Skincare
+        maybelline_day_cream = Product(
+            name="Maybelline Dream Fresh Day Cream",
+            description="Lightweight day cream by Maybelline",
+            price=15.99,
+            stock_quantity=40,
+            sku="MAYBELLINE-CRM-001",
+            brand="Maybelline",
+            image_urls=["https://images.unsplash.com/photo-1596755938965-6a769b598113"],
+            is_active=True
+        )
+        maybelline_day_cream.generate_slug()
+        maybelline_day_cream.categories.extend([maybelline, moisturizers, day_cream])
+        db.session.add(maybelline_day_cream)
+
+        fenty_clay_mask = Product(
+            name="Fenty Skin Cookies N Clean Mask",
+            description="Purifying clay mask by Fenty Beauty",
+            price=32.00,
+            stock_quantity=20,
+            sku="FENTY-MSK-002",
+            brand="Fenty Beauty",
+            image_urls=["https://images.unsplash.com/photo-1596755938965-6a769b598113"],
+            is_active=True
+        )
+        fenty_clay_mask.generate_slug()
+        fenty_clay_mask.categories.extend([fenty, masks, clay_masks])
+        db.session.add(fenty_clay_mask)
+
+        loreal_night_cream = Product(
+            name="L’Oréal Age Perfect Night Cream",
+            description="Anti-aging night cream by L’Oréal",
+            price=29.99,
+            discount_price=24.99,
+            stock_quantity=30,
+            sku="LOREAL-CRM-001",
+            brand="L’Oréal",
+            image_urls=["https://images.unsplash.com/photo-1596755938965-6a769b598113"],
+            is_active=True,
+            is_featured=True
+        )
+        loreal_night_cream.generate_slug()
+        loreal_night_cream.categories.extend([loreal, moisturizers, night_cream, discounted_items])
+        db.session.add(loreal_night_cream)
+
+        # Accessories
+        estee_lauder_earrings = Product(
+            name="Estée Lauder Gold Hoop Earrings",
+            description="Elegant gold hoop earrings",
+            price=120.00,
+            stock_quantity=10,
+            sku="ESTEE-ERR-001",
+            brand="Estée Lauder",
+            image_urls=["https://images.unsplash.com/photo-1606760227091-3dd44d7f5878"],
+            is_active=True,
+            is_featured=True
+        )
+        estee_lauder_earrings.generate_slug()
+        estee_lauder_earrings.categories.extend([estee_lauder, jewelry, earrings])
+        db.session.add(estee_lauder_earrings)
+
+        maybelline_crossbody_bag = Product(
+            name="Maybelline Compact Crossbody Bag",
+            description="Chic crossbody bag by Maybelline",
+            price=45.00,
+            discount_price=35.00,
+            stock_quantity=15,
+            sku="MAYBELLINE-BAG-001",
+            brand="Maybelline",
+            image_urls=["https://images.unsplash.com/photo-1606760227091-3dd44d7f5878"],
+            is_active=True
+        )
+        maybelline_crossbody_bag.generate_slug()
+        maybelline_crossbody_bag.categories.extend([maybelline, bags, crossbody_bags, clearance_items])
+        db.session.add(maybelline_crossbody_bag)
+
+        chanel_hair_dryer = Product(
+            name="Chanel Luxe Hair Dryer",
+            description="High-performance hair dryer by Chanel",
+            price=200.00,
+            stock_quantity=8,
+            sku="CHANEL-DRY-001",
+            brand="Chanel",
+            image_urls=["https://images.unsplash.com/photo-1606760227091-3dd44d7f5878"],
+            is_active=True
+        )
+        chanel_hair_dryer.generate_slug()
+        chanel_hair_dryer.categories.extend([chanel, beauty_tools, hair_dryers])
+        db.session.add(chanel_hair_dryer)
 
         db.session.commit()
         logger.info("Products added successfully.")

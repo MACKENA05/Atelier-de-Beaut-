@@ -3,6 +3,10 @@ from schemas.product_schema import ProductSchema
 from schemas.category_schema import CategorySchema
 from services.product_service import ProductService
 from services.category_service import CategoryService
+from utils.decorators import admin_or_manager_required
+from  marshmallow import ValidationError
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 
 products_bp = Blueprint('api', __name__)
 
@@ -53,7 +57,53 @@ def get_product_by_slug(slug):
         abort(404, description=str(e))
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@products_bp.route('/', methods=['POST'])
+@jwt_required()
+@admin_or_manager_required
+def create_product():
+    """Create a new product (Admin/Manager only)"""
+    try:
+        data = product_schema.load(request.get_json())
+        product = ProductService.create_product(data)
+        return jsonify(product_schema.dump(product)), 201
+    except ValidationError as e:
+        return jsonify({'error': 'Validation error', 'messages': e.messages}), 400
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
+@products_bp.route('/<slug>', methods=['PUT'])
+@jwt_required()
+@admin_or_manager_required
+def update_product(slug):
+    """Update a product by slug (Admin/Manager only)"""
+    try:
+        data = product_schema.load(request.get_json(), partial=True)
+        product = ProductService.update_product_by_slug(slug, data)
+        return jsonify(product_schema.dump(product)), 200
+    except ValidationError as e:
+        return jsonify({'error': 'Validation error', 'messages': e.messages}), 400
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@products_bp.route('/<slug>', methods=['DELETE'])
+@jwt_required()
+@admin_or_manager_required
+def delete_product(slug):
+    """Soft delete a product by slug (Admin/Manager only)"""
+    try:
+        product = ProductService.delete_product_by_slug(slug)
+        return jsonify({'message': f'Product {product.slug} deleted'}), 200
+    except ValueError as e:
+        abort(404, description=str(e))
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    
 @products_bp.route('/categories/<int:category_id>/products', methods=['GET'])
 def get_products_by_category_id(category_id):
     """Get products in a specific category by ID with pagination."""
