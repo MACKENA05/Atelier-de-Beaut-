@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import CategoryFilter from '../components/CategoryFilter';
+import ProductGrid from '../components/ProductGrid';
 import './Shop.css';
 
 const mockProducts = [
@@ -86,16 +87,7 @@ const Shop = () => {
       </aside>
       <main className="main-content">
         <h1 className="title">Shop</h1>
-        <div className="grid">
-          {filteredProducts.map(({ id, name, price, image }) => (
-            <div key={id} className="card">
-              <img src={image} alt={name} className="image" />
-              <h2 className="productName">{name}</h2>
-              <p className="price">${price.toFixed(2)}</p>
-              <button className="button">Add to Cart</button>
-            </div>
-          ))}
-        </div>
+        <ProductGrid products={filteredProducts} />
       </main>
     </div>
   );
