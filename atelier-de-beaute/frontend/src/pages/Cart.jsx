@@ -9,6 +9,8 @@ import {
   clearCart,
   applyDiscount,
 } from '../redux/cartSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Sidebar = () => {
   return (
@@ -53,25 +55,32 @@ const Cart = () => {
   const [discountCode, setDiscountCode] = useState('');
   const [discountError, setDiscountError] = useState('');
 
+  const notify = (message) => toast(message);
+
   const handleRemove = (id) => {
     dispatch(removeFromCart(id));
+    notify('Item removed from cart');
   };
 
   const handleQuantityChange = (id, quantity) => {
     if (quantity < 1) return;
     dispatch(updateQuantity({ id, quantity }));
+    notify('Cart updated');
   };
 
   const handleClearCart = () => {
     dispatch(clearCart());
+    notify('Cart cleared');
   };
 
   const handleApplyDiscount = () => {
     if (discountCode === 'SAVE10') {
       dispatch(applyDiscount(0.1));
       setDiscountError('');
+      notify('Discount applied');
     } else {
       setDiscountError('Invalid discount code');
+      notify('Invalid discount code');
     }
   };
 
@@ -136,6 +145,7 @@ const Cart = () => {
             </div>
           </>
         )}
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       </main>
     </div>
   );

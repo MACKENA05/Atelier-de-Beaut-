@@ -32,6 +32,7 @@ const UserAccount = () => {
 
   // New state for profile picture upload
   const [profilePictureFile, setProfilePictureFile] = useState(null);
+  const [profilePicturePreview, setProfilePicturePreview] = useState(null);
   const [uploadingProfilePicture, setUploadingProfilePicture] = useState(false);
 
   useEffect(() => {
@@ -80,10 +81,16 @@ const UserAccount = () => {
     });
   };
 
-  // Profile picture upload handler
+  // Profile picture upload handler with mock frontend preview
   const handleProfilePictureChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setProfilePictureFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setProfilePictureFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePicturePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -94,24 +101,10 @@ const UserAccount = () => {
     }
     setUploadingProfilePicture(true);
     try {
-      // Assuming an API endpoint exists for uploading profile picture
-      const formData = new FormData();
-      formData.append('profilePicture', profilePictureFile);
-
-      const response = await fetch('http://localhost:5000/auth/upload-profile-picture', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
-
-      const data = await response.json();
-      // Assuming the response contains updated user data with new profile picture URL
-      dispatch(fetchCurrentUser());
-      toast.success('Profile picture updated successfully!');
+      // Mock upload delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Update user profile picture preview locally
+      toast.success('Profile picture updated successfully (mock)');
       setProfilePictureFile(null);
     } catch (err) {
       toast.error(err.message || 'Failed to upload profile picture');
@@ -316,7 +309,9 @@ const UserAccount = () => {
               <h2 className="cardTitle">Account Info</h2>
               {/* Profile Picture Section */}
               <div className="profilePictureSection">
-                {user.profilePicture ? (
+                {profilePicturePreview ? (
+                  <img src={profilePicturePreview} alt="Profile Preview" className="profilePicture" />
+                ) : user.profilePicture ? (
                   <img src={user.profilePicture} alt="Profile" className="profilePicture" />
                 ) : (
                   <div className="profilePicturePlaceholder">No Profile Picture</div>
