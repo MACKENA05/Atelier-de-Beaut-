@@ -38,12 +38,12 @@ export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async 
   }
 });
 
-// Add funds to wallet
+// Add funds to wallet with payment method
 export const addFunds = createAsyncThunk(
   'auth/addFunds',
-  async (amount, { rejectWithValue }) => {
+  async ({ amount, method }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/wallet/add-funds`, { amount });
+      const response = await axios.post(`${API_URL}/wallet/add-funds`, { amount, method });
       return response.data.user;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || 'Add funds failed');

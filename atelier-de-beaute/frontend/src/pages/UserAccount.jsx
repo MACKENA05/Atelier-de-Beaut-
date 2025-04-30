@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, signup, logout, fetchCurrentUser, addFunds } from '../redux/authSlice';
+import { toast } from 'react-toastify';
 import './UserAccount.css';
 import luxuryCreamImage from '../assets/images/Luxury cream.jpg';
 
@@ -21,6 +22,11 @@ const UserAccount = () => {
   const [amountToAdd, setAmountToAdd] = useState('');
   const [addFundsError, setAddFundsError] = useState(null);
   const [localError, setLocalError] = useState(null);
+
+  // New state for popup and payment method
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [popupAmount, setPopupAmount] = useState('');
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -67,19 +73,39 @@ const UserAccount = () => {
       phone: '',
     });
   };
-  
-  const handleAddFunds = async () => {
-    setAddFundsError(null);
-    setLocalError(null);
+
+  // Open popup on add funds button click
+  const openPaymentPopup = () => {
     if (!amountToAdd || Number(amountToAdd) <= 0) {
       setLocalError('Please enter a valid amount');
       return;
     }
+    setPopupAmount(amountToAdd);
+    setSelectedPaymentMethod('');
+    setAddFundsError(null);
+    setLocalError(null);
+    setShowPaymentPopup(true);
+  };
+
+  const closePaymentPopup = () => {
+    setShowPaymentPopup(false);
+    setPopupAmount('');
+    setSelectedPaymentMethod('');
+  };
+
+  const handleConfirmPayment = async () => {
+    if (!selectedPaymentMethod) {
+      setAddFundsError('Please select a payment method');
+      return;
+    }
     try {
-      await dispatch(addFunds(Number(amountToAdd))).unwrap();
+      await dispatch(addFunds({ amount: Number(popupAmount), method: selectedPaymentMethod })).unwrap();
+      toast.success('Funds added successfully!');
       setAmountToAdd('');
+      closePaymentPopup();
     } catch (err) {
       setAddFundsError(err || 'Failed to add funds');
+      toast.error(err || 'Failed to add funds');
     }
   };
 
@@ -212,6 +238,15 @@ const UserAccount = () => {
           <div className="cardContainer">
             <div className="card">
               <h2 className="cardTitle">Account Info</h2>
+              {/* Profile Picture Section */}
+              <div className="profilePictureSection">
+                {user.profilePicture ? (
+                  <img src={user.profilePicture} alt="Profile" className="profilePicture" />
+                ) : (
+                  <div className="profilePicturePlaceholder">No Profile Picture</div>
+                )}
+                {/* Optionally add upload button or functionality here */}
+              </div>
               <p><strong>Name:</strong> {user.name}</p>
               <p><strong>Email:</strong> {user.email}</p>
             </div>
@@ -232,15 +267,57 @@ const UserAccount = () => {
                 />
                 <button
                   className="actionButton"
-                  onClick={handleAddFunds}
+                  onClick={openPaymentPopup}
                   disabled={loading || !amountToAdd || Number(amountToAdd) <= 0}
                 >
-                  {loading ? 'Adding...' : 'Add Funds'}
+                  {loading ? 'Processing...' : 'Add Funds'}
                 </button>
-                {error && <p className="errorMessage">{error}</p>}
+                {localError && <p className="errorMessage">{localError}</p>}
+                {addFundsError && <p className="errorMessage">{addFundsError}</p>}
               </div>
             </div>
           </div>
+
+          {/* Payment Popup */}
+          {showPaymentPopup && (
+            <div className="paymentPopupOverlay" onClick={closePaymentPopup}>
+              <div className="paymentPopup" onClick={(e) => e.stopPropagation()}>
+                <h3>Select Payment Method</h3>
+                <p>Amount: ${popupAmount}</p>
+                <div className="paymentOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="Mpesa"
+                      checked={selectedPaymentMethod === 'Mpesa'}
+                      onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                    />
+                    Mpesa
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="PayPal"
+                      checked={selectedPaymentMethod === 'PayPal'}
+                      onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                    />
+                    PayPal
+                  </label>
+                </div>
+                {addFundsError && <p className="errorMessage">{addFundsError}</p>}
+                <div className="popupButtons">
+                  <button className="button" onClick={handleConfirmPayment} disabled={loading}>
+                    {loading ? 'Processing...' : 'Confirm'}
+                  </button>
+                  <button className="button cancelButton" onClick={closePaymentPopup} disabled={loading}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           <h2 className="ordersTitle">Order History</h2>
           <table className="table">
