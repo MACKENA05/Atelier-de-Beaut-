@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_caching import Cache
+from flask_cors import CORS
 from utils.validators import handle_404, handle_500
 from config import Config 
 import logging
@@ -26,6 +27,8 @@ def create_app(config_class='config.Config'):
     jwt.init_app(app)
     cache.init_app(app)
 
+    # Enable CORS for frontend origin
+    CORS(app, resources={r"/auth/*": {"origins": "http://localhost:3000"}})
 
     from routes.auth import auth_bp
     from routes.admin import admin_bp

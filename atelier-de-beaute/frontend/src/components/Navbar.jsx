@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/authSlice';
 import './Navbar.css';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
+  const { user } = auth;
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -18,6 +24,12 @@ const Navbar = () => {
     e.preventDefault();
     // Implement search functionality or navigation here
     console.log('Search submitted:', searchTerm);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    sessionStorage.removeItem('userRole');
+    navigate('/login');
   };
 
   return (
@@ -34,6 +46,13 @@ const Navbar = () => {
         <li><NavLink to="/cart" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Cart</NavLink></li>
         <li><NavLink to="/account" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Account</NavLink></li>
         <li><NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Contact</NavLink></li>
+        {user ? (
+          <li>
+            <button className="logout-button" onClick={handleLogout}>
+              Logout
+            </button>
+          </li>
+        ) : null}
       </ul>
       <form className="navbar-search" onSubmit={handleSearchSubmit}>
         <input

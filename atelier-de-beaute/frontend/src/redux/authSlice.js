@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = '/auth';
+const API_URL = 'http://localhost:5000/auth';
 
 export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
     const response = await axios.post(`${API_URL}/login`, credentials);
     return response.data.user;
   } catch (err) {
-    return rejectWithValue(err.response.data.error || 'Login failed');
+    return rejectWithValue(err.response?.data?.error || 'Login failed');
   }
 });
 
@@ -17,7 +17,7 @@ export const signup = createAsyncThunk('auth/signup', async (userData, { rejectW
     const response = await axios.post(`${API_URL}/register`, userData);
     return response.data.user;
   } catch (err) {
-    return rejectWithValue(err.response.data.error || 'Signup failed');
+    return rejectWithValue(err.response?.data?.error || 'Signup failed');
   }
 });
 
@@ -25,7 +25,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
   try {
     await axios.post(`${API_URL}/logout`);
   } catch (err) {
-    return rejectWithValue(err.response.data.error || 'Logout failed');
+    return rejectWithValue(err.response?.data?.error || 'Logout failed');
   }
 });
 
@@ -34,7 +34,7 @@ export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async 
     const response = await axios.get(`${API_URL}/me`);
     return response.data.user;
   } catch (err) {
-    return rejectWithValue(err.response.data.error || 'Fetch user failed');
+    return rejectWithValue(err.response?.data?.error || 'Fetch user failed');
   }
 });
 

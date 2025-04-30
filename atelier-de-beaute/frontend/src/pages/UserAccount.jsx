@@ -9,7 +9,7 @@ const UserAccount = () => {
   const { user, loading, error } = useSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState('login');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [signUpData, setSignUpData] = useState({ name: '', email: '', password: '' });
+  const [signUpData, setSignUpData] = useState({ username: '', email: '', password: '', first_name: '', last_name: '', phone: '' });
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -30,7 +30,9 @@ const UserAccount = () => {
 
   const handleSignUpChange = (e) => {
     const { name, value } = e.target;
-    setSignUpData((prev) => ({ ...prev, [name]: value }));
+    // Trim phone input to remove spaces and all non-digit characters
+    const newValue = name === 'phone' ? value.replace(/\D/g, '') : value;
+    setSignUpData((prev) => ({ ...prev, [name]: newValue }));
   };
 
   const handleLoginSubmit = (e) => {
@@ -46,7 +48,7 @@ const UserAccount = () => {
   const handleLogout = () => {
     dispatch(logout());
     setLoginData({ email: '', password: '' });
-    setSignUpData({ name: '', email: '', password: '' });
+    setSignUpData({ username: '', email: '', password: '', first_name: '', last_name: '', phone: '' });
   };
 
   return (
@@ -92,10 +94,10 @@ const UserAccount = () => {
         <form className="form" onSubmit={handleLoginSubmit}>
           <input
             className="input"
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={loginData.email}
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={loginData.username}
             onChange={handleLoginChange}
             required
           />
@@ -108,8 +110,8 @@ const UserAccount = () => {
             onChange={handleLoginChange}
             required
           />
-          <button type="submit" className="button">
-            Log In
+          <button type="submit" className="button" disabled={loading}>
+            {loading ? 'Logging in...' : 'Log In'}
           </button>
         </form>
       )}
@@ -119,9 +121,9 @@ const UserAccount = () => {
           <input
             className="input"
             type="text"
-            name="name"
-            placeholder="Name"
-            value={signUpData.name}
+            name="username"
+            placeholder="Username"
+            value={signUpData.username}
             onChange={handleSignUpChange}
             required
           />
@@ -143,8 +145,32 @@ const UserAccount = () => {
             onChange={handleSignUpChange}
             required
           />
-          <button type="submit" className="button">
-            Sign Up
+          <input
+            className="input"
+            type="text"
+            name="first_name"
+            placeholder="First Name"
+            value={signUpData.first_name}
+            onChange={handleSignUpChange}
+          />
+          <input
+            className="input"
+            type="text"
+            name="last_name"
+            placeholder="Last Name"
+            value={signUpData.last_name}
+            onChange={handleSignUpChange}
+          />
+          <input
+            className="input"
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={signUpData.phone}
+            onChange={handleSignUpChange}
+          />
+          <button type="submit" className="button" disabled={loading}>
+            {loading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
       )}

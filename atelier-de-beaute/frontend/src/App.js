@@ -10,6 +10,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import UserAccount from './pages/UserAccount';
 import Login from './pages/Login';
+import CreateAccount from './pages/CreateAccount';
 import AdminPanel from './pages/AdminPanel';
 import Contact from './pages/Contact';
 import LandingPage from './pages/LandingPage';
@@ -40,9 +41,10 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/account" element={<UserAccount />} />
-            <Route path="/login" element={<Login />} />
+            {/* Removed login and create-account routes as per user request */}
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            
             
 
             <Route

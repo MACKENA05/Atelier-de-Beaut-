@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/authSlice';
+import { signup } from '../redux/authSlice';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-const Login = () => {
+const CreateAccount = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
@@ -21,20 +21,25 @@ const Login = () => {
   const initialValues = {
     email: '',
     password: '',
+    confirmPassword: '',
   };
 
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email address').required('Required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Required'),
   });
 
   const onSubmit = (values) => {
-    dispatch(login(values));
+    const { email, password } = values;
+    dispatch(signup({ email, password }));
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Login</h1>
+      <h1 style={styles.title}>Create Account</h1>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ isSubmitting }) => (
           <Form style={styles.form}>
@@ -46,8 +51,12 @@ const Login = () => {
             <Field type="password" name="password" style={styles.input} />
             <ErrorMessage name="password" component="div" style={styles.error} />
 
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <Field type="password" name="confirmPassword" style={styles.input} />
+            <ErrorMessage name="confirmPassword" component="div" style={styles.error} />
+
             <button type="submit" style={styles.button} disabled={isSubmitting || loading}>
-              {loading ? 'Logging in...' : 'Log In'}
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
             {error && <div style={styles.error}>{error}</div>}
           </Form>
@@ -111,4 +120,4 @@ const styles = {
   },
 };
 
-export default Login;
+export default CreateAccount;
