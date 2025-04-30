@@ -1,5 +1,7 @@
-import secrets
-import string
+from functools import wraps
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import jsonify
+from app import db
 from models.user import User, UserRole
 from app import db
 from typing import Tuple, Dict, Any
@@ -92,20 +94,29 @@ def create_user_as_admin(creator: User, user_data: dict) -> Tuple[Dict[str, Any]
         return {"error": "Server error", "details": str(e), "status": 500}, 500
 
 def get_all_users(current_user: User, query_args: dict) -> Tuple[Dict[str, Any], int]:
-    """Get paginated list of all active users (excluding soft-deleted)"""
     try:
+        # Authorization check
         if current_user.role != UserRole.ADMIN:
-            logger.warning(f"Unauthorized user list access attempt by {current_user.username} from {request.remote_addr}")
-            return {"error": "Only admins can view user lists", "details": {}, "status": 403}, 403
+            logger.warning(f"Unauthorized user list access attempt by {current_user.username}")
+            return {"error": "Only admins can view user lists"}, 403
 
-        page = query_args.get('page', 1, type=int)
-        per_page = min(query_args.get('per_page', 10, type=int), 100)
+        # Ensure pagination parameters are integers and within bounds
+        page = max(1, int(query_args.get('page', 1)))
+        per_page = min(max(1, int(query_args.get('per_page', 10))), 100)  # Clamp between 1-100
 
-        users = User.query.filter(User.deleted_at == None).order_by(User.created_at.desc()).paginate(
+        # Debug log the received parameters
+        logger.debug(f"Pagination params - page: {page}, per_page: {per_page}")
+
+        # Get paginated results
+        users_query = User.query.filter(User.deleted_at == None)
+        users = users_query.order_by(User.created_at.desc()).paginate(
             page=page,
             per_page=per_page,
             error_out=False
         )
+
+        # Verify pagination is working
+        logger.debug(f"Total items: {users.total}, Items on page: {len(users.items)}")
 
         response = {
             "users": UserResponseSchema(many=True).dump(users.items),
@@ -113,16 +124,20 @@ def get_all_users(current_user: User, query_args: dict) -> Tuple[Dict[str, Any],
                 "total": users.total,
                 "pages": users.pages,
                 "current_page": users.page,
-                "per_page": users.per_page
+                "per_page": users.per_page,
+                "has_next": users.has_next,
+                "has_prev": users.has_prev
             }
         }
 
-        logger.debug(f"User {current_user.username} retrieved {users.total} users for page {page} from {request.remote_addr}")
         return response, 200
 
+    except ValueError as ve:
+        logger.error(f"Invalid pagination parameters: {ve}")
+        return {"error": "Invalid pagination parameters"}, 400
     except Exception as e:
-        logger.error(f"Error in get_all_users by {current_user.username} from {request.remote_addr}: {str(e)}", exc_info=True)
-        return {"error": "Server error", "details": str(e), "status": 500}, 500
+        logger.error(f"Error in get_all_users: {str(e)}", exc_info=True)
+        return {"error": "Server error"}, 500
 
 def get_user(current_user: User, user_id: int) -> Tuple[Dict[str, Any], int]:
     """Get a single active user by ID (excluding soft-deleted)"""

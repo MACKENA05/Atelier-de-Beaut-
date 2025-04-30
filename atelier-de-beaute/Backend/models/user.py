@@ -40,7 +40,7 @@ class User(db.Model):
     username= db.Column(db.String(100),  nullable=False)
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
-    phone = db.Column(db.String(10))
+    phone = db.Column(db.String(20))
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     last_login = db.Column(db.DateTime)
