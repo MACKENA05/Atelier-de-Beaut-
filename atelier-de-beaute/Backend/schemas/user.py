@@ -7,6 +7,20 @@ class LoginSchema(Schema):
     username = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
 
+    @validates('username')
+    def validate_username(self, value):
+        if not value.strip():
+            raise ValidationError("Username cannot be empty")
+        if len(value) > 80:
+            raise ValidationError("Username cannot exceed 80 characters")
+    
+    @validates('password')
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise ValidationError("Password must be at least 8 characters")
+        if len(value) > 256:
+            raise ValidationError("Password cannot exceed 256 characters")
+
 class RegisterSchema(Schema):
     username = fields.Str(required=True, validate=[
         validate.Length(min=3, max=80),
