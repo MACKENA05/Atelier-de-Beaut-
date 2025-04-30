@@ -44,11 +44,12 @@ def create_app(config_name='development'):
     with app.app_context():
         from routes.auth import auth_bp
         from routes.admin import admin_bp
-        # from routes.products import products_bp
+        from routes.products import products_bp
         # from routes.categories import categories_bp  
         from utils.validators import handle_404, handle_500
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(admin_bp, url_prefix='/admin')
+        app.register_blueprint(products_bp,url_prefix='/products')
  
 
         app.register_error_handler(404, handle_404)
