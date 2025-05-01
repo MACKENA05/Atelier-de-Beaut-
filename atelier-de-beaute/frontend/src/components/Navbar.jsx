@@ -46,13 +46,14 @@ const Navbar = () => {
         <li><NavLink to="/cart" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Cart</NavLink></li>
         <li><NavLink to="/user-account" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Account</NavLink></li>
         <li><NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Contact</NavLink></li>
-        {user ? (
+        {/* Removed unnecessary logout button in header */}
+        {/* {user ? (
           <li>
             <button className="logout-button" onClick={handleLogout}>
               Logout
             </button>
           </li>
-        ) : null}
+        ) : null} */}
       </ul>
       <form className="navbar-search" onSubmit={handleSearchSubmit}>
         <input
