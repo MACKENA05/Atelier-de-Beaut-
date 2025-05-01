@@ -1,13 +1,19 @@
 .cart-item {
   display: flex;
   align-items: center;
-  background-color: #f4e1d2; /* light beige */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(58, 12, 163, 0.2);
-  margin: 1rem 0;
+  background-color: #ffffff; /* white background */
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(58, 12, 163, 0.15);
+  margin: 0.75rem 0;
   padding: 1rem;
-  font-family: 'Georgia', serif;
-  color: #3a0ca3; /* deep purple */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  gap: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.cart-item:hover {
+  box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
 }
 
 .cart-item-image {
@@ -15,25 +21,64 @@
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
-  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.cart-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .cart-item-info h4 {
-  margin: 0 0 0.5rem 0;
+  margin: 0;
+  font-size: 1rem;
+  color: #3a0ca3;
 }
 
-.remove-button {
-  background-color: #ffb703; /* gold */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantity-button {
+  background-color: #ffb703;
   border: none;
-  padding: 0.5rem 1rem;
-  color: #3a0ca3; /* deep purple */
-  font-weight: bold;
-  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  color: #3a0ca3;
+  font-weight: 700;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 0.5rem;
   transition: background-color 0.3s ease;
 }
 
+.quantity-button:hover {
+  background-color: #e6a000;
+}
+
+.quantity-value {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #222;
+  min-width: 24px;
+  text-align: center;
+}
+
+.remove-button {
+  background-color: transparent;
+  border: 1px solid #ffb703;
+  padding: 0.25rem 0.75rem;
+  color: #ffb703;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .remove-button:hover {
-  background-color: #d99904;
+  background-color: #ffb703;
+  color: #3a0ca3;
 }

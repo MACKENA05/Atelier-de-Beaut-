@@ -1,61 +1,35 @@
 @import '../styles/common.css';
 
-.shop-container {
-  display: flex;
-  gap: 2rem;
-  padding: 2rem;
+.container-with-filterbar {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #ffffff;
-  color: #3a0ca3;
-  min-height: 100vh;
-}
-
-.filter-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #f4e1d2;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  height: 50px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 1rem;
+  background-color: #f0f0f5;
+  color: #222;
+  padding: 1rem 2rem;
 }
 
 .category-filter {
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-.category-filter h4 {
-  margin-right: 1rem;
-  font-size: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(58, 12, 163, 0.1);
   font-weight: 600;
   color: #3a0ca3;
 }
 
 .category-filter ul {
-  display: flex;
   list-style: none;
   padding: 0;
   margin: 0;
-  height: 100%;
-  align-items: center;
+  display: flex;
+  gap: 1rem;
 }
 
 .category-filter li {
-  margin-right: 1rem;
   cursor: pointer;
-  font-size: 0.9rem;
-  color: #3a0ca3;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   transition: background-color 0.3s ease;
-  height: 100%;
-  display: flex;
-  align-items: center;
 }
 
 .category-filter li.active,
@@ -66,19 +40,17 @@
 
 .price-filter-bar {
   display: flex;
-  align-items: center;
-  height: 100%;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .price-input-bar {
-  width: 80px;
-  margin-left: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  flex: 1 1 100px;
+  padding: 0.4rem 0.75rem;
+  border-radius: 16px;
+  border: 1px solid #3a0ca3;
   font-size: 0.9rem;
-  box-sizing: border-box;
-  height: 30px;
+  color: #3a0ca3;
   transition: border-color 0.3s ease;
 }
 

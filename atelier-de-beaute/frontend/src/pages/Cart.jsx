@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
+import CategoryFilter from '../components/CategoryFilter';
 import './Cart.css';
 import {
   removeFromCart,
@@ -11,20 +12,6 @@ import {
 } from '../redux/cartSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const Sidebar = () => {
-  return (
-    <aside className="sidebar">
-      <h3>Categories</h3>
-      <ul>
-        <li><Link to="/shop?category=skincare">Skincare</Link></li>
-        <li><Link to="/shop?category=haircare">Haircare</Link></li>
-        <li><Link to="/shop?category=makeup">Makeup</Link></li>
-        <li><Link to="/shop?category=fragrance">Fragrance</Link></li>
-      </ul>
-    </aside>
-  );
-};
 
 const Slideshow = () => {
   const slides = [
@@ -54,6 +41,7 @@ const Cart = () => {
   const dispatch = useDispatch();
   const [discountCode, setDiscountCode] = useState('');
   const [discountError, setDiscountError] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const notify = (message) => toast(message);
 
@@ -84,7 +72,11 @@ const Cart = () => {
     }
   };
 
-  const subtotal = cartItems.reduce(
+  const filteredCartItems = selectedCategory
+    ? cartItems.filter((item) => item.category === selectedCategory)
+    : cartItems;
+
+  const subtotal = filteredCartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
@@ -94,17 +86,21 @@ const Cart = () => {
   const total = subtotal + tax + shipping - discountAmount;
 
   return (
-    <div className="container-with-sidebar">
-      <Sidebar />
+    <div className="container-with-filterbar">
+      <CategoryFilter
+        categories={['Skincare', 'Haircare', 'Makeup', 'Fragrance']}
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+      />
       <main className="cart-main">
         <Slideshow />
         <h1 className="title">Your Shopping Cart</h1>
-        {cartItems.length === 0 ? (
+        {filteredCartItems.length === 0 ? (
           <p className="emptyMessage">Your cart is empty.</p>
         ) : (
           <>
             <div className="cart-items">
-              {cartItems.map((item) => (
+              {filteredCartItems.map((item) => (
                 <CartItem
                   key={item.id}
                   item={item}

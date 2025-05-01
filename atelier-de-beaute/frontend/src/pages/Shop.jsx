@@ -40,7 +40,7 @@ const Shop = () => {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
 
-  const categories = Array.from(new Set(mockProducts.map((p) => p.category)));
+  const categories = ['Skincare', 'Haircare', 'Makeup', 'Fragrance'];
 
   const filteredProducts = mockProducts.filter((product) => {
     const matchCategory = selectedCategory ? product.category === selectedCategory : true;
@@ -50,7 +50,7 @@ const Shop = () => {
   });
 
   return (
-    <div className="container-with-sidebar">
+    <div className="container-with-filterbar">
       <h1 className="title">Shop</h1>
       <div className="filter-bar">
         <CategoryFilter
