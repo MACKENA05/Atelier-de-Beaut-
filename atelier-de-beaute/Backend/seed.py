@@ -695,7 +695,6 @@ def seed_data():
         db.session.add(fenty_handbag)
 
         # Additional Products
-        # Makeup
         maybelline_eyeliner = Product(
             name="Maybelline Hyper Easy Eyeliner",
             description="Liquid eyeliner with precision tip by Maybelline",
@@ -783,7 +782,6 @@ def seed_data():
         estee_lauder_lip_liner.categories.extend([estee_lauder, lip_makeup, lip_liner, clearance_items])
         db.session.add(estee_lauder_lip_liner)
 
-        # Fragrance
         estee_lauder_fruity_perfume = Product(
             name="Estée Lauder Beautiful Belle",
             description="Fruity floral perfume for women by Estée Lauder",
@@ -828,7 +826,6 @@ def seed_data():
         maybelline_unisex_fragrance.categories.extend([maybelline, unisex_fragrance, citrus_u, discounted_items])
         db.session.add(maybelline_unisex_fragrance)
 
-        # Haircare
         chanel_hydrating_conditioner = Product(
             name="Chanel Coco Nourish Conditioner",
             description="Hydrating conditioner for all hair types",
@@ -872,7 +869,6 @@ def seed_data():
         mac_hair_oil.categories.extend([mac, hair_treatments, oils, clearance_items])
         db.session.add(mac_hair_oil)
 
-        # Skincare
         maybelline_day_cream = Product(
             name="Maybelline Dream Fresh Day Cream",
             description="Lightweight day cream by Maybelline",
@@ -916,7 +912,6 @@ def seed_data():
         loreal_night_cream.categories.extend([loreal, moisturizers, night_cream, discounted_items])
         db.session.add(loreal_night_cream)
 
-        # Accessories
         estee_lauder_earrings = Product(
             name="Estée Lauder Gold Hoop Earrings",
             description="Elegant gold hoop earrings",
@@ -986,6 +981,24 @@ def seed_data():
         raise
 
     try:
+        # 5. User
+        logger.info("Seeding test user...")
+        user = User(
+            id=1,
+            email='test@gmail.com',
+            username='testuser',
+            is_active=True
+        )
+        user.set_password('password')
+        db.session.add(user)
+        db.session.commit()
+        logger.info("Test user added successfully.")
+    except Exception as e:
+        logger.error(f"Error adding test user: {e}")
+        db.session.rollback()
+        raise
+
+    try:
         # 6. Cart and Cart Items
         logger.info("Seeding cart and cart items...")
         cart = Cart(user_id=1)
@@ -1011,7 +1024,6 @@ def seed_data():
             raise
 
     logger.info("Atelier-de-Beauty database seeded successfully with categories, products, user, and cart!")
-    
 
 if __name__ == "__main__":
     with app.app_context():
@@ -1020,6 +1032,3 @@ if __name__ == "__main__":
         except Exception as e:
             logger.error(f"Seeding failed: {e}")
             raise
-
-
-
