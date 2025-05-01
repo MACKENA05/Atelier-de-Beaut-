@@ -1,0 +1,38 @@
+"""create admin
+
+Revision ID: 75f47a4ea8fe
+Revises: 
+Create Date: 2025-04-27 20:30:20.856678
+
+"""
+from alembic import op
+import sqlalchemy as sa
+from app import db
+from models.user import User, UserRole
+import os
+
+
+
+# revision identifiers, used by Alembic.
+revision = '75f47a4ea8fe'
+down_revision = None
+branch_labels = None
+depends_on = None
+
+def upgrade():
+    admin = User(
+        email=os.getenv('SUPERADMIN_EMAIL', 'superadmin@gmail.com'),
+        username='Super Admin',
+        role=UserRole.ADMIN
+    )
+    admin.set_password(os.getenv('SUPERADMIN_PASSWORD', 'SecureAdminPass123!'))
+    db.session.add(admin)
+    db.session.commit()
+
+
+
+def downgrade():
+    User.query.filter_by(email='superadmin@example.com').delete()
+    db.session.commit()
+
+
