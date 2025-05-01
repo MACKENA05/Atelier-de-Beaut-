@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
@@ -13,24 +13,52 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import luxuryCream from '../assets/images/Luxury cream.jpg';
+import silkHairSerum from '../assets/images/silk hair serum.jpg';
+
 const Slideshow = () => {
   const slides = [
-    { id: 1, image: 'https://via.placeholder.com/600x200?text=Promo+1', alt: 'Promo 1' },
-    { id: 2, image: 'https://via.placeholder.com/600x200?text=Promo+2', alt: 'Promo 2' },
-    { id: 3, image: 'https://via.placeholder.com/600x200?text=Promo+3', alt: 'Promo 3' },
+    { id: 1, image: luxuryCream, alt: 'Luxury Cream' },
+    { id: 2, image: silkHairSerum, alt: 'Silk Hair Serum' },
   ];
   const [current, setCurrent] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 4000);
+    }, 8000); // slower transition: 8 seconds
     return () => clearInterval(timer);
   }, [slides.length]);
 
   return (
-    <div className="slideshow">
-      <img src={slides[current].image} alt={slides[current].alt} />
+    <div
+      className="slideshow"
+      style={{
+        width: '100%',
+        maxWidth: '600px',
+        height: '300px', // fixed height to keep consistent size
+        margin: '0 auto 20px auto',
+        borderRadius: '10px',
+        overflow: 'hidden',
+        boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+        transition: 'opacity 1s ease-in-out',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f9f9f9',
+      }}
+    >
+      <img
+        src={slides[current].image}
+        alt={slides[current].alt}
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          display: 'block',
+          borderRadius: '10px',
+          objectFit: 'contain', // contain to avoid cropping and keep aspect ratio
+        }}
+      />
     </div>
   );
 };
@@ -92,57 +120,57 @@ const Cart = () => {
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
-      <main className="cart-main">
-        <Slideshow />
-        <h1 className="title">Your Shopping Cart</h1>
-        {filteredCartItems.length === 0 ? (
-          <p className="emptyMessage">Your cart is empty.</p>
-        ) : (
-          <>
-            <div className="cart-items">
-              {filteredCartItems.map((item) => (
-                <CartItem
-                  key={item.id}
-                  item={item}
-                  onRemove={handleRemove}
-                  onQuantityChange={handleQuantityChange}
-                />
-              ))}
-            </div>
-            <div className="cart-actions">
-              <button className="clear-cart-button" onClick={handleClearCart}>
-                Clear Cart
-              </button>
-            </div>
-            <div className="discount-section">
-              <input
-                type="text"
-                placeholder="Discount code"
-                value={discountCode}
-                onChange={(e) => setDiscountCode(e.target.value)}
-                className="discount-input"
+      <main className="cart-main" style={{ gridTemplateColumns: '1fr 2fr', gap: '1.5rem' }}>
+        <div className="cart-items">
+          <h1 className="title">Your Shopping Cart</h1>
+          {filteredCartItems.length === 0 ? (
+            <p className="emptyMessage">Your cart is empty.</p>
+          ) : (
+            filteredCartItems.map((item) => (
+              <CartItem
+                key={item.id}
+                item={item}
+                onRemove={handleRemove}
+                onQuantityChange={handleQuantityChange}
               />
-              <button onClick={handleApplyDiscount} className="apply-discount-button">
-                Apply
-              </button>
-              {discountError && <p className="discount-error">{discountError}</p>}
-            </div>
-            <div className="price-summary">
-              <p>Subtotal: ${subtotal.toFixed(2)}</p>
-              <p>Tax (7%): ${tax.toFixed(2)}</p>
-              <p>Shipping: ${shipping.toFixed(2)}</p>
-              {discount > 0 && <p>Discount: -${discountAmount.toFixed(2)}</p>}
-              <strong>Total: ${total.toFixed(2)}</strong>
-            </div>
-            <div className="checkout-section">
-              <Link to="/checkout" className="checkout-button">
-                Proceed to Checkout
-              </Link>
-            </div>
-          </>
-        )}
-        <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+            ))
+          )}
+          <div className="cart-actions">
+            <button className="clear-cart-button" onClick={handleClearCart}>
+              Clear Cart
+            </button>
+          </div>
+        </div>
+        <div>
+          <Slideshow />
+          <div className="discount-section">
+            <input
+              type="text"
+              placeholder="Discount code"
+              value={discountCode}
+              onChange={(e) => setDiscountCode(e.target.value)}
+              className="discount-input"
+            />
+            <button onClick={handleApplyDiscount} className="apply-discount-button">
+              Apply
+            </button>
+            {discountError && <p className="discount-error">{discountError}</p>}
+          </div>
+          <div className="price-summary">
+            <p>Subtotal: ${subtotal.toFixed(2)}</p>
+            <p>Tax (7%): ${tax.toFixed(2)}</p>
+            <p>Shipping: ${shipping.toFixed(2)}</p>
+            {discount > 0 && <p>Discount: -${discountAmount.toFixed(2)}</p>}
+            <strong>Total: ${total.toFixed(2)}</strong>
+          </div>
+          <div className="checkout-section">
+            <Link to="/checkout" className="checkout-button">
+              Proceed to Checkout
+            </Link>
+          </div>
+        </div>
       </main>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

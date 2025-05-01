@@ -9,6 +9,12 @@ const UserAccount = () => {
   const dispatch = useDispatch();
   const { user, loading, error } = useSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState('login');
+
+  React.useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signUpData, setSignUpData] = useState({
     username: '',
@@ -215,7 +221,8 @@ const UserAccount = () => {
       </div>
 
       {loading && <p>Loading...</p>}
-      {error && <p className="errorMessage">{error}</p>}
+      {/* Removed inline error message display to use toast notifications */}
+      {/* {error && <p className="errorMessage">{error}</p>} */}
 
       {!user && activeTab === 'login' && (
         <form className="form" onSubmit={handleLoginSubmit}>

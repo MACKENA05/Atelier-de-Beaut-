@@ -51,10 +51,12 @@ export const addFunds = createAsyncThunk(
   }
 );
 
+const persistedUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null,
+    user: persistedUser,
     loading: false,
     error: null,
   },
@@ -69,6 +71,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -82,6 +85,7 @@ const authSlice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
@@ -90,6 +94,7 @@ const authSlice = createSlice({
       // logout
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+        localStorage.removeItem('user');
       })
       // fetchCurrentUser
       .addCase(fetchCurrentUser.pending, (state) => {
@@ -99,11 +104,13 @@ const authSlice = createSlice({
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.user = null;
+        localStorage.removeItem('user');
       })
       // addFunds
       .addCase(addFunds.pending, (state) => {
@@ -113,6 +120,7 @@ const authSlice = createSlice({
       .addCase(addFunds.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(addFunds.rejected, (state, action) => {
         state.loading = false;
