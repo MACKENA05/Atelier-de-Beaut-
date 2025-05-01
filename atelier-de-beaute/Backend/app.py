@@ -24,6 +24,7 @@ def create_app(config_name='development'):
     jwt.init_app(app)
     cache.init_app(app)
     cors.init_app(app)
+    
 
     # JWT error handlers
     @jwt.invalid_token_loader
@@ -36,20 +37,22 @@ def create_app(config_name='development'):
         logger.warning(f"Missing token from {request.remote_addr}: {str(error)}")
         return jsonify({"error": "Missing authentication token", "details": str(error), "status": 401}), 401
 
-    from models.category import Category
-    from models.product import Product
-    from models.user import User
+    # from models.category import Category
+    # from models.product import Product
+    # from models.user import User
+    # from models.cart import Cart,CartItem
 
     # Register blueprints and error handlers
     with app.app_context():
         from routes.auth import auth_bp
         from routes.admin import admin_bp
         from routes.products import products_bp
-        # from routes.categories import categories_bp  
+        from routes.cart import cart_bp     
         from utils.validators import handle_404, handle_500
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(admin_bp, url_prefix='/admin')
         app.register_blueprint(products_bp,url_prefix='/products')
+        app.register_blueprint(cart_bp, url_prefix='/api')
  
 
         app.register_error_handler(404, handle_404)

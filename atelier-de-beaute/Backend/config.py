@@ -11,7 +11,8 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 3600))
     ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'fallback@example.com')
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'fallback_password')
-    
+
+
     if not (300 <= JWT_ACCESS_TOKEN_EXPIRES <= 86400):  # 5min to 24h range
         raise ValueError("Invalid JWT expiration time")
     

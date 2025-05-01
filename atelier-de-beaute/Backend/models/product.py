@@ -33,7 +33,7 @@ class Product(db.Model):
     # Relationships
     # order_items = db.relationship('OrderItem', backref='product', lazy=True)
     # reviews = db.relationship('Review', backref='product', lazy=True, cascade='all, delete-orphan')
-    # cart_items = db.relationship('CartItem', backref='product', lazy=True)
+    cart_items = db.relationship('CartItem', back_populates='product', lazy='dynamic')
     categories = db.relationship(
         'Category', 
         secondary=product_category,

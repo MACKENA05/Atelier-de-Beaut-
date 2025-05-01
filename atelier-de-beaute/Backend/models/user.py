@@ -53,6 +53,12 @@ class User(db.Model):
         Index('ix_user_email_lower', func.lower(email)),  # Case-insensitive email index
     )
 
+     # Relationships
+    # addresses = db.relationship('Address', backref='user', lazy=True, cascade='all, delete-orphan')
+    # orders = db.relationship('Order', backref='user', lazy='dynamic')
+    # reviews = db.relationship('Review', backref='user', lazy=True)
+    carts = db.relationship('Cart', back_populates='user', lazy='dynamic')
+
     @validates('email')
     def validate_email(self, key, email):
         try:

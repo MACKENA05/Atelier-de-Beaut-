@@ -4,6 +4,9 @@ from extensions import db
 from app import create_app
 from models.category import Category
 from models.product import Product
+from models.user import User
+from models.cart import Cart, CartItem
+from werkzeug.security import generate_password_hash
 
 app = create_app()
 
@@ -16,11 +19,13 @@ def seed_data():
 
     try:
         # Clear existing data
-        logger.info("Clearing existing data from product_category, Product, and Category tables...")
+        logger.info("Clearing existing data from all relevant tables...")
         db.session.execute(text("DELETE FROM product_category"))
-        logger.info("Cleared product_category join table.")
+        db.session.execute(text("DELETE FROM cart_items"))
+        db.session.execute(text("DELETE FROM carts"))
         Product.query.delete()
         Category.query.delete()
+        User.query.delete()
         db.session.commit()
         logger.info("Existing data deleted successfully.")
     except Exception as e:
@@ -690,7 +695,6 @@ def seed_data():
         db.session.add(fenty_handbag)
 
         # Additional Products
-        # Makeup
         maybelline_eyeliner = Product(
             name="Maybelline Hyper Easy Eyeliner",
             description="Liquid eyeliner with precision tip by Maybelline",
@@ -778,7 +782,6 @@ def seed_data():
         estee_lauder_lip_liner.categories.extend([estee_lauder, lip_makeup, lip_liner, clearance_items])
         db.session.add(estee_lauder_lip_liner)
 
-        # Fragrance
         estee_lauder_fruity_perfume = Product(
             name="Estée Lauder Beautiful Belle",
             description="Fruity floral perfume for women by Estée Lauder",
@@ -823,7 +826,6 @@ def seed_data():
         maybelline_unisex_fragrance.categories.extend([maybelline, unisex_fragrance, citrus_u, discounted_items])
         db.session.add(maybelline_unisex_fragrance)
 
-        # Haircare
         chanel_hydrating_conditioner = Product(
             name="Chanel Coco Nourish Conditioner",
             description="Hydrating conditioner for all hair types",
@@ -867,7 +869,6 @@ def seed_data():
         mac_hair_oil.categories.extend([mac, hair_treatments, oils, clearance_items])
         db.session.add(mac_hair_oil)
 
-        # Skincare
         maybelline_day_cream = Product(
             name="Maybelline Dream Fresh Day Cream",
             description="Lightweight day cream by Maybelline",
@@ -912,7 +913,6 @@ def seed_data():
         loreal_night_cream.categories.extend([loreal, moisturizers, night_cream, discounted_items])
         db.session.add(loreal_night_cream)
 
-        # Accessories
         estee_lauder_earrings = Product(
             name="Estée Lauder Gold Hoop Earrings",
             description="Elegant gold hoop earrings",
@@ -964,7 +964,50 @@ def seed_data():
         db.session.rollback()
         raise
 
-    logger.info("Atelier-de-Beauty database seeded successfully with expanded category hierarchy!")
+    try:
+        # 5. User
+        logger.info("Seeding test user...")
+        user = User(
+            id=1,
+            email='test@gmail.com',
+            username='testuser',
+            is_active=True
+        )
+        user.set_password('password')
+        db.session.add(user)
+        db.session.commit()
+        logger.info("Test user added successfully.")
+    except Exception as e:
+        logger.error(f"Error adding test user: {e}")
+        db.session.rollback()
+        raise
+
+    try:
+        # 6. Cart and Cart Items
+        logger.info("Seeding cart and cart items...")
+        cart = Cart(user_id=1)
+        db.session.add(cart)
+        db.session.commit()
+
+        # Add multiple cart items for testing
+        cart_item1 = CartItem(cart_id=cart.id, product_id=740, quantity=2)  # e.g., Moisturizer
+        cart_item2 = CartItem(cart_id=cart.id, product_id=741, quantity=1)  # e.g., Lipstick
+        cart_item3 = CartItem(cart_id=cart.id, product_id=742, quantity=3)  # e.g., Foundation
+        cart_item4 = CartItem(cart_id=cart.id, product_id=743, quantity=1)  # e.g., Mascara
+        cart_item5 = CartItem(cart_id=cart.id, product_id=744, quantity=2)  # e.g., Cleanser
+        db.session.add(cart_item1)
+        db.session.add(cart_item2)
+        db.session.add(cart_item3)
+        db.session.add(cart_item4)
+        db.session.add(cart_item5)
+        db.session.commit()
+        logger.info("Cart and cart items added successfully.")
+    except Exception as e:
+            logger.error(f"Error adding cart and cart items: {e}")
+            db.session.rollback()
+            raise
+
+    logger.info("Atelier-de-Beauty database seeded successfully with categories, products, user, and cart!")
 
 if __name__ == "__main__":
     with app.app_context():

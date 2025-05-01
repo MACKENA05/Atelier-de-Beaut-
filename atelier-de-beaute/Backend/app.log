@@ -14,3 +14,4 @@
 2025-04-30 15:32:45,969 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid crypto padding
 2025-04-30 15:32:56,516 - __main__ - WARNING - Invalid token from 127.0.0.1: Bad Authorization header. Expected 'Authorization: Bearer <JWT>'
 2025-04-30 15:33:45,876 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid crypto padding
+2025-05-01 01:03:25,423 - __main__ - WARNING - Invalid token from 127.0.0.1: Signature verification failed
