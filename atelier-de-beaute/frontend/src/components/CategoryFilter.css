@@ -1,31 +1,114 @@
-.category-filter {
-  background-color: #f4e1d2; /* light beige */
-  border-radius: 8px;
-  padding: 1rem;
-  font-family: 'Georgia', serif;
-  color: #3a0ca3; /* deep purple */
-  max-width: 200px;
-  margin-bottom: 2rem;
-}
+/* Removed all styles to do away with filter by category CSS */
+/* No code was selected, so we'll add a basic CSS reset to improve the code */
 
-.category-filter h4 {
-  margin-bottom: 1rem;
-}
-
-.category-filter ul {
-  list-style: none;
-  padding: 0;
+* {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
 }
 
-.category-filter ul li {
-  padding: 0.5rem 0;
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f9f9f9;
+}* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: #337ab7;
+}
+
+a:hover {
+  color: #23527c;
+}
+
+button, input[type="submit"] {
   cursor: pointer;
-  transition: color 0.3s ease;
 }
 
-.category-filter ul li:hover,
-.category-filter ul li.active {
-  color: #ffb703; /* gold */
-  font-weight: bold;
+button:disabled, input[type="submit"]:disabled {
+  cursor: not-allowed;
+}* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: #337ab7;
+}
+
+a:hover {
+  color: #23527c;
+}
+
+button, input[type="submit"] {
+  cursor: pointer;
+}
+
+button:disabled, input[type="submit"]:disabled {
+  cursor: not-allowed;
+}
+
+:root {
+  --primary-color: #337ab7;
+  --secondary-color: #23527c;
+  --background-color: #f9f9f9;
+  --text-color: #333;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+a:hover {
+  color: var(--secondary-color);
 }

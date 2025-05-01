@@ -44,7 +44,7 @@ const Navbar = () => {
         <li><NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Home</NavLink></li>
         <li><NavLink to="/shop" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Shop</NavLink></li>
         <li><NavLink to="/cart" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Cart</NavLink></li>
-        <li><NavLink to="/account" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Account</NavLink></li>
+        <li><NavLink to="/user-account" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Account</NavLink></li>
         <li><NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Contact</NavLink></li>
         {user ? (
           <li>

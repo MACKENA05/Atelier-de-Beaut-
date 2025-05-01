@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import CategoryFilter from '../components/CategoryFilter';
-import ProductGrid from '../components/ProductGrid';
+import React, { useState } from 'react';
 import './Shop.css';
+import CategoryFilter from '../components/CategoryFilter';
 
 const mockProducts = [
   { id: 1, name: 'Luxury Face Cream', price: 49.99, category: 'Skincare', image: 'https://via.placeholder.com/200' },
@@ -41,53 +40,54 @@ const Shop = () => {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
 
-  const categories = useMemo(() => {
-    const cats = new Set(mockProducts.map((p) => p.category));
-    return Array.from(cats);
-  }, []);
+  const categories = Array.from(new Set(mockProducts.map((p) => p.category)));
 
-  const filteredProducts = useMemo(() => {
-    return mockProducts.filter((product) => {
-      const matchCategory = selectedCategory ? product.category === selectedCategory : true;
-      const matchMinPrice = minPrice ? product.price >= parseFloat(minPrice) : true;
-      const matchMaxPrice = maxPrice ? product.price <= parseFloat(maxPrice) : true;
-      return matchCategory && matchMinPrice && matchMaxPrice;
-    });
-  }, [selectedCategory, minPrice, maxPrice]);
+  const filteredProducts = mockProducts.filter((product) => {
+    const matchCategory = selectedCategory ? product.category === selectedCategory : true;
+    const matchMinPrice = minPrice ? product.price >= parseFloat(minPrice) : true;
+    const matchMaxPrice = maxPrice ? product.price <= parseFloat(maxPrice) : true;
+    return matchCategory && matchMinPrice && matchMaxPrice;
+  });
 
   return (
     <div className="container-with-sidebar">
-      <aside className="sidebar">
+      <h1 className="title">Shop</h1>
+      <div className="filter-bar">
         <CategoryFilter
           categories={categories}
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
         />
-        <div className="price-filter">
-          <h4>Filter by Price</h4>
-          <div className="price-inputs">
-            <input
-              type="number"
-              placeholder="Min"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              min="0"
-              className="price-input"
-            />
-            <input
-              type="number"
-              placeholder="Max"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              min="0"
-              className="price-input"
-            />
-          </div>
+        <div className="price-filter-bar">
+          <input
+            type="number"
+            placeholder="Min Price"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            min="0"
+            className="price-input-bar"
+          />
+          <input
+            type="number"
+            placeholder="Max Price"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            min="0"
+            className="price-input-bar"
+          />
         </div>
-      </aside>
+      </div>
       <main className="main-content">
-        <h1 className="title">Shop</h1>
-        <ProductGrid products={filteredProducts} />
+        <div className="grid">
+          {filteredProducts.map(({ id, name, price, image }) => (
+            <div key={id} className="card">
+              <img src={image} alt={name} className="image" />
+              <h2 className="productName">{name}</h2>
+              <p className="price">${price.toFixed(2)}</p>
+              <button className="button">Add to Cart</button>
+            </div>
+          ))}
+        </div>
       </main>
     </div>
   );
