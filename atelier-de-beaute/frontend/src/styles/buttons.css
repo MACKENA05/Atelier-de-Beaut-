@@ -2,15 +2,16 @@
   padding: 0.5rem 1rem;
   border-radius: 24px;
   border: none;
-  background-color: #ffb703; /* gold */
-  color: #3a0ca3; /* deep purple */
+  background-color: #B76E79; /* Rose Gold */
+  color:  #ffffff;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 0 12px #ffb703;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 0 12px #F7D1D1;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .button:hover {
-  background-color: #e6a700;
+  background-color: #9C3D4B; /* Darker rose gold on hover */
+  box-shadow: 0 0 16px #F7D1D1;
 }
