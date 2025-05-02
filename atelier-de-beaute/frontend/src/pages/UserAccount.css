@@ -1,12 +1,12 @@
 @import '../styles/common.css';
 
-/* User Account Page Styles */
+/* User Account Page Styles - Rosegold Theme */
 
 .container {
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #ffffff; /* white background */
-  color: #3a0ca3; /* deep purple text */
+  background-color: #fffafa;
+  color: #94424f; /* deep rose */
   min-height: 100vh;
   max-width: 900px;
   margin: 0 auto;
@@ -18,7 +18,7 @@
   font-weight: 700;
   font-size: 2.75rem;
   letter-spacing: 0.1rem;
-  color: #3a0ca3;
+  color: #94424f;
 }
 
 .tabContainer {
@@ -30,35 +30,35 @@
 
 .tabButton {
   padding: 0.75rem 1.5rem;
-  background-color: #f4e1d2; /* cream */
+  background-color: #f8e1e7;
   border: none;
   border-radius: 16px;
   cursor: pointer;
-  color: #3a0ca3;
+  color: #94424f;
   font-weight: 600;
   font-size: 1rem;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .tabButton:hover {
-  background-color: #e6d8b7;
+  background-color: #f2c7d2;
 }
 
 .activeTabButton {
   padding: 0.75rem 1.5rem;
-  background-color: #ffb703; /* gold */
-  color: #3a0ca3;
+  background-color: #b76e79;
+  color: #ffffff;
   border: none;
   border-radius: 16px;
   cursor: pointer;
   font-weight: 700;
   font-size: 1rem;
-  box-shadow: 0 0 8px rgba(255, 183, 3, 0.7);
+  box-shadow: 0 0 8px rgba(183, 110, 121, 0.7);
 }
 
 .logoutButton {
   padding: 0.75rem 1.5rem;
-  background-color: #f44336;
+  background-color: #c1444d;
   color: #ffffff;
   border: none;
   border-radius: 16px;
@@ -69,7 +69,7 @@
 }
 
 .logoutButton:hover {
-  background-color: #d32f2f;
+  background-color: #a03941;
 }
 
 .form {
@@ -84,23 +84,23 @@
   padding: 0.85rem 1rem;
   font-size: 1.1rem;
   border-radius: 16px;
-  border: 2px solid #3a0ca3;
-  background-color: #f4e1d2; /* cream */
-  color: #3a0ca3;
+  border: 2px solid #94424f;
+  background-color: #f8e1e7;
+  color: #94424f;
   transition: border-color 0.3s ease;
 }
 
 .input:focus {
   outline: none;
-  border-color: #ffb703; /* gold */
-  background-color: #fff8dc;
+  border-color: #b76e79;
+  background-color: #fff0f2;
 }
 
 .button {
   padding: 0.85rem 1rem;
   font-size: 1.1rem;
-  background-color: #ffb703; /* gold */
-  color: #3a0ca3;
+  background-color: #b76e79;
+  color: #ffffff;
   border: none;
   border-radius: 16px;
   cursor: pointer;
@@ -109,7 +109,7 @@
 }
 
 .button:hover {
-  background-color: #e6a700;
+  background-color: #a15d67;
 }
 
 .cardContainer {
@@ -125,11 +125,11 @@
 
 .card {
   flex: 1 1 300px;
-  background-color: #f4e1d2; /* cream */
+  background-color: #f8e1e7;
   padding: 1.5rem;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(244, 225, 210, 0.6);
-  color: #3a0ca3;
+  box-shadow: 0 4px 12px rgba(183, 110, 121, 0.3);
+  color: #94424f;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -137,10 +137,10 @@
 
 .cardTitle {
   margin-bottom: 1rem;
-  color: #3a0ca3;
+  color: #94424f;
   font-weight: 800;
   font-size: 1.5rem;
-  border-bottom: 2px solid #ffb703;
+  border-bottom: 2px solid #b76e79;
   padding-bottom: 0.5rem;
   width: 100%;
 }
@@ -157,45 +157,44 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  flex-wrap: wrap; /* prevent overflow */
+  flex-wrap: wrap;
 }
 
 .addFundsInput {
   flex: 1;
-  min-width: 150px; /* minimum width */
+  min-width: 150px;
   padding: 0.75rem 1rem;
   font-size: 1.1rem;
   border-radius: 16px;
-  border: 2px solid #3a0ca3;
-  background-color: #f4e1d2;
-  color: #3a0ca3;
+  border: 2px solid #94424f;
+  background-color: #f8e1e7;
+  color: #94424f;
   transition: border-color 0.3s ease;
 }
 
 .addFundsInput:focus {
   outline: none;
-  border-color: #ffb703;
-  background-color: #fff8dc;
+  border-color: #b76e79;
+  background-color: #fff0f2;
 }
 
 .actionButton {
   padding: 0.75rem 1.5rem;
-  background-color: #ffb703; /* gold */
-  color: #3a0ca3;
+  background-color: #b76e79;
+  color: #ffffff;
   border: none;
   border-radius: 16px;
   cursor: pointer;
   font-weight: 700;
   font-size: 1.1rem;
   transition: background-color 0.3s ease;
-  white-space: nowrap; /* prevent text wrap */
+  white-space: nowrap;
 }
 
 .actionButton:hover {
-  background-color: #e6a700;
+  background-color: #a15d67;
 }
 
-/* Profile Picture Section */
 .profilePictureSection {
   display: flex;
   flex-direction: column;
@@ -208,7 +207,7 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #ffb703;
+  border: 3px solid #b76e79;
   margin-bottom: 0.5rem;
 }
 
@@ -216,25 +215,24 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background-color: #f4e1d2;
-  color: #3a0ca3;
+  background-color: #f8e1e7;
+  color: #94424f;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   font-size: 0.9rem;
-  border: 3px solid #ffb703;
+  border: 3px solid #b76e79;
   margin-bottom: 0.5rem;
 }
 
-/* Payment Popup Styles */
 .paymentPopupOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(58, 12, 163, 0.6);
+  background-color: rgba(148, 66, 79, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -242,13 +240,13 @@
 }
 
 .paymentPopup {
-  background-color: #f4e1d2;
+  background-color: #f8e1e7;
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(58, 12, 163, 0.3);
+  box-shadow: 0 4px 12px rgba(148, 66, 79, 0.3);
   width: 320px;
   max-width: 90%;
-  color: #3a0ca3;
+  color: #94424f;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -269,17 +267,17 @@
 }
 
 .cancelButton {
-  background-color: #f44336;
+  background-color: #c1444d;
   color: #fff;
 }
 
 .cancelButton:hover {
-  background-color: #d32f2f;
+  background-color: #a03941;
 }
 
 .ordersTitle {
   margin-bottom: 1.5rem;
-  color: #3a0ca3;
+  color: #94424f;
   font-weight: 800;
   font-size: 1.75rem;
   text-align: center;
@@ -291,32 +289,32 @@
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 4px 12px rgba(58, 12, 163, 0.1);
+  box-shadow: 0 4px 12px rgba(148, 66, 79, 0.1);
   border-radius: 16px;
   overflow: hidden;
 }
 
 .th {
   text-align: left;
-  border-bottom: 3px solid #3a0ca3;
+  border-bottom: 3px solid #94424f;
   padding: 1rem;
-  color: #3a0ca3;
+  color: #94424f;
   font-weight: 800;
-  background-color: #f4e1d2;
+  background-color: #f8e1e7;
 }
 
 .tr {
-  border-bottom: 1px solid #3a0ca3;
+  border-bottom: 1px solid #94424f;
   transition: background-color 0.3s ease;
 }
 
 .tr:hover {
-  background-color: #fffbf0;
+  background-color: #fff7f9;
 }
 
 .td {
   padding: 1rem;
-  color: #3a0ca3;
+  color: #94424f;
   font-weight: 600;
 }
 
