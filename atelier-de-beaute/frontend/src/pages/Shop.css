@@ -2,7 +2,7 @@
 
 .container-with-filterbar {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f0f5;
+  background-color: #f5f5f5; 
   color: #222;
   padding: 1rem 2rem;
 }
@@ -12,9 +12,9 @@
   background-color: #fff;
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(58, 12, 163, 0.1);
+  box-shadow: 0 0 10px rgba(183, 110, 121, 0.1); 
   font-weight: 600;
-  color: #3a0ca3;
+  color: #B76E79; 
 }
 
 .category-filter ul {
@@ -34,7 +34,7 @@
 
 .category-filter li.active,
 .category-filter li:hover {
-  background-color: #3a0ca3;
+  background-color: #B76E79; 
   color: white;
 }
 
@@ -48,14 +48,14 @@
   flex: 1 1 100px;
   padding: 0.4rem 0.75rem;
   border-radius: 16px;
-  border: 1px solid #3a0ca3;
+  border: 1px solid #B76E79; 
   font-size: 0.9rem;
-  color: #3a0ca3;
+  color: #B76E79; 
   transition: border-color 0.3s ease;
 }
 
 .price-input-bar:focus {
-  border-color: #007bff;
+  border-color: #FFD700; 
   outline: none;
 }
 
@@ -67,7 +67,7 @@
   font-weight: 700;
   font-size: 2.25rem;
   margin-bottom: 1rem;
-  color: #3a0ca3;
+  color: #B76E79; 
 }
 
 .grid {
@@ -77,9 +77,9 @@
 }
 
 .card {
-  background-color: #f4e1d2;
+  background-color: #F7D1D1; 
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(58, 12, 163, 0.2);
+  box-shadow: 0 4px 12px rgba(183, 110, 121, 0.2); 
   padding: 1.25rem;
   text-align: center;
   display: flex;
@@ -90,7 +90,7 @@
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(58, 12, 163, 0.3);
+  box-shadow: 0 8px 20px rgba(183, 110, 121, 0.3); 
 }
 
 .image {
@@ -104,7 +104,7 @@
   font-weight: 600;
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
-  color: #3a0ca3;
+  color: #B76E79; 
 }
 
 .price {
@@ -118,17 +118,17 @@
   padding: 0.6rem 1.2rem;
   border-radius: 24px;
   border: none;
-  background-color: #ffb703;
-  color: #3a0ca3;
+  background-color: #FFD700; 
+  color: #B76E79;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(58, 12, 163, 0.3);
+  box-shadow: 0 4px 8px rgba(183, 110, 121, 0.3); 
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .button:hover {
-  background-color: #e6a700;
-  box-shadow: 0 6px 14px rgba(58, 12, 163, 0.4);
+  background-color: #E6A700; 
+  box-shadow: 0 6px 14px rgba(183, 110, 121, 0.4); 
 }
 
 .button:disabled {
