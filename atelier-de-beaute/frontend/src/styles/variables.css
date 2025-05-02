@@ -1,11 +1,12 @@
 :root {
   /* Color palette */
-  --color-primary: #3a0ca3; /* deep purple */
-  --color-secondary: #ffb703; /* gold */
-  --color-background: #ffffff; /* white */
-  --color-cream: #fff0f5; /* light pink almost white */
-  --color-text: var(--color-primary);
-
+  --color-primary: #B76E79; /* Rose Gold */
+  --color-secondary: #FFD700; /* Light Gold */
+  --color-background: #F5F5F5; /* Soft Light Grey Background */
+  --color-cream: #F7D1D1; /* Light Rose Gold (Cream) */
+  --color-text: var(--color-primary); /* Rose Gold for Text */
+  --color-dark: #9C3D4B; /* Dark Rose Gold for accents and shadows */
+  
   /* Fonts */
   --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-secondary: 'Georgia', serif;
