@@ -1,72 +1,98 @@
 .footer {
-  background-color: #ffffff; /* white */
-  color: #f4e1d2; /* cream */
-  padding: 2rem 4rem;
+  background-color: #F7C6B6; /* Light pinkish background from Figma */
+  color: #9C3D4B; /* Text color, soft dark brownish */
+  padding: 2rem 1rem; /* Padding for spacing */
   font-family: 'Georgia', serif;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-  margin-top: 2rem;
-  text-align: left;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1.5rem;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Footer Content Layout */
 .footer-content {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 2rem;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 1rem;
 }
 
+/* Footer Sections (About, Links, Social) */
 .footer-section {
-  flex: 1 1 200px;
+  flex: 1;
+  min-width: 180px;
 }
 
 .footer-section h3 {
-  margin-bottom: 0.75rem;
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #3a0ca3; /* deep purple for headings */
+  font-size: 1.3rem;
+  color: #000000;
+  margin-bottom: 0.8rem;
 }
 
-.footer-section p,
+/* Links */
 .footer-section ul {
-  margin: 0;
   padding: 0;
   list-style: none;
-  color: #6b6b6b; /* dark gray for text */
 }
 
 .footer-section ul li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
 .footer-section ul li a {
-  color: #6b6b6b;
   text-decoration: none;
+  color: #6b6b6b; /* Soft gray text for links */
   transition: color 0.3s ease;
 }
 
 .footer-section ul li a:hover {
-  color: #ffb703; /* gold */
+  color: #D998A3; /* Light pink hover effect on links */
 }
 
-.social-icons a {
-  margin-right: 1rem;
-  color: #6b6b6b;
+/* Social Icons */
+.social-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.social-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.social-item img {
+  width: 35px;
+  height: 35px;
+}
+
+.social-item p {
+  font-size: 1rem;
+  color: #000;
+}
+
+.social-item a {
+  color: #000;
   text-decoration: none;
-  font-weight: 600;
   transition: color 0.3s ease;
 }
 
-.social-icons a:hover {
-  color: #ffb703; /* gold */
+.social-item a:hover {
+  color: #9C3D4B; 
 }
 
+
+/* Footer Bottom */
 .footer-bottom {
-  border-top: 1px solid #f4e1d2;
-  padding-top: 1rem;
+  border-top: 1px solid #9C3D4B; /* Matching dark rose border */
+  padding-top: 0.5rem;
   text-align: center;
-  font-size: 0.9rem;
-  color: #a0a0a0;
+  color: #6b6b6b;
+  font-size: 0.75rem;
 }
