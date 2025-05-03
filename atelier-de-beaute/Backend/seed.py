@@ -1,4 +1,3 @@
-
 import logging
 from sqlalchemy.sql import text
 from extensions import db
@@ -7,6 +6,7 @@ from models.category import Category
 from models.product import Product
 from models.user import User
 from models.cart import Cart, CartItem
+from models.review import Review  # Added import for Review model
 from werkzeug.security import generate_password_hash
 app = create_app()
 
@@ -986,7 +986,45 @@ def seed_data():
         raise
 
     try:
-        # 6. Cart and Cart Items
+        # 6. Reviews
+        logger.info("Seeding reviews...")
+        # Review for L’Oréal Matte Lipstick by testuser
+        review1 = Review(
+            product_id=loreal_lipstick.id,
+            user_id=user.id,
+            rating=4,
+            comment="Great color and long-lasting! Perfect for daily wear.",
+            is_featured=True
+        )
+        db.session.add(review1)
+
+        # Review for Maybelline Fit Me Foundation by testuser
+        review2 = Review(
+            product_id=maybelline_foundation.id,
+            user_id=user.id,
+            rating=5,
+            comment="Matches my skin tone perfectly. Love the natural finish!"
+        )
+        db.session.add(review2)
+
+        # Review for Fenty Killawatt Highlighter by testuser
+        review3 = Review(
+            product_id=fenty_highlighter.id,
+            user_id=user.id,
+            rating=4,
+            comment="Gives a beautiful glow, but a bit pricey."
+        )
+        db.session.add(review3)
+
+        db.session.commit()
+        logger.info("Reviews added successfully.")
+    except Exception as e:
+        logger.error(f"Error adding reviews: {e}")
+        db.session.rollback()
+        raise
+
+    try:
+        # 7. Cart and Cart Items
         logger.info("Seeding cart and cart items...")
         cart = Cart(user_id=1)
         db.session.add(cart)
@@ -1020,6 +1058,3 @@ if __name__ == "__main__":
         except Exception as e:
             logger.error(f"Seeding failed: {e}")
             raise
-
-
-
