@@ -471,3 +471,21 @@ DETAIL:  Failing row contains (9, 120, 27, 6, Invalid rating test, 2025-05-03 20
 2025-05-03 22:03:27,086 - __main__ - DEBUG - Looking up user with identity: 28
 2025-05-03 22:03:31,995 - __main__ - DEBUG - Looking up user with identity: 28
 2025-05-03 22:03:31,997 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-04 01:17:34,965 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:18:38,773 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:26:03,363 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:26:04,575 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:26:05,798 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:26:20,258 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:26:53,799 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:27:12,618 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:27:41,292 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:27:47,961 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:28:16,511 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:28:25,279 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:28:41,053 - app - WARNING - Missing token from 127.0.0.1: Missing Authorization Header
+2025-05-04 01:29:29,328 - app - WARNING - Invalid token from 127.0.0.1: Bad Authorization header. Expected 'Authorization: Bearer <JWT>'
+2025-05-04 01:29:38,639 - app - DEBUG - Looking up user with identity: 4
+2025-05-04 01:35:42,360 - app - WARNING - Missing token from 127.0.0.1: Missing Authorization Header
+2025-05-04 01:35:47,083 - app - WARNING - Missing token from 127.0.0.1: Missing Authorization Header
+2025-05-04 01:35:59,274 - app - WARNING - Invalid token from 127.0.0.1: Not enough segments

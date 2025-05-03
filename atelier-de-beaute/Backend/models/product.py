@@ -3,7 +3,6 @@ from app import db
 import re
 from slugify import slugify 
 
-
 # Association table for many-to-many relationship
 product_category = db.Table('product_category',
     db.Column('product_id', db.Integer, db.ForeignKey('products.id'), primary_key=True),
@@ -27,6 +26,8 @@ class Product(db.Model):
     image_urls = db.Column(db.JSON)  # List of image URLs
     is_active = db.Column(db.Boolean, default=True)
     is_featured = db.Column(db.Boolean, default=False)
+    views = db.Column(db.Integer, nullable=False, default=0)
+    cart_adds = db.Column(db.Integer, nullable=False, default=0)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     
@@ -38,7 +39,7 @@ class Product(db.Model):
         'Category', 
         secondary=product_category,
         back_populates='products',
-        lazy='dynamic'  # or 'joined' if you always want to load categories
+        lazy='dynamic'
     )
 
     @property
@@ -50,7 +51,6 @@ class Product(db.Model):
         if self.discount_price and self.price:
             return round(((self.price - self.discount_price) / self.price) * 100, 1)
         return 0
-
     
     @property
     def average_rating(self):
@@ -63,17 +63,13 @@ class Product(db.Model):
         return len(self.reviews)
     
     def validate_sku(self, key, sku):
-        # Ensure the SKU matches a specific pattern
         if not re.match(r'^[A-Za-z0-9\-]+$', sku):
             raise ValueError('SKU must only contain alphanumeric characters and hyphens.')
         return sku
     
-    
     def generate_slug(self):
-        # Automatically generate a slug if it doesn't already exist
         if not self.slug:
             self.slug = slugify(self.name)
-
     
     def __repr__(self):
-        return f'<Product {self.name}>'            
+        return f'<Product {self.name}>'

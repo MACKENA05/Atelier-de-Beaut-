@@ -67,6 +67,8 @@ def create_app(config_name='development'):
         from utils.validators import handle_404, handle_500
         from routes.payment import payments_bp
         from routes.review import reviews_bp
+        from routes.analytics import analytics_bp
+
         
         app.register_blueprint(payments_bp, url_prefix = '/payment')
         app.register_blueprint(auth_bp, url_prefix='/auth')
@@ -75,6 +77,7 @@ def create_app(config_name='development'):
         app.register_blueprint(cart_bp, url_prefix='/api')
         app.register_blueprint(orders_bp, url_prefix='/orders')
         app.register_blueprint(reviews_bp, url_prefix='/api')
+        app.register_blueprint(analytics_bp, url_prefix = '/analytic')
  
 
         app.register_error_handler(404, handle_404)
