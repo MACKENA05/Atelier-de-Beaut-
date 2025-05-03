@@ -11,7 +11,18 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 3600))
     ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'fallback@example.com')
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'fallback_password')
-    
+
+    # M-Pesa Sandbox Credentials
+    CONSUMER_KEY = os.getenv('MPESA_CONSUMER_KEY')
+    CONSUMER_SECRET = os.getenv('MPESA_CONSUMER_SECRET')
+    PASSKEY = os.getenv('MPESA_PASSKEY')
+    SHORTCODE = os.getenv("MPESA_SHORTCODE")  
+    CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")  
+    SANDBOX_URL = "https://sandbox.safaricom.co.ke"
+    TEST_PHONE_NUMBER = "254708374149" 
+    AMOUNT = "1"  
+
+
     if not (300 <= JWT_ACCESS_TOKEN_EXPIRES <= 86400):  # 5min to 24h range
         raise ValueError("Invalid JWT expiration time")
     

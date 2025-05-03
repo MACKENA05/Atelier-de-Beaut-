@@ -14,3 +14,460 @@
 2025-04-30 15:32:45,969 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid crypto padding
 2025-04-30 15:32:56,516 - __main__ - WARNING - Invalid token from 127.0.0.1: Bad Authorization header. Expected 'Authorization: Bearer <JWT>'
 2025-04-30 15:33:45,876 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid crypto padding
+2025-05-01 01:03:25,423 - __main__ - WARNING - Invalid token from 127.0.0.1: Signature verification failed
+2025-05-02 02:44:53,845 - app - ERROR - Checkout failed for order 1: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-05-02 02:57:38,809 - app - ERROR - Checkout failed for order 1: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-05-02 03:11:26,326 - app - ERROR - Checkout failed for order 7: 'Order' object has no attribute 'total_amount'
+2025-05-02 03:12:27,805 - app - ERROR - Checkout failed for order 7: 400 Bad Request: Failed to decode JSON object: Extra data: line 1 column 26 (char 25)
+2025-05-02 03:13:05,615 - app - ERROR - Checkout failed for order 7: 'Order' object has no attribute 'total_amount'
+2025-05-02 03:13:57,865 - app - ERROR - Checkout failed for order 7: 'Order' object has no attribute 'total_amount'
+2025-05-02 03:15:27,259 - app - ERROR - Checkout failed for order 7: 'Order' object has no attribute 'total_amount'
+2025-05-02 03:16:48,768 - app - WARNING - Total mismatch for order 7: client=300, order=155.99
+2025-05-02 03:20:25,685 - app - ERROR - Checkout failed for order 7: STK Push request failed: 400 Client Error: Bad Request for url: https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest
+2025-05-02 03:29:10,613 - app - INFO - M-Pesa Callback received: {'Body': {'stkCallback': {'CheckoutRequestID': 'ws_CO_02112024123456789', 'ResultCode': 0, 'ResultDesc': 'The service request is processed successfully'}}}
+2025-05-02 09:38:05,222 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 12:03:07,490 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 12:14:23,014 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 21:50:32,266 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 22:40:06,648 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 22:41:55,634 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 22:46:42,621 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 22:55:34,456 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:04:28,350 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:10:30,430 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:12:09,189 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:13:50,050 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:14:39,406 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:17:21,041 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:35:15,250 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:47:37,466 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:58:19,426 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 23:58:53,606 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:01:21,110 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:01:28,551 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:01:38,889 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:01:52,741 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:02:04,905 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 07:17:55,846 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-03 07:18:16,332 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 07:19:43,901 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 07:23:06,406 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 07:26:44,227 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:27:44,936 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:28:10,952 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:28:19,714 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:28:58,845 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:29:25,599 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:30:02,518 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:33:45,753 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 09:34:34,920 - __main__ - DEBUG - Looking up user with identity: 7
+2025-05-03 09:37:44,753 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:37:51,463 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:38:02,731 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:38:18,094 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:38:22,785 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:41:05,568 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:41:38,735 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-03 09:42:09,524 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:43:10,947 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:53:28,968 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:54:08,597 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 10:08:46,417 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:08:55,292 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:09:11,976 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:09:18,757 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:10:04,099 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:12:39,016 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:13:00,903 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:15:58,693 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:34:57,017 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 11:09:11,764 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:09:11,766 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:14:10,731 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:14:10,733 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:16:29,472 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:16:29,474 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:19:39,563 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:21:55,531 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:22:20,059 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:22:42,860 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:23:12,043 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:24:07,173 - app - DEBUG - Looking up user with identity: 12
+2025-05-03 11:24:45,627 - app - DEBUG - Looking up user with identity: 13
+2025-05-03 11:24:49,835 - app - DEBUG - Looking up user with identity: 13
+2025-05-03 11:25:03,900 - app - DEBUG - Looking up user with identity: 13
+2025-05-03 11:25:33,778 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:26:40,216 - app - DEBUG - Looking up user with identity: 13
+2025-05-03 11:27:19,831 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:27:57,668 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:30:46,520 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:30:56,840 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:32:37,432 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:37:50,171 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:38:06,086 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:38:23,508 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:38:40,309 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:40:21,169 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:40:23,497 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:00,085 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:11,016 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:24,080 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:40,222 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:51,338 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:46:31,186 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:46:55,387 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:47:14,451 - __main__ - DEBUG - Looking up user with identity: 13
+2025-05-03 11:47:29,427 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:48:09,064 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:48:09,066 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:55:34,384 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:55:34,534 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:55:40,326 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:55:40,331 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:56:04,093 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:56:12,535 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:56:43,765 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:57:48,995 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:58:01,881 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:58:57,738 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 12:16:23,871 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:18:27,430 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:27:15,911 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:27:29,560 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:27:35,890 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:28:09,187 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:28:37,955 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:29:04,092 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:30:02,104 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 12:34:09,629 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:37:11,755 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-03 12:37:28,213 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:38:30,762 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:43:11,724 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:43:22,765 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:44:55,589 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:45:16,232 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:46:15,635 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:46:29,639 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:47:14,328 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:47:23,182 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:48:01,842 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:48:07,713 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:48:26,475 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:48:37,475 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:49:06,080 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:49:35,648 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:50:07,189 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:50:12,505 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:36:27,346 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 13:38:50,248 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid payload padding
+2025-05-03 13:44:16,512 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid crypto padding
+2025-05-03 13:44:26,020 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:44:50,952 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:45:16,708 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:45:49,373 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:47:55,271 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:49:35,253 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:49:58,938 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:52:59,147 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:53:13,284 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:53:56,712 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 14:14:45,139 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 14:14:51,258 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 14:14:57,292 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 20:11:08,124 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:11:08,132 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:11:17,785 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:11:17,787 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:11:23,671 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:11:23,672 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:12:15,186 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:12:15,188 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:13:38,803 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-03 20:13:44,955 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:13:44,956 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:14:00,485 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:14:00,487 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:14:24,187 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:14:24,189 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:14:44,342 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:14:44,343 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:15:28,392 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:15:34,634 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:16:26,504 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:16:26,505 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 20:24:43,316 - app - DEBUG - Looking up user with identity: 30
+2025-05-03 20:25:20,315 - app - DEBUG - Looking up user with identity: 30
+2025-05-03 20:25:20,316 - app - DEBUG - Looking up user with identity: 30
+2025-05-03 20:26:12,575 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:12,576 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:26,425 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:26,427 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:46,127 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:46,129 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:46,134 - app - ERROR - Exception on /api/reviews [POST]
+Traceback (most recent call last):
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 945, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.CheckViolation: new row for relation "reviews" violates check constraint "check_rating_range"
+DETAIL:  Failing row contains (8, 120, 27, 6, Invalid rating test, 2025-05-03 20:23:38.3217+03, 2025-05-03 20:23:38.321724+03, f).
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask_cors/extension.py", line 178, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask_jwt_extended/view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask_jwt_extended/view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/Backend/utils/decorators.py", line 59, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/Backend/routes/review.py", line 19, in create_review
+    review = ReviewService.create_review(data, current_user_id, user_role)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/Backend/services/review_service.py", line 30, in create_review
+    db.session.commit()
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/scoping.py", line 599, in commit
+    return self._proxied.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2032, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1313, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1288, in _prepare_impl
+    self.session.flush()
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4353, in flush
+    self._flush(objects)
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4488, in _flush
+    with util.safe_reraise():
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4449, in _flush
+    flush_context.execute()
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 945, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.CheckViolation) new row for relation "reviews" violates check constraint "check_rating_range"
+DETAIL:  Failing row contains (8, 120, 27, 6, Invalid rating test, 2025-05-03 20:23:38.3217+03, 2025-05-03 20:23:38.321724+03, f).
+
+[SQL: INSERT INTO reviews (product_id, user_id, rating, comment, created_at, updated_at, is_featured) VALUES (%(product_id)s, %(user_id)s, %(rating)s, %(comment)s, %(created_at)s, %(updated_at)s, %(is_featured)s) RETURNING reviews.id]
+[parameters: {'product_id': 120, 'user_id': '27', 'rating': 6, 'comment': 'Invalid rating test', 'created_at': datetime.datetime(2025, 5, 3, 17, 23, 38, 321700, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2025, 5, 3, 17, 23, 38, 321724, tzinfo=datetime.timezone.utc), 'is_featured': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-05-03 20:26:50,783 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:50,786 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:50,790 - app - ERROR - Exception on /api/reviews [POST]
+Traceback (most recent call last):
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 945, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.CheckViolation: new row for relation "reviews" violates check constraint "check_rating_range"
+DETAIL:  Failing row contains (9, 120, 27, 6, Invalid rating test, 2025-05-03 20:23:38.3217+03, 2025-05-03 20:23:38.321724+03, f).
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask_cors/extension.py", line 178, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask_jwt_extended/view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/flask_jwt_extended/view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/Backend/utils/decorators.py", line 59, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/Backend/routes/review.py", line 19, in create_review
+    review = ReviewService.create_review(data, current_user_id, user_role)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/Backend/services/review_service.py", line 30, in create_review
+    db.session.commit()
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/scoping.py", line 599, in commit
+    return self._proxied.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2032, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1313, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1288, in _prepare_impl
+    self.session.flush()
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4353, in flush
+    self._flush(objects)
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4488, in _flush
+    with util.safe_reraise():
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4449, in _flush
+    flush_context.execute()
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/mackena/Desktop/Moringa/phase_5/Project/atelier-de-beaute/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 945, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.CheckViolation) new row for relation "reviews" violates check constraint "check_rating_range"
+DETAIL:  Failing row contains (9, 120, 27, 6, Invalid rating test, 2025-05-03 20:23:38.3217+03, 2025-05-03 20:23:38.321724+03, f).
+
+[SQL: INSERT INTO reviews (product_id, user_id, rating, comment, created_at, updated_at, is_featured) VALUES (%(product_id)s, %(user_id)s, %(rating)s, %(comment)s, %(created_at)s, %(updated_at)s, %(is_featured)s) RETURNING reviews.id]
+[parameters: {'product_id': 120, 'user_id': '27', 'rating': 6, 'comment': 'Invalid rating test', 'created_at': datetime.datetime(2025, 5, 3, 17, 23, 38, 321700, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2025, 5, 3, 17, 23, 38, 321724, tzinfo=datetime.timezone.utc), 'is_featured': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-05-03 20:26:59,549 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:26:59,552 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:48:30,611 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 20:48:30,612 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 20:53:11,566 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:53:11,568 - app - DEBUG - Looking up user with identity: 27
+2025-05-03 20:53:35,669 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 20:53:35,671 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 20:53:37,610 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 20:53:37,611 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:14:39,140 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:14:39,141 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:15:06,673 - app - DEBUG - Looking up user with identity: 30
+2025-05-03 21:15:06,674 - app - DEBUG - Looking up user with identity: 30
+2025-05-03 21:15:40,299 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:15:40,302 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:24:00,153 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:24:00,154 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:25:44,011 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:25:44,013 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:26:53,413 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:26:53,414 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:33:25,485 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:33:25,486 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:33:27,669 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:33:27,671 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:34:21,173 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:34:21,174 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:34:40,391 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:34:40,392 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:36:54,876 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:36:54,877 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:36:58,534 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:36:58,537 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:37:50,920 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:37:50,921 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:37:52,341 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:37:52,342 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:42:20,337 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:42:20,340 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:42:22,327 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:42:22,328 - app - DEBUG - Looking up user with identity: 28
+2025-05-03 21:42:36,798 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-03 21:42:54,701 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-03 21:43:40,593 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-03 21:43:41,883 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-03 21:47:40,969 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-03 21:48:11,057 - __main__ - DEBUG - Looking up user with identity: 30
+2025-05-03 21:49:16,714 - __main__ - DEBUG - Looking up user with identity: 30
+2025-05-03 21:49:16,715 - __main__ - DEBUG - Looking up user with identity: 30
+2025-05-03 21:49:35,056 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 21:49:35,058 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 21:49:43,279 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 21:49:43,280 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 22:03:18,544 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 22:03:18,600 - __main__ - DEBUG - Looking up user with identity: 27
+2025-05-03 22:03:27,084 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-03 22:03:27,086 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-03 22:03:31,995 - __main__ - DEBUG - Looking up user with identity: 28
+2025-05-03 22:03:31,997 - __main__ - DEBUG - Looking up user with identity: 28

@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from Backend.app import db
+from app import db
 
 class Review(db.Model):
     __tablename__ = 'reviews'
@@ -11,8 +11,9 @@ class Review(db.Model):
     comment = db.Column(db.Text)
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
-    is_featured = db.Column(db.Boolean, default=False, nullable=False)  # New field
+    is_featured = db.Column(db.Boolean, default=False, nullable=False)
 
+    # Relationships
     product = db.relationship('Product', back_populates='reviews')
     user = db.relationship('User', back_populates='reviews')
 

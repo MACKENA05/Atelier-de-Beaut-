@@ -31,9 +31,9 @@ class Product(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     
     # Relationships
-    # order_items = db.relationship('OrderItem', backref='product', lazy=True)
-    # reviews = db.relationship('Review', backref='product', lazy=True, cascade='all, delete-orphan')
-    # cart_items = db.relationship('CartItem', backref='product', lazy=True)
+    order_items = db.relationship('OrderItem', back_populates='product', lazy=True)
+    reviews = db.relationship('Review', back_populates='product', lazy=True, cascade='all, delete-orphan')
+    cart_items = db.relationship('CartItem', back_populates='product', lazy='dynamic')
     categories = db.relationship(
         'Category', 
         secondary=product_category,
