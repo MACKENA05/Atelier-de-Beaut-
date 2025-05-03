@@ -80,7 +80,6 @@ def register_user(data: dict):
             phone=data.get('phone', '').strip() or None,
             role=UserRole.CUSTOMER
         )
-
         new_user.set_password(data['password'])
         
         db.session.add(new_user)
@@ -111,3 +110,15 @@ def register_user(data: dict):
         db.session.rollback()
         logger.error(f"Register user error: {str(e)}", exc_info=True)
         return jsonify({"error": str(e)}), 500
+    
+
+
+
+
+
+
+
+
+
+
+

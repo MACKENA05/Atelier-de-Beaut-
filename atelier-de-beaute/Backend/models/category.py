@@ -26,7 +26,7 @@ class Category(db.Model):
         'Product', 
         secondary=product_category,
         back_populates='categories',
-        lazy='dynamic'  # or 'joined' if you always want to load products
+        lazy='dynamic' # or 'joined' if you always want to load products
     )
     def generate_slug(self):
         if not self.name:
@@ -41,17 +41,3 @@ class Category(db.Model):
 
     def __repr__(self):
         return f'<Category {self.name}>'
-    
-
-
-
-# we have this categories on a navbar
-#all products
-#     #  by brands
-#     #makeup
-#     #fragrance
-#     #Hairecare
-#     #SkinCare
-#     #Accessories
-#     #Deals
-#     and we have filtering by price 

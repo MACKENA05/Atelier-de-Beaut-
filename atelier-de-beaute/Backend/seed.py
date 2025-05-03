@@ -1,12 +1,16 @@
 import logging
 from sqlalchemy.sql import text
+from sqlalchemy import inspect
 from extensions import db
 from app import create_app
 from models.category import Category
 from models.product import Product
-from models.user import User
+from models.user import User, UserRole
 from models.cart import Cart, CartItem
+from models.order import Order, OrderItem, Address, Invoice, PaymentStatus, DeliveryStatus
 from werkzeug.security import generate_password_hash
+import uuid
+from datetime import datetime, timezone
 
 app = create_app()
 
@@ -20,6 +24,11 @@ def seed_data():
     try:
         # Clear existing data
         logger.info("Clearing existing data from all relevant tables...")
+        inspector = inspect(db.engine)
+        db.session.execute(text("DELETE FROM invoices"))
+        db.session.execute(text("DELETE FROM addresses"))
+        db.session.execute(text("DELETE FROM order_items"))
+        db.session.execute(text("DELETE FROM orders"))
         db.session.execute(text("DELETE FROM product_category"))
         db.session.execute(text("DELETE FROM cart_items"))
         db.session.execute(text("DELETE FROM carts"))
@@ -973,7 +982,7 @@ def seed_data():
             username='testuser',
             is_active=True
         )
-        user.set_password('password')
+        user.set_password('Password@123')
         db.session.add(user)
         db.session.commit()
         logger.info("Test user added successfully.")
@@ -989,12 +998,12 @@ def seed_data():
         db.session.add(cart)
         db.session.commit()
 
-        # Add multiple cart items for testing
-        cart_item1 = CartItem(cart_id=cart.id, product_id=740, quantity=2)  # e.g., Moisturizer
-        cart_item2 = CartItem(cart_id=cart.id, product_id=741, quantity=1)  # e.g., Lipstick
-        cart_item3 = CartItem(cart_id=cart.id, product_id=742, quantity=3)  # e.g., Foundation
-        cart_item4 = CartItem(cart_id=cart.id, product_id=743, quantity=1)  # e.g., Mascara
-        cart_item5 = CartItem(cart_id=cart.id, product_id=744, quantity=2)  # e.g., Cleanser
+        # Add cart items using valid product IDs
+        cart_item1 = CartItem(cart_id=cart.id, product_id=loreal_lipstick.id, quantity=2)
+        cart_item2 = CartItem(cart_id=cart.id, product_id=maybelline_foundation.id, quantity=1)
+        cart_item3 = CartItem(cart_id=cart.id, product_id=loreal_mascara.id, quantity=3)
+        cart_item4 = CartItem(cart_id=cart.id, product_id=fenty_highlighter.id, quantity=1)
+        cart_item5 = CartItem(cart_id=cart.id, product_id=estee_lauder_gel_cleanser.id, quantity=2)
         db.session.add(cart_item1)
         db.session.add(cart_item2)
         db.session.add(cart_item3)
@@ -1003,11 +1012,197 @@ def seed_data():
         db.session.commit()
         logger.info("Cart and cart items added successfully.")
     except Exception as e:
-            logger.error(f"Error adding cart and cart items: {e}")
-            db.session.rollback()
-            raise
+        logger.error(f"Error adding cart and cart items: {e}")
+        db.session.rollback()
+        raise
 
-    logger.info("Atelier-de-Beauty database seeded successfully with categories, products, user, and cart!")
+    try:
+        # 7. Orders
+        logger.info("Seeding test orders...")
+
+        # Order 1: Completed M-Pesa order (standard shipping)
+        order1 = Order(
+            user_id=1,
+            total=53.97,  # (2 * 12.99) + 12.99 + 10.99 + 5.00 (shipping)
+            shipping_cost=5.00,
+            payment_status=PaymentStatus.COMPLETED.value,
+            delivery_status=DeliveryStatus.DELIVERED.value,
+            transaction_id=f"TXN-{uuid.uuid4().hex[:8].upper()}",
+            checkout_request_id=f"CHECKOUT-{uuid.uuid4().hex[:8].upper()}",
+            shipping_method='standard',
+            payment_method='mpesa',
+            description='Test order with M-Pesa payment',
+            created_at=datetime.now(timezone.utc).replace(day=1, month=4, year=2025)
+        )
+        db.session.add(order1)
+        db.session.flush()
+
+        order1_items = [
+            OrderItem(order_id=order1.id, product_id=loreal_lipstick.id, quantity=2, unit_price=12.99),
+            OrderItem(order_id=order1.id, product_id=maybelline_foundation.id, quantity=1, unit_price=12.99),
+            OrderItem(order_id=order1.id, product_id=loreal_mascara.id, quantity=1, unit_price=10.99)
+        ]
+        for item in order1_items:
+            db.session.add(item)
+
+        order1_address = Address(
+            order_id=order1.id,
+            full_name="Test User",
+            phone="+254123456789",
+            postal_address="123 Main St",
+            city="Nairobi",
+            country="Kenya"
+        )
+        db.session.add(order1_address)
+
+        order1_invoice = Invoice(
+            order_id=order1.id,
+            invoice_number=f"INV-{uuid.uuid4().hex[:8].upper()}",
+            total=53.97,
+            transaction_id=order1.transaction_id,
+            status=PaymentStatus.COMPLETED.value,
+            issued_at=order1.created_at
+        )
+        db.session.add(order1_invoice)
+
+        # Order 2: Pending pay on delivery order (express shipping)
+        order2 = Order(
+            user_id=1,
+            total=90.99,  # 36.00 + 30.00 + 9.99 + 15.00 (shipping)
+            shipping_cost=15.00,
+            payment_status=PaymentStatus.PENDING.value,
+            delivery_status=DeliveryStatus.PENDING.value,
+            shipping_method='express',
+            payment_method='pay_on_delivery',
+            description='Test order with pay on delivery',
+            created_at=datetime.now(timezone.utc).replace(day=15, month=4, year=2025)
+        )
+        db.session.add(order2)
+        db.session.flush()
+
+        order2_items = [
+            OrderItem(order_id=order2.id, product_id=fenty_highlighter.id, quantity=1, unit_price=36.00),
+            OrderItem(order_id=order2.id, product_id=chanel_lip_gloss.id, quantity=1, unit_price=30.00),
+            OrderItem(order_id=order2.id, product_id=loreal_blush.id, quantity=1, unit_price=9.99)
+        ]
+        for item in order2_items:
+            db.session.add(item)
+
+        order2_address = Address(
+            order_id=order2.id,
+            full_name="Test User",
+            phone="+254987654321",
+            postal_address="456 Elm St",
+            city="Mombasa",
+            country="Kenya"
+        )
+        db.session.add(order2_address)
+
+        order2_invoice = Invoice(
+            order_id=order2.id,
+            invoice_number=f"INV-{uuid.uuid4().hex[:8].upper()}",
+            total=90.99,
+            transaction_id=None,
+            status=PaymentStatus.PENDING.value,
+            issued_at=order2.created_at
+        )
+        db.session.add(order2_invoice)
+
+        # Order 3: Failed M-Pesa order (standard shipping)
+        order3 = Order(
+            user_id=1,
+            total=159.98,  # 120.00 + 24.99 + 9.99 + 5.00 (shipping)
+            shipping_cost=5.00,
+            payment_status=PaymentStatus.FAILED.value,
+            delivery_status=DeliveryStatus.PENDING.value,
+            checkout_request_id=f"CHECKOUT-{uuid.uuid4().hex[:8].upper()}",
+            shipping_method='standard',
+            payment_method='mpesa',
+            description='Test order with failed M-Pesa payment',
+            created_at=datetime.now(timezone.utc).replace(day=20, month=4, year=2025)
+        )
+        db.session.add(order3)
+        db.session.flush()
+
+        order3_items = [
+            OrderItem(order_id=order3.id, product_id=chanel_floral_perfume.id, quantity=1, unit_price=120.00),
+            OrderItem(order_id=order3.id, product_id=loreal_night_cream.id, quantity=1, unit_price=24.99),
+            OrderItem(order_id=order3.id, product_id=maybelline_eyeliner.id, quantity=1, unit_price=9.99)
+        ]
+        for item in order3_items:
+            db.session.add(item)
+
+        order3_address = Address(
+            order_id=order3.id,
+            full_name="Test User",
+            phone="+254123456789",
+            postal_address="789 Oak St",
+            city="Kisumu",
+            country="Kenya"
+        )
+        db.session.add(order3_address)
+
+        order3_invoice = Invoice(
+            order_id=order3.id,
+            invoice_number=f"INV-{uuid.uuid4().hex[:8].upper()}",
+            total=159.98,
+            transaction_id=None,
+            status=PaymentStatus.FAILED.value,
+            issued_at=order3.created_at
+        )
+        db.session.add(order3_invoice)
+
+        # Order 4: Initiated M-Pesa order (standard shipping)
+        order4 = Order(
+            user_id=1,
+            total=84.98,  # 19.99 + 60.00 + 5.00 (shipping)
+            shipping_cost=5.00,
+            payment_status=PaymentStatus.INITIATED.value,
+            delivery_status=DeliveryStatus.PENDING.value,
+            checkout_request_id=f"CHECKOUT-{uuid.uuid4().hex[:8].upper()}",
+            shipping_method='standard',
+            payment_method='mpesa',
+            description='Test order with M-Pesa payment',
+            created_at=datetime.now(timezone.utc).replace(day=25, month=4, year=2025)
+        )
+        db.session.add(order4)
+        db.session.flush()
+
+        order4_items = [
+            OrderItem(order_id=order4.id, product_id=loreal_hyaluronic_serum.id, quantity=1, unit_price=19.99),
+            OrderItem(order_id=order4.id, product_id=chanel_sheet_mask.id, quantity=1, unit_price=60.00)
+        ]
+        for item in order4_items:
+            db.session.add(item)
+
+        order4_address = Address(
+            order_id=order4.id,
+            full_name="Test User",
+            phone="+254712345678",
+            postal_address="101 Pine St",
+            city="Nairobi",
+            country="Kenya"
+        )
+        db.session.add(order4_address)
+
+        order4_invoice = Invoice(
+            order_id=order4.id,
+            invoice_number=f"INV-{uuid.uuid4().hex[:8].upper()}",
+            total=84.98,
+            transaction_id=None,
+            status=PaymentStatus.INITIATED.value,
+            issued_at=order4.created_at
+        )
+        db.session.add(order4_invoice)
+
+        db.session.commit()
+        logger.info("Test orders added successfully.")
+    except Exception as e:
+        logger.error(f"Error adding test orders: {e}")
+        db.session.rollback()
+        raise
+
+    logger.info("Atelier-de-Beauty database seeded successfully with categories, products, user, cart, and orders!")
 
 if __name__ == "__main__":
     with app.app_context():

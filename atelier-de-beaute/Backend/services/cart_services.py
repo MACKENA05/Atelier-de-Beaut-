@@ -200,7 +200,6 @@ class Cart_Services:
             logger.error(f"Error merging guest cart for user {user_id}: {str(e)}")
             raise
 
-
     @staticmethod
     def clear_cart(user_id):
         """Clear all items from the cart."""

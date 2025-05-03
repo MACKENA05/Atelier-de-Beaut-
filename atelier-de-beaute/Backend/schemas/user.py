@@ -43,7 +43,7 @@ class RegisterSchema(Schema):
                        error="Only letters, spaces and hyphens allowed")
     ])
     phone = fields.Str(validate=[
-        validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
+        validate.Length(min=10, max=15, error="Phone number must be 13 digits"),
         validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
     ])
     
@@ -77,7 +77,7 @@ class AdminUserCreateSchema(Schema):
         validate.Regexp(r'^[a-zA-Z\- ]+$')
     ])
     phone = fields.Str(validate=[
-        validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
+        validate.Length(min=10, max=15, error="Phone number must be 13 digits"),
         validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
     ])
     is_active = fields.Boolean(load_default=True)
@@ -114,7 +114,7 @@ class AdminUserUpdateSchema(Schema):
         validate.Regexp(r'^[a-zA-Z\- ]+$')
     ])
     phone = fields.Str(validate=[
-        validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
+        validate.Length(min=10, max=15, error="Phone number must be 13 digits"),
         validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
     ])
 
@@ -142,3 +142,6 @@ class UserResponseSchema(Schema):
     last_name = fields.Str(dump_only=True)
     phone = fields.Str(dump_only=True)
     role = fields.Str(dump_only=True)
+    is_active = fields.Boolean(dump_only=True)
+    created_at = fields.DateTime(dump_only=True, format='iso8601')
+    last_login = fields.DateTime(dump_only=True, format='iso8601', allow_none=True)
