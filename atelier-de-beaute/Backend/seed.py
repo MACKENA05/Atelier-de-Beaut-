@@ -8,6 +8,7 @@ from models.product import Product
 from models.user import User, UserRole
 from models.cart import Cart, CartItem
 from models.order import Order, OrderItem, Address, Invoice, PaymentStatus, DeliveryStatus
+from models.review import Review
 from werkzeug.security import generate_password_hash
 import uuid
 from datetime import datetime, timezone
@@ -25,6 +26,7 @@ def seed_data():
         # Clear existing data
         logger.info("Clearing existing data from all relevant tables...")
         inspector = inspect(db.engine)
+        db.session.execute(text("DELETE FROM reviews"))
         db.session.execute(text("DELETE FROM invoices"))
         db.session.execute(text("DELETE FROM addresses"))
         db.session.execute(text("DELETE FROM order_items"))
@@ -973,28 +975,63 @@ def seed_data():
         db.session.rollback()
         raise
 
+    # try:
+    #     # 5. User
+    #     logger.info("Seeding test user...")
+    #     user = User(
+    #         id=1,
+    #         email='test@gmail.com',
+    #         username='testuser',
+    #         is_active=True
+    #     )
+    #     user.set_password('Password@123')
+    #     db.session.add(user)
+    #     db.session.commit()
+    #     logger.info("Test user added successfully.")
+    # except Exception as e:
+    #     logger.error(f"Error adding test user: {e}")
+    #     db.session.rollback()
+    #     raise
+
+
+    logging.info("Seeding test users...")
     try:
-        # 5. User
-        logger.info("Seeding test user...")
-        user = User(
-            id=1,
-            email='test@gmail.com',
-            username='testuser',
-            is_active=True
-        )
-        user.set_password('Password@123')
-        db.session.add(user)
+        users = [
+            User(
+                email="test1@gmail.com",
+                username="testuser1",
+                role="CUSTOMER",
+                is_active=True
+            ),
+            User(
+                email="test2@gmail.com",
+                username="testuser2",
+                role="CUSTOMER",
+                is_active=True
+            ),
+            User(
+                email="admin@gmail.com",
+                username="admin",
+                role="ADMIN",
+                is_active=True
+            )
+        ]
+        users[0].set_password('Password@123')
+        users[1].set_password('Password@123!')
+        users[2].set_password('Password@12')
+
+        db.session.add_all(users)
         db.session.commit()
-        logger.info("Test user added successfully.")
+        logging.info(f"Test users added successfully: {[user.id for user in users]}")
     except Exception as e:
-        logger.error(f"Error adding test user: {e}")
         db.session.rollback()
+        logging.error(f"Error adding test users: {str(e)}")
         raise
 
     try:
         # 6. Cart and Cart Items
         logger.info("Seeding cart and cart items...")
-        cart = Cart(user_id=1)
+        cart = Cart(user_id=27)
         db.session.add(cart)
         db.session.commit()
 
@@ -1022,7 +1059,7 @@ def seed_data():
 
         # Order 1: Completed M-Pesa order (standard shipping)
         order1 = Order(
-            user_id=1,
+            user_id=27,
             total=53.97,  # (2 * 12.99) + 12.99 + 10.99 + 5.00 (shipping)
             shipping_cost=5.00,
             payment_status=PaymentStatus.COMPLETED.value,
@@ -1067,7 +1104,7 @@ def seed_data():
 
         # Order 2: Pending pay on delivery order (express shipping)
         order2 = Order(
-            user_id=1,
+            user_id=28,
             total=90.99,  # 36.00 + 30.00 + 9.99 + 15.00 (shipping)
             shipping_cost=15.00,
             payment_status=PaymentStatus.PENDING.value,
@@ -1110,7 +1147,7 @@ def seed_data():
 
         # Order 3: Failed M-Pesa order (standard shipping)
         order3 = Order(
-            user_id=1,
+            user_id=29,
             total=159.98,  # 120.00 + 24.99 + 9.99 + 5.00 (shipping)
             shipping_cost=5.00,
             payment_status=PaymentStatus.FAILED.value,
@@ -1154,7 +1191,7 @@ def seed_data():
 
         # Order 4: Initiated M-Pesa order (standard shipping)
         order4 = Order(
-            user_id=1,
+            user_id=27,
             total=84.98,  # 19.99 + 60.00 + 5.00 (shipping)
             shipping_cost=5.00,
             payment_status=PaymentStatus.INITIATED.value,
@@ -1199,6 +1236,64 @@ def seed_data():
         logger.info("Test orders added successfully.")
     except Exception as e:
         logger.error(f"Error adding test orders: {e}")
+        db.session.rollback()
+        raise
+
+    try:
+        # 8. Reviews
+        logger.info("Seeding reviews...")
+        reviews = [
+            Review(
+                product_id=loreal_lipstick.id,
+                user_id=27,
+                rating=4,
+                comment="Love the matte finish, stays on all day!",
+                is_featured=True,
+                created_at=datetime.now(timezone.utc).replace(day=2, month=4, year=2025)
+            ),
+            Review(
+                product_id=loreal_lipstick.id,
+                user_id=28,
+                rating=3,
+                comment="Nice color but a bit drying.",
+                created_at=datetime.now(timezone.utc).replace(day=3, month=4, year=2025)
+            ),
+            Review(
+                product_id=maybelline_foundation.id,
+                user_id=29,
+                rating=5,
+                comment="Perfect match for my skin tone, great coverage!",
+                is_featured=True,
+                created_at=datetime.now(timezone.utc).replace(day=4, month=4, year=2025)
+            ),
+            Review(
+                product_id=fenty_highlighter.id,
+                user_id=27,
+                rating=4,
+                comment="Gives a beautiful glow, but a bit pricey.",
+                created_at=datetime.now(timezone.utc).replace(day=5, month=4, year=2025)
+            ),
+            Review(
+                product_id=chanel_floral_perfume.id,
+                user_id=28,
+                rating=5,
+                comment="Amazing scent, feels so luxurious!",
+                is_featured=True,
+                created_at=datetime.now(timezone.utc).replace(day=6, month=4, year=2025)
+            ),
+            Review(
+                product_id=loreal_hyaluronic_serum.id,
+                user_id=29,
+                rating=4,
+                comment="Hydrates well, great for daily use.",
+                created_at=datetime.now(timezone.utc).replace(day=7, month=4, year=2025)
+            )
+        ]
+        db.session.add_all(reviews)
+        db.session.commit()
+        logger.info("Reviews added successfully.")
+    except Exception as e:
+        logger.error(f"Error adding reviews: {e}")
         db.session.rollback()
         raise
 
