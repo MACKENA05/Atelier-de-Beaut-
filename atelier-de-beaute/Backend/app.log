@@ -14,3 +14,161 @@
 2025-04-30 15:32:45,969 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid crypto padding
 2025-04-30 15:32:56,516 - __main__ - WARNING - Invalid token from 127.0.0.1: Bad Authorization header. Expected 'Authorization: Bearer <JWT>'
 2025-04-30 15:33:45,876 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid crypto padding
+2025-05-01 01:03:25,423 - __main__ - WARNING - Invalid token from 127.0.0.1: Signature verification failed
+2025-05-02 02:44:53,845 - app - ERROR - Checkout failed for order 1: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-05-02 02:57:38,809 - app - ERROR - Checkout failed for order 1: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-05-02 03:11:26,326 - app - ERROR - Checkout failed for order 7: 'Order' object has no attribute 'total_amount'
+2025-05-02 03:12:27,805 - app - ERROR - Checkout failed for order 7: 400 Bad Request: Failed to decode JSON object: Extra data: line 1 column 26 (char 25)
+2025-05-02 03:13:05,615 - app - ERROR - Checkout failed for order 7: 'Order' object has no attribute 'total_amount'
+2025-05-02 03:13:57,865 - app - ERROR - Checkout failed for order 7: 'Order' object has no attribute 'total_amount'
+2025-05-02 03:15:27,259 - app - ERROR - Checkout failed for order 7: 'Order' object has no attribute 'total_amount'
+2025-05-02 03:16:48,768 - app - WARNING - Total mismatch for order 7: client=300, order=155.99
+2025-05-02 03:20:25,685 - app - ERROR - Checkout failed for order 7: STK Push request failed: 400 Client Error: Bad Request for url: https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest
+2025-05-02 03:29:10,613 - app - INFO - M-Pesa Callback received: {'Body': {'stkCallback': {'CheckoutRequestID': 'ws_CO_02112024123456789', 'ResultCode': 0, 'ResultDesc': 'The service request is processed successfully'}}}
+2025-05-02 09:38:05,222 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 12:03:07,490 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 12:14:23,014 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 21:50:32,266 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 22:40:06,648 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 22:41:55,634 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 22:46:42,621 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 22:55:34,456 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:04:28,350 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:10:30,430 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:12:09,189 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:13:50,050 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:14:39,406 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:17:21,041 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:35:15,250 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:47:37,466 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-02 23:58:19,426 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-02 23:58:53,606 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:01:21,110 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:01:28,551 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:01:38,889 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:01:52,741 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 00:02:04,905 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 07:17:55,846 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-03 07:18:16,332 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 07:19:43,901 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 07:23:06,406 - __main__ - DEBUG - Looking up user with identity: 1
+2025-05-03 07:26:44,227 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:27:44,936 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:28:10,952 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:28:19,714 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:28:58,845 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:29:25,599 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:30:02,518 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 07:33:45,753 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-03 09:34:34,920 - __main__ - DEBUG - Looking up user with identity: 7
+2025-05-03 09:37:44,753 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:37:51,463 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:38:02,731 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:38:18,094 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:38:22,785 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:41:05,568 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:41:38,735 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-03 09:42:09,524 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:43:10,947 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:53:28,968 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 09:54:08,597 - __main__ - DEBUG - Looking up user with identity: 8
+2025-05-03 10:08:46,417 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:08:55,292 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:09:11,976 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:09:18,757 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:10:04,099 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:12:39,016 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:13:00,903 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:15:58,693 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 10:34:57,017 - __main__ - DEBUG - Looking up user with identity: 9
+2025-05-03 11:09:11,764 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:09:11,766 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:14:10,731 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:14:10,733 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:16:29,472 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:16:29,474 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:19:39,563 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:21:55,531 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:22:20,059 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:22:42,860 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:23:12,043 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:24:07,173 - app - DEBUG - Looking up user with identity: 12
+2025-05-03 11:24:45,627 - app - DEBUG - Looking up user with identity: 13
+2025-05-03 11:24:49,835 - app - DEBUG - Looking up user with identity: 13
+2025-05-03 11:25:03,900 - app - DEBUG - Looking up user with identity: 13
+2025-05-03 11:25:33,778 - app - DEBUG - Looking up user with identity: 11
+2025-05-03 11:26:40,216 - app - DEBUG - Looking up user with identity: 13
+2025-05-03 11:27:19,831 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:27:57,668 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:30:46,520 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:30:56,840 - app - DEBUG - Looking up user with identity: 10
+2025-05-03 11:32:37,432 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:37:50,171 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:38:06,086 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:38:23,508 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:38:40,309 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:40:21,169 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:40:23,497 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:00,085 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:11,016 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:24,080 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:40,222 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:45:51,338 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:46:31,186 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:46:55,387 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:47:14,451 - __main__ - DEBUG - Looking up user with identity: 13
+2025-05-03 11:47:29,427 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:48:09,064 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:48:09,066 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:55:34,384 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:55:34,534 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:55:40,326 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:55:40,331 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:56:04,093 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 11:56:12,535 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:56:43,765 - __main__ - DEBUG - Looking up user with identity: 11
+2025-05-03 11:57:48,995 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:58:01,881 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 11:58:57,738 - __main__ - DEBUG - Looking up user with identity: 12
+2025-05-03 12:16:23,871 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:18:27,430 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:27:15,911 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:27:29,560 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:27:35,890 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:28:09,187 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:28:37,955 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:29:04,092 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:30:02,104 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 12:34:09,629 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:37:11,755 - __main__ - WARNING - Invalid token from 127.0.0.1: Not enough segments
+2025-05-03 12:37:28,213 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:38:30,762 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:43:11,724 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:43:22,765 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:44:55,589 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:45:16,232 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:46:15,635 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:46:29,639 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:47:14,328 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:47:23,182 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:48:01,842 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:48:07,713 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:48:26,475 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:48:37,475 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:49:06,080 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:49:35,648 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:50:07,189 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 12:50:12,505 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:36:27,346 - __main__ - DEBUG - Looking up user with identity: 10
+2025-05-03 13:38:50,248 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid payload padding
+2025-05-03 13:44:16,512 - __main__ - WARNING - Invalid token from 127.0.0.1: Invalid crypto padding
+2025-05-03 13:44:26,020 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:44:50,952 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:45:16,708 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:45:49,373 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:47:55,271 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:49:35,253 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:49:58,938 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:52:59,147 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:53:13,284 - __main__ - DEBUG - Looking up user with identity: 14
+2025-05-03 13:53:56,712 - __main__ - DEBUG - Looking up user with identity: 14

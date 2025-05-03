@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from services.cart_service import Cart_Services
+from services.cart_services import Cart_Services
 import logging
 
 cart_bp = Blueprint('cart', __name__)
@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 @cart_bp.route('/cart', methods=['GET'])
 @jwt_required(optional=True)
 def get_cart():
-    #View all products in the cart.
+    """View all products in the cart."""
     user_id = get_jwt_identity()
     try:
         cart_data = Cart_Services.get_cart_data(user_id)
@@ -34,7 +34,7 @@ def add_to_cart():
 @cart_bp.route('/cart/update', methods=['PUT'])
 @jwt_required(optional=True)
 def update_cart_item():
-    #Update item quantity in the cart.
+    """Update item quantity in the cart."""
     user_id = get_jwt_identity()
     data = request.get_json()
     try:

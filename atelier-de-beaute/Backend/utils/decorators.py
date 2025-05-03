@@ -2,20 +2,13 @@ from functools import wraps
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from flask import jsonify
 from models.user import UserRole
-from enum import Enum
 import logging
 
 logger = logging.getLogger(__name__)
 
-# class UserRole(str, Enum):
-#     ADMIN = 'admin'
-#     MANAGER = 'manager'
-#     SALES_REP = 'sales-representative'
-#     CUSTOMER = 'customer'
-
 ROLE_HIERARCHY = {
-    UserRole.ADMIN: [UserRole.ADMIN, UserRole.MANAGER, UserRole.SALES_REPRESENTATIVE],
-    UserRole.MANAGER: [UserRole.MANAGER, UserRole.SALES_REPRESENTATIVE],
+    UserRole.ADMIN: [UserRole.ADMIN],
+    UserRole.MANAGER: [UserRole.MANAGER],
     UserRole.SALES_REPRESENTATIVE: [UserRole.SALES_REPRESENTATIVE],
     UserRole.CUSTOMER: [UserRole.CUSTOMER]
 }
