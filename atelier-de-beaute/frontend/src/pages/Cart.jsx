@@ -5,10 +5,11 @@ import CartItem from '../components/CartItem';
 import CategoryFilter from '../components/CategoryFilter';
 import './Cart.css';
 import {
-  removeFromCart,
-  updateQuantity,
+  removeFromCartThunk,
+  updateQuantityThunk,
   clearCart,
   applyDiscount,
+  fetchCartThunk,
 } from '../redux/cartSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,33 +32,11 @@ const Slideshow = () => {
   }, [slides.length]);
 
   return (
-    <div
-      className="slideshow"
-      style={{
-        width: '100%',
-        maxWidth: '600px',
-        height: '300px', // fixed height to keep consistent size
-        margin: '0 auto 20px auto',
-        borderRadius: '10px',
-        overflow: 'hidden',
-        boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
-        transition: 'opacity 1s ease-in-out',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f9f9f9',
-      }}
-    >
+    <div className="slideshow">
       <img
         src={slides[current].image}
         alt={slides[current].alt}
-        style={{
-          maxWidth: '100%',
-          maxHeight: '100%',
-          display: 'block',
-          borderRadius: '10px',
-          objectFit: 'contain', // contain to avoid cropping and keep aspect ratio
-        }}
+        className="slideshow-image"
       />
     </div>
   );
@@ -71,16 +50,20 @@ const Cart = () => {
   const [discountError, setDiscountError] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  useEffect(() => {
+    dispatch(fetchCartThunk());
+  }, [dispatch]);
+
   const notify = (message) => toast(message);
 
   const handleRemove = (id) => {
-    dispatch(removeFromCart(id));
+    dispatch(removeFromCartThunk(id));
     notify('Item removed from cart');
   };
 
   const handleQuantityChange = (id, quantity) => {
     if (quantity < 1) return;
-    dispatch(updateQuantity({ id, quantity }));
+    dispatch(updateQuantityThunk({ id, quantity }));
     notify('Cart updated');
   };
 
@@ -120,7 +103,7 @@ const Cart = () => {
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
-      <main className="cart-main" style={{ gridTemplateColumns: '1fr 2fr', gap: '1.5rem' }}>
+      <main className="cart-main">
         <div className="cart-items">
           <h1 className="title">Your Shopping Cart</h1>
           {filteredCartItems.length === 0 ? (

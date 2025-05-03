@@ -16,7 +16,13 @@ const Login = () => {
     if (user) {
       toast.success('Login successful!');
       sessionStorage.setItem('userRole', user.role || 'user');
-      navigate('/landing');
+      setTimeout(() => {
+        if (user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/landing');
+        }
+      }, 500);
     }
   }, [user, navigate]);
 

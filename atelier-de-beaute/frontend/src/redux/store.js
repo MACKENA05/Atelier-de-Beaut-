@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import cartReducer from './cartSlice';
 import authReducer from './authSlice';
 import productsReducer from './productsSlice';
+import adminReducer from './adminSlice';
+
 import {
   persistStore,
   persistReducer,
@@ -26,6 +28,8 @@ const store = configureStore({
     cart: persistedCartReducer,
     auth: authReducer,
     products: productsReducer,
+    admin: adminReducer,
+
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

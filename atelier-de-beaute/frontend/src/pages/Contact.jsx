@@ -12,7 +12,6 @@ const Contact = () => {
   const [captchaChecked, setCaptchaChecked] = useState(false);
 
   const validateEmail = (email) => {
-    // Simple email regex validation
     return /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
   };
 
@@ -45,7 +44,6 @@ const Contact = () => {
 
     setLoading(true);
 
-    // Simulate API call with timeout
     setTimeout(() => {
       setLoading(false);
       setSuccess('Message sent successfully!');
@@ -57,6 +55,7 @@ const Contact = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Contact Us</h1>
+
       <form style={styles.form} onSubmit={handleSubmit} noValidate>
         <input
           style={styles.input}
@@ -99,12 +98,13 @@ const Contact = () => {
         <button type="submit" style={styles.button} disabled={loading}>
           {loading ? 'Sending...' : 'Send Message'}
         </button>
+
         {error && <p style={styles.error}>{error}</p>}
         {success && <p style={styles.success}>{success}</p>}
       </form>
 
       <div style={styles.contactInfo}>
-        <h2>Contact Information</h2>
+        <h2>Reach Out to Us</h2>
         <p>Address: Nairobi, Kenya</p>
         <p>Phone: +254 707590734</p>
         <p>Email: contact@atelierdebeaute.com</p>
@@ -124,6 +124,7 @@ const Contact = () => {
 
       <div style={styles.socialMedia}>
         <h2>Follow Us</h2>
+        <p>Stay connected with us through our social media channels!</p>
         <a href="https://facebook.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Facebook</a> |{' '}
         <a href="https://instagram.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Instagram</a> |{' '}
         <a href="https://twitter.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Twitter</a>
@@ -136,8 +137,8 @@ const styles = {
   container: {
     padding: '2rem',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    backgroundColor: '#ffffff', // white background for body
-    color: '#3a0ca3', // deep purple text
+    backgroundColor: '#ffffff',
+    color: '#3a0ca3',
     minHeight: '100vh',
   },
   title: {
@@ -157,23 +158,23 @@ const styles = {
   input: {
     padding: '0.75rem 1rem',
     borderRadius: '12px',
-    border: '1px solid #3a0ca3', // deep purple border
+    border: '1px solid #3a0ca3',
     outline: 'none',
     fontSize: '1rem',
-    backgroundColor: '#f4e1d2', // cream background
-    color: '#3a0ca3', // deep purple text
+    backgroundColor: '#f4e1d2',
+    color: '#3a0ca3',
     boxShadow: '0 0 8px #a0a0a0',
     transition: 'box-shadow 0.3s ease',
   },
   textarea: {
     padding: '0.75rem 1rem',
     borderRadius: '12px',
-    border: '1px solid #3a0ca3', // deep purple border
+    border: '1px solid #3a0ca3',
     outline: 'none',
     fontSize: '1rem',
     minHeight: '120px',
-    backgroundColor: '#f4e1d2', // cream background
-    color: '#3a0ca3', // deep purple text
+    backgroundColor: '#f4e1d2',
+    color: '#3a0ca3',
     boxShadow: '0 0 8px #a0a0a0',
     transition: 'box-shadow 0.3s ease',
     resize: 'vertical',
@@ -189,8 +190,8 @@ const styles = {
     padding: '0.75rem 1.5rem',
     borderRadius: '12px',
     border: 'none',
-    backgroundColor: '#ffb703', // gold button
-    color: '#3a0ca3', // deep purple text
+    backgroundColor: '#ffb703',
+    color: '#3a0ca3',
     fontWeight: '600',
     cursor: 'pointer',
     boxShadow: '0 0 12px #cc7a3a',
@@ -209,11 +210,11 @@ const styles = {
   contactInfo: {
     maxWidth: '600px',
     margin: '2rem auto 0',
-    backgroundColor: '#f4e1d2', // cream background
+    backgroundColor: '#f4e1d2',
     padding: '1rem 2rem',
     borderRadius: '12px',
     boxShadow: '0 0 12px #a0a0a0',
-    color: '#3a0ca3', // deep purple text
+    color: '#3a0ca3',
   },
   mapContainer: {
     maxWidth: '600px',
@@ -225,7 +226,7 @@ const styles = {
     textAlign: 'center',
   },
   socialLink: {
-    color: '#3a0ca3', // deep purple
+    color: '#3a0ca3',
     textDecoration: 'none',
     fontWeight: '600',
   },

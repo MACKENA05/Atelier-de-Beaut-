@@ -1,135 +1,163 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  fetchAdminData,
+  createUser,
+  updateUser,
+  deleteUser,
+  clearError,
+} from '../redux/adminSlice';
 
 const AdministratorPanel = () => {
-  // Sample state for dashboard stats and users
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    totalOrders: 0,
-    totalRevenue: 0,
+  const dispatch = useDispatch();
+  const { users, loading, error } = useSelector((state) => state.admin);
+
+  const [formData, setFormData] = useState({
+    id: null,
+    name: '',
+    email: '',
+    role: 'user',
   });
-  const [users, setUsers] = useState([]);
-  const [newUser, setNewUser] = useState({ email: '', role: 'user' });
-  const [error, setError] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    // TODO: Fetch dashboard stats and users from API
-    // For now, use dummy data
-    setStats({
-      totalUsers: 120,
-      totalOrders: 350,
-      totalRevenue: 12500,
-    });
-    setUsers([
-      { id: 1, email: 'admin@example.com', role: 'administrator' },
-      { id: 2, email: 'manager@example.com', role: 'product_manager' },
-      { id: 3, email: 'delivery@example.com', role: 'delivery_manager' },
-      { id: 4, email: 'user@example.com', role: 'user' },
-    ]);
-  }, []);
+    dispatch(fetchAdminData());
+  }, [dispatch]);
 
-  const handleAddUser = () => {
-    if (!newUser.email) {
-      setError('Email is required');
-      return;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isEditing) {
+      dispatch(updateUser({ userId: formData.id, userData: formData })).then(() => {
+        setIsEditing(false);
+        setFormData({ id: null, name: '', email: '', role: 'user' });
+        dispatch(fetchAdminData());
+      });
+    } else {
+      dispatch(createUser(formData)).then(() => {
+        setFormData({ id: null, name: '', email: '', role: 'user' });
+        dispatch(fetchAdminData());
+      });
     }
-    // TODO: Add user via API
-    setUsers([...users, { id: Date.now(), email: newUser.email, role: newUser.role }]);
-    setNewUser({ email: '', role: 'user' });
-    setError('');
   };
 
-  const handleRemoveUser = (id) => {
-    // TODO: Remove user via API
-    setUsers(users.filter((user) => user.id !== id));
+  const handleEdit = (user) => {
+    setIsEditing(true);
+    setFormData({
+      id: user.id,
+      name: user.name || '',
+      email: user.email || '',
+      role: user.role || 'user',
+    });
   };
 
-  const handleRoleChange = (id, newRole) => {
-    // TODO: Update user role via API
-    setUsers(users.map((user) => (user.id === id ? { ...user, role: newRole } : user)));
+  const handleDelete = (userId) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      dispatch(deleteUser(userId)).then(() => {
+        dispatch(fetchAdminData());
+      });
+    }
+  };
+
+  const handleClearError = () => {
+    dispatch(clearError());
   };
 
   return (
     <div style={styles.container}>
       <h1>Administrator Panel</h1>
 
-      <section style={styles.section}>
-        <h2>Dashboard Stats</h2>
-        <div style={styles.statsGrid}>
-          <div style={styles.statCard}>
-            <h3>Total Users</h3>
-            <p>{stats.totalUsers}</p>
-          </div>
-          <div style={styles.statCard}>
-            <h3>Total Orders</h3>
-            <p>{stats.totalOrders}</p>
-          </div>
-          <div style={styles.statCard}>
-            <h3>Total Revenue</h3>
-            <p>${stats.totalRevenue.toFixed(2)}</p>
-          </div>
+      {error && (
+        <div style={styles.error}>
+          <p>{error}</p>
+          <button onClick={handleClearError} style={styles.clearErrorButton}>Clear</button>
         </div>
-      </section>
+      )}
 
-      <section style={styles.section}>
-        <h2>User Management</h2>
-        <div style={styles.addUserForm}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={newUser.email}
-            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-            style={styles.input}
-          />
-          <select
-            value={newUser.role}
-            onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-            style={styles.select}
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <h2>{isEditing ? 'Edit User' : 'Create User'}</h2>
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={formData.name}
+          onChange={handleInputChange}
+          required
+          style={styles.input}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleInputChange}
+          required
+          style={styles.input}
+        />
+        <select
+          name="role"
+          value={formData.role}
+          onChange={handleInputChange}
+          style={styles.select}
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button type="submit" style={styles.button} disabled={loading}>
+          {loading ? 'Saving...' : isEditing ? 'Update User' : 'Create User'}
+        </button>
+        {isEditing && (
+          <button
+            type="button"
+            onClick={() => {
+              setIsEditing(false);
+              setFormData({ id: null, name: '', email: '', role: 'user' });
+            }}
+            style={styles.cancelButton}
           >
-            <option value="user">User</option>
-            <option value="administrator">Administrator</option>
-            <option value="product_manager">Product Manager</option>
-            <option value="delivery_manager">Delivery Manager</option>
-          </select>
-          <button onClick={handleAddUser} style={styles.button}>
-            Add User
+            Cancel
           </button>
-        </div>
-        {error && <p style={styles.error}>{error}</p>}
+        )}
+      </form>
 
+      <h2>User List</h2>
+      {loading && <p>Loading users...</p>}
+      {!loading && users.length === 0 && <p>No users found.</p>}
+      {!loading && users.length > 0 && (
         <table style={styles.table}>
           <thead>
             <tr>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
+              <th style={styles.th}>ID</th>
+              <th style={styles.th}>Name</th>
+              <th style={styles.th}>Email</th>
+              <th style={styles.th}>Role</th>
+              <th style={styles.th}>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users.map(({ id, email, role }) => (
-              <tr key={id}>
-                <td>{email}</td>
-                <td>
-                  <select
-                    value={role}
-                    onChange={(e) => handleRoleChange(id, e.target.value)}
-                    style={styles.select}
-                  >
-                    <option value="user">User</option>
-                    <option value="administrator">Administrator</option>
-                    <option value="product_manager">Product Manager</option>
-                    <option value="delivery_manager">Delivery Manager</option>
-                  </select>
-                </td>
-                <td>
-                  <button onClick={() => handleRemoveUser(id)} style={styles.removeButton}>
-                    Remove
+            {users.map((user) => (
+              <tr key={user.id} style={styles.tr}>
+                <td style={styles.td}>{user.id}</td>
+                <td style={styles.td}>{user.name}</td>
+                <td style={styles.td}>{user.email}</td>
+                <td style={styles.td}>{user.role}</td>
+                <td style={styles.td}>
+                  <button onClick={() => handleEdit(user)} style={styles.actionButton}>
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete(user.id)} style={styles.deleteButton}>
+                    Delete
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </section>
+      )}
     </div>
   );
 };
@@ -138,64 +166,92 @@ const styles = {
   container: {
     padding: '2rem',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    backgroundColor: '#ffffff',
-    color: '#3a0ca3',
-    minHeight: '100vh',
+    color: '#333',
   },
-  section: {
-    marginBottom: '3rem',
-  },
-  statsGrid: {
-    display: 'flex',
-    gap: '2rem',
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: '#f4e1d2',
-    borderRadius: '12px',
+  error: {
+    backgroundColor: '#f8d7da',
+    color: '#721c24',
     padding: '1rem',
-    textAlign: 'center',
-    boxShadow: '0 0 10px #f4e1d2',
-  },
-  addUserForm: {
-    display: 'flex',
-    gap: '1rem',
     marginBottom: '1rem',
+    borderRadius: '4px',
+  },
+  clearErrorButton: {
+    marginTop: '0.5rem',
+    padding: '0.25rem 0.5rem',
+    backgroundColor: '#721c24',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '3px',
+    cursor: 'pointer',
+  },
+  form: {
+    marginBottom: '2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '400px',
+    gap: '0.75rem',
   },
   input: {
-    flex: 2,
     padding: '0.5rem',
-    borderRadius: '8px',
+    fontSize: '1rem',
+    borderRadius: '4px',
     border: '1px solid #ccc',
   },
   select: {
-    flex: 1,
     padding: '0.5rem',
-    borderRadius: '8px',
+    fontSize: '1rem',
+    borderRadius: '4px',
     border: '1px solid #ccc',
   },
   button: {
-    flex: 1,
-    backgroundColor: '#ffb703',
+    padding: '0.5rem',
+    fontSize: '1rem',
+    borderRadius: '4px',
     border: 'none',
-    borderRadius: '8px',
-    color: '#3a0ca3',
-    fontWeight: '700',
+    backgroundColor: '#0f3460',
+    color: '#fff',
     cursor: 'pointer',
   },
-  error: {
-    color: 'red',
+  cancelButton: {
+    padding: '0.5rem',
+    fontSize: '1rem',
+    borderRadius: '4px',
+    border: 'none',
+    backgroundColor: '#888',
+    color: '#fff',
+    cursor: 'pointer',
+    marginTop: '0.5rem',
   },
   table: {
     width: '100%',
     borderCollapse: 'collapse',
   },
-  removeButton: {
-    backgroundColor: '#e63946',
+  th: {
+    borderBottom: '2px solid #ddd',
+    padding: '0.5rem',
+    textAlign: 'left',
+  },
+  tr: {
+    borderBottom: '1px solid #ddd',
+  },
+  td: {
+    padding: '0.5rem',
+  },
+  actionButton: {
+    marginRight: '0.5rem',
+    padding: '0.25rem 0.5rem',
+    backgroundColor: '#0f3460',
+    color: '#fff',
     border: 'none',
-    borderRadius: '8px',
-    color: 'white',
-    padding: '0.5rem 1rem',
+    borderRadius: '3px',
+    cursor: 'pointer',
+  },
+  deleteButton: {
+    padding: '0.25rem 0.5rem',
+    backgroundColor: '#c82333',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '3px',
     cursor: 'pointer',
   },
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import './PrivacyPolicy.css';
 
 const PrivacyPolicy = () => {
+  console.log("PrivacyPolicy component rendered");
   return (
     <div className="privacy-container">
       <h1 className="privacy-title">Privacy Policy</h1>

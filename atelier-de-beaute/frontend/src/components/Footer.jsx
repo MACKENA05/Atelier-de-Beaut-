@@ -1,7 +1,10 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import './Footer.css';
 
 const Footer = () => {
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <footer className="footer">
       <div className="footer-content">
@@ -17,7 +20,12 @@ const Footer = () => {
             <li><a href="/account">Account</a></li>
             <li><a href="/contact">Contact</a></li>
             <li><a href="/privacy">Privacy Policy</a></li>
-            <li><a href="/admin">Login as Admin</a></li>
+
+            {/* Role-based admin links */}
+            {!user && <li><a href="/admin-landing">Login as Admin</a></li>}
+            {user && user.role === 'admin' && <li><a href="/dashboard/admin">Admin Dashboard</a></li>}
+            {user && user.role === 'manager' && <li><a href="/dashboard/manager">Manager Dashboard</a></li>}
+            {user && user.role === 'sales rep' && <li><a href="/dashboard/sales-rep">Sales Rep Dashboard</a></li>}
           </ul>
         </div>
         <div className="footer-section social">

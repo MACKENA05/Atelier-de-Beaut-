@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import apiClient from '../services/apiClient';
 
-const API_URL = 'http://localhost:5000/auth';
+const API_URL = '/auth';
 
 export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, credentials);
+    const response = await apiClient.post(`${API_URL}/login`, credentials);
     return response.data.user;
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || 'Login failed');
@@ -14,7 +14,7 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
 
 export const signup = createAsyncThunk('auth/signup', async (userData, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${API_URL}/register`, userData);
+    const response = await apiClient.post(`${API_URL}/register`, userData);
     return response.data.user;
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || 'Signup failed');
@@ -23,7 +23,7 @@ export const signup = createAsyncThunk('auth/signup', async (userData, { rejectW
 
 export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
   try {
-    await axios.post(`${API_URL}/logout`);
+    await apiClient.post(`${API_URL}/logout`);
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || 'Logout failed');
   }
@@ -31,7 +31,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
 
 export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${API_URL}/me`);
+    const response = await apiClient.get(`${API_URL}/me`);
     return response.data.user;
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || 'Fetch user failed');
@@ -43,7 +43,7 @@ export const addFunds = createAsyncThunk(
   'auth/addFunds',
   async ({ amount, method }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/wallet/add-funds`, { amount, method });
+      const response = await apiClient.post(`${API_URL}/wallet/add-funds`, { amount, method });
       return response.data.user;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || 'Add funds failed');

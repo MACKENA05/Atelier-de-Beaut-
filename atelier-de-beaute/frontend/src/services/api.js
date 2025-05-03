@@ -13,25 +13,61 @@ export const fetchTestimonials = async () => {
 };
 
 export const fetchCart = async () => {
-  throw new Error('fetchCart API not implemented');
+  try {
+    const response = await axios.get(API_BASE_URL + '/api/cart');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+    throw error;
+  }
 };
 
 export const addCartItem = async (product) => {
-  throw new Error('addCartItem API not implemented');
+  try {
+    const response = await axios.post(API_BASE_URL + '/api/cart', product);
+    return response.data;
+  } catch (error) {
+    console.error('Error adding cart item:', error);
+    throw error;
+  }
 };
 
 export const updateCartItem = async (id, quantity) => {
-  throw new Error('updateCartItem API not implemented');
+  try {
+    const response = await axios.put(API_BASE_URL + `/api/cart/${id}`, { quantity });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating cart item:', error);
+    throw error;
+  }
 };
 
 export const removeCartItem = async (id) => {
-  throw new Error('removeCartItem API not implemented');
+  try {
+    const response = await axios.delete(API_BASE_URL + `/api/cart/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error removing cart item:', error);
+    throw error;
+  }
 };
 
 export const fetchCategories = async () => {
-  throw new Error('fetchCategories API not implemented');
+  try {
+    const response = await axios.get(API_BASE_URL + '/api/categories');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
 };
 
 export const fetchProducts = async () => {
-  throw new Error('fetchProducts API not implemented');
+  try {
+    const response = await axios.get(API_BASE_URL + '/api/products');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
 };

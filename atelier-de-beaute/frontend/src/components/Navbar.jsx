@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logout } from '../redux/authSlice';
 import './Navbar.css';
 
@@ -9,8 +9,6 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const auth = useSelector((state) => state.auth);
-  const { user } = auth;
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -26,11 +24,7 @@ const Navbar = () => {
     console.log('Search submitted:', searchTerm);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    sessionStorage.removeItem('userRole');
-    navigate('/login');
-  };
+  // Removed handleLogout function as it is unused to fix eslint warning
 
   return (
     <nav className="navbar">
@@ -46,14 +40,7 @@ const Navbar = () => {
         <li><NavLink to="/cart" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Cart</NavLink></li>
         <li><NavLink to="/user-account" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Account</NavLink></li>
         <li><NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMenuOpen(false)}>Contact</NavLink></li>
-        {/* Removed unnecessary logout button in header */}
-        {/* {user ? (
-          <li>
-            <button className="logout-button" onClick={handleLogout}>
-              Logout
-            </button>
-          </li>
-        ) : null} */}
+        {/* Removed Privacy Policy link as requested */}
       </ul>
       <form className="navbar-search" onSubmit={handleSearchSubmit}>
         <input

@@ -27,12 +27,14 @@ const CreateAccount = () => {
   }, [error]);
 
   const initialValues = {
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
   };
 
   const validationSchema = Yup.object({
+    username: Yup.string().min(3, 'Username must be at least 3 characters').required('Required'),
     email: Yup.string().email('Invalid email address').required('Required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required'),
     confirmPassword: Yup.string()
@@ -41,8 +43,8 @@ const CreateAccount = () => {
   });
 
   const onSubmit = (values) => {
-    const { email, password } = values;
-    dispatch(signup({ email, password }));
+    const { username, email, password } = values;
+    dispatch(signup({ username, email, password }));
   };
 
   return (
@@ -51,6 +53,10 @@ const CreateAccount = () => {
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ isSubmitting }) => (
           <Form style={styles.form}>
+            <label htmlFor="username">Username</label>
+            <Field type="text" name="username" style={styles.input} />
+            <ErrorMessage name="username" component="div" style={styles.error} />
+
             <label htmlFor="email">Email</label>
             <Field type="email" name="email" style={styles.input} />
             <ErrorMessage name="email" component="div" style={styles.error} />

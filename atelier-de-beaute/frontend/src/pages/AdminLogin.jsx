@@ -13,14 +13,25 @@ const AdminLogin = () => {
   const { user, loading, error } = auth;
 
   React.useEffect(() => {
-    if (user && user.role === 'administrator') {
-      toast.success('Admin login successful!');
+    if (user) {
       sessionStorage.setItem('userRole', user.role);
-      navigate('/admin');
-    } else if (user) {
-      toast.error('You are not authorized as an administrator.');
+      if (user.role === 'admin') {
+        toast.success('Admin login successful!');
+        navigate('/dashboard/admin');
+      } else if (user.role === 'manager') {
+        toast.success('Manager login successful!');
+        navigate('/dashboard/manager');
+      } else if (user.role === 'sales rep') {
+        toast.success('Sales Rep login successful!');
+        navigate('/dashboard/sales-rep');
+      } else {
+        toast.error('You are not authorized to access this portal.');
+      }
     }
   }, [user, navigate]);
+  
+
+  
 
   React.useEffect(() => {
     if (error) {

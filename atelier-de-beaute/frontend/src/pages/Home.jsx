@@ -74,7 +74,12 @@ const Home = () => {
               <img src={image} alt={name} style={styles.productImage} />
               <h3 style={styles.productName}>{name}</h3>
               <p style={styles.productPrice}>${price.toFixed(2)}</p>
-              <button style={styles.productButton} onClick={() => handleAddToCart({ id, name, price, image })}>Add to Cart</button>
+              <button
+                style={styles.productButton}
+                onClick={() => handleAddToCart({ id, name, price, image })}
+              >
+                Add to Cart
+              </button>
             </div>
           ))}
         </div>
@@ -84,7 +89,7 @@ const Home = () => {
         <h2 style={styles.sectionTitle}>What Our Customers Say</h2>
         <div style={styles.testimonialsGrid}>
           {loadingTestimonials ? (
-            <p>Loading testimonials...</p>
+            <div style={styles.loader}>Loading...</div>
           ) : error ? (
             <p>{error}</p>
           ) : (
@@ -116,18 +121,19 @@ const styles = {
     borderRadius: '16px',
     boxShadow: '0 0 20px #f4e1d2',
     marginBottom: '3rem',
+    backgroundImage: 'url("/path-to-image.jpg")',  // Optional background image
+    backgroundSize: 'cover',
+    color: '#fff',
   },
   heroTitle: {
     fontSize: '3rem',
     fontWeight: '700',
     marginBottom: '1rem',
     letterSpacing: '0.1rem',
-    color: '#3a0ca3',
   },
   heroSubtitle: {
     fontSize: '1.5rem',
     marginBottom: '2rem',
-    color: '#3a0ca3',
   },
   ctaButton: {
     padding: '1rem 2rem',
@@ -163,11 +169,17 @@ const styles = {
     padding: '1rem',
     boxShadow: '0 0 12px #f4e1d2',
     textAlign: 'center',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  },
+  productCardHover: {
+    transform: 'scale(1.05)',
+    boxShadow: '0 0 15px rgba(0, 0, 0, 0.1)',
   },
   productImage: {
     width: '100%',
     borderRadius: '16px',
     marginBottom: '1rem',
+    transition: 'transform 0.3s ease',
   },
   productName: {
     fontSize: '1.25rem',
@@ -212,6 +224,12 @@ const styles = {
   testimonialName: {
     fontWeight: '700',
     textAlign: 'right',
+    color: '#3a0ca3',
+  },
+  loader: {
+    textAlign: 'center',
+    fontSize: '1.5rem',
+    fontWeight: '700',
     color: '#3a0ca3',
   },
 };
