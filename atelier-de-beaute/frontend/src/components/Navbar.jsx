@@ -37,13 +37,13 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <img src={logoImage} alt="Logo"className="logo-image"/>
-        <div className="logo-text">Atelier-de-Beaute</div>
+        <div className="logo-text">Atelier-de-beaute</div>
       </div>
       <div className="menu-toggle" onClick={toggleMenu}>
         ☰
       </div>
       
-      <div className={`navbar-center ${menuOpen ? 'active' : ''}`}>
+      <div className={`navbar-right ${menuOpen ? 'active' : ''}`}>
         <NavLink to="/" onClick={() => setMenuOpen(false)}>HOME</NavLink>
         <NavLink to="/shop" onClick={() => setMenuOpen(false)}>SHOP</NavLink>
         <NavLink to="/contact" onClick={() => setMenuOpen(false)}>CONTACT</NavLink>
@@ -66,10 +66,10 @@ const Navbar = () => {
         </form>
         <div className="icon-links">
           <NavLink to="/cart" aria-label="Cart">
-            <FaShoppingCart className="nav-icon" />
+            <FaShoppingCart className="nav-icon cart" />
           </NavLink>
           <NavLink to="/user-account" aria-label="User Account">
-            <FaUser className="nav-icon" />
+            <FaUser className="nav-icon user" />
           </NavLink>
         </div>
       </div>
