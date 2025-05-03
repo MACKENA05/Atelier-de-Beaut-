@@ -15,10 +15,10 @@ class Category(db.Model):
     display_order = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
-    # Parent category ID (for subcategories)
+
     parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
 
-    # Define a relationship to parent (self-referential)
+    # relationship to parent (self-referential)
     parent = db.relationship('Category', remote_side=[id], backref='subcategories', lazy=True)
 
     # Relationships
@@ -26,7 +26,7 @@ class Category(db.Model):
         'Product', 
         secondary=product_category,
         back_populates='categories',
-        lazy='dynamic' # or 'joined' if you always want to load products
+        lazy='dynamic' 
     )
     def generate_slug(self):
         if not self.name:

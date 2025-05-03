@@ -57,7 +57,7 @@ class User(db.Model):
 
     # Relationships
     orders = db.relationship('Order', back_populates='user', lazy='dynamic')
-    # reviews = db.relationship('Review', back_populates='user', lazy=True)
+    reviews = db.relationship('Review', back_populates='user', lazy=True)
     carts = db.relationship('Cart', back_populates='user', lazy='dynamic')
 
     @validates('email')
