@@ -5,6 +5,7 @@ import { addToCart } from '../redux/cartSlice';
 import { fetchTestimonials } from '../services/api';
 import luxuryCreamImage from '../assets/images/Luxury cream.jpg';
 import silkHairSerumImage from '../assets/images/silk hair serum.jpg';
+import welcomeBanner from '../assets/images/welcome_homebanner.png'
 
 const featuredProducts = [
   {
@@ -31,6 +32,7 @@ const Home = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [loadingTestimonials, setLoadingTestimonials] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -56,164 +58,234 @@ const Home = () => {
     navigate('/shop');
   };
 
-  return (
-    <div style={styles.container}>
-      <section style={styles.hero}>
-        <h1 style={styles.heroTitle}>Welcome to Atelier de Beauté</h1>
-        <p style={styles.heroSubtitle}>
-          Your one-stop shop for beauty products and more.
-        </p>
-        <button style={styles.ctaButton} onClick={handleShopNow}>Shop Now</button>
-      </section>
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
-      <section style={styles.featuredSection}>
-        <h2 style={styles.sectionTitle}>Featured Products</h2>
-        <div style={styles.productsGrid}>
-          {featuredProducts.map(({ id, name, image, price }) => (
-            <div key={id} style={styles.productCard}>
-              <img src={image} alt={name} style={styles.productImage} />
-              <h3 style={styles.productName}>{name}</h3>
-              <p style={styles.productPrice}>${price.toFixed(2)}</p>
-              <button style={styles.productButton} onClick={() => handleAddToCart({ id, name, price, image })}>Add to Cart</button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section style={styles.testimonialsSection}>
-        <h2 style={styles.sectionTitle}>What Our Customers Say</h2>
-        <div style={styles.testimonialsGrid}>
-          {loadingTestimonials ? (
-            <p>Loading testimonials...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : (
-            testimonials.map(({ id, name, comment }) => (
-              <div key={id} style={styles.testimonialCard}>
-                <p style={styles.testimonialComment}>"{comment}"</p>
-                <p style={styles.testimonialName}>- {name}</p>
-              </div>
-            ))
-          )}
-        </div>
-      </section>
-    </div>
+  const filteredProducts = featuredProducts.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  return (
+      <div style={styles.container}>
+        <section style={styles.bannerSection}>
+          <div style={styles.bannerContent}>
+            <img src={welcomeBanner} alt="Welcome Banner" style={styles.bannerImage} />
+            <button style={styles.ctaButton} onClick={handleShopNow}>Shop Now</button>
+          </div>
+    
+          <div style={styles.searchContainer}>
+            <span style={styles.searchIcon}>🔍</span>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              style={styles.searchInput}
+              aria-label="Search"
+            />
+          </div>
+        </section>
+    
+        <section style={styles.featuredSection}>
+          <h2 style={styles.sectionTitle}>Featured Products</h2>
+          <div style={styles.productsGrid}>
+            {filteredProducts.map(({ id, name, image, price }) => (
+              <div key={id} style={styles.productCard}>
+                <img src={image} alt={name} style={styles.productImage} />
+                <h3 style={styles.productName}>{name}</h3>
+                <p style={styles.productPrice}>${price.toFixed(2)}</p>
+                <button
+                  style={styles.productButton}
+                  onClick={() => handleAddToCart({ id, name, price, image })}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+    
+        <section style={styles.testimonialsSection}>
+          <h2 style={styles.sectionTitle}>What Our Customers Say</h2>
+          <div style={styles.testimonialsGrid}>
+            {loadingTestimonials ? (
+              <p>Loading testimonials...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : (
+              testimonials.map(({ id, name, comment }) => (
+                <div key={id} style={styles.testimonialCard}>
+                  <p style={styles.testimonialComment}>"{comment}"</p>
+                  <p style={styles.testimonialName}>- {name}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
+      </div>
+    );
+    
 };
 
 const styles = {
   container: {
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    backgroundColor: '#ffffff',
-    color: '#3a0ca3',
-    minHeight: '100vh',
-    padding: '2rem',
+    fontFamily: 'Poppins, sans-serif',
+    backgroundColor: '#fff',
+    color: '#333',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '2rem 1rem',
   },
-  hero: {
+
+  bannerSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     textAlign: 'center',
-    padding: '4rem 2rem',
-    backgroundColor: '#f4e1d2',
+    padding: '1rem 1rem',
+    backgroundColor: '#ffffff',
     borderRadius: '16px',
-    boxShadow: '0 0 20px #f4e1d2',
-    marginBottom: '3rem',
-  },
-  heroTitle: {
-    fontSize: '3rem',
-    fontWeight: '700',
-    marginBottom: '1rem',
-    letterSpacing: '0.1rem',
-    color: '#3a0ca3',
-  },
-  heroSubtitle: {
-    fontSize: '1.5rem',
     marginBottom: '2rem',
-    color: '#3a0ca3',
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.08)',
+    maxHeight: '300px',   
   },
+
+  bannerImage:{
+    width: '100%',
+    height: '200px',      
+    objectFit: 'cover',
+    borderRadius: '12px',
+    marginBottom: '1px',
+  },
+  
   ctaButton: {
-    padding: '1rem 2rem',
-    fontSize: '1.25rem',
-    borderRadius: '24px',
+    backgroundColor: '#d998a3',
+    color: '#000',
     border: 'none',
-    backgroundColor: '#ffb703',
-    color: '#3a0ca3',
-    fontWeight: '700',
+    padding: '0.8rem 2rem',
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    borderRadius: '4px',
     cursor: 'pointer',
-    boxShadow: '0 0 15px #ffb703',
-    transition: 'background-color 0.3s ease',
+    transition: 'background 0.3s ease',
+    marginTop: '1px'
   },
-  featuredSection: {
-    marginBottom: '3rem',
-  },
+
+  searchSection: {
+      flex: '1',
+      display: 'flex',
+      justifyContent: 'flex-start', 
+      padding: '20px',
+      alignitems:'left',
+    },
+  searchWrapper: {
+      display: 'flex',
+      alignItems: 'center',
+      border: '1px solid #ccc',
+      borderRadius: '8px',
+      padding: '8px 12px',
+      width: '100%',
+      maxWidth: '300px',
+      backgroundColor: '#D9D9D9',
+    },
+  searchIcon: {
+      marginRight: '8px',
+      fontSize: '18px',
+      color: '#666',
+    },
+  searchInput: {
+      border: 'none',
+      outline: 'none',
+      fontSize: '16px',
+      flex: 1,
+      background: 'transparent',
+    },
+  
   sectionTitle: {
     fontSize: '2rem',
     fontWeight: '700',
+    color: '#000000',
     marginBottom: '1.5rem',
-    borderBottom: '2px solid #3a0ca3',
-    paddingBottom: '0.5rem',
-    color: '#3a0ca3',
+    textAlign: 'center',
   },
+
+  featuredSection: {
+    marginBottom: '3rem',
+  },
+
   productsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
     gap: '2rem',
   },
+
   productCard: {
-    backgroundColor: '#f4e1d2',
+    backgroundColor: '#fff5f7',
     borderRadius: '16px',
     padding: '1rem',
-    boxShadow: '0 0 12px #f4e1d2',
     textAlign: 'center',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
   },
+
   productImage: {
     width: '100%',
-    borderRadius: '16px',
+    height: 'auto',
+    borderRadius: '12px',
     marginBottom: '1rem',
   },
+
   productName: {
-    fontSize: '1.25rem',
+    fontSize: '1.1rem',
+    fontWeight: '600',
     marginBottom: '0.5rem',
-    color: '#3a0ca3',
+    color: '#333',
   },
+
   productPrice: {
-    fontWeight: '600',
+    fontSize: '1rem',
+    fontWeight: '500',
+    color: '#666',
     marginBottom: '1rem',
-    color: '#3a0ca3',
   },
+
   productButton: {
-    padding: '0.5rem 1rem',
-    borderRadius: '24px',
+    backgroundColor: '#3a0ca3',
+    color: '#fff',
     border: 'none',
-    backgroundColor: '#ffb703',
-    color: '#3a0ca3',
-    fontWeight: '600',
+    padding: '0.6rem 1.2rem',
+    fontSize: '0.95rem',
+    borderRadius: '20px',
     cursor: 'pointer',
-    boxShadow: '0 0 12px #ffb703',
-    transition: 'background-color 0.3s ease',
   },
+
   testimonialsSection: {
-    marginBottom: '3rem',
+    marginTop: '4rem',
   },
+
   testimonialsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
     gap: '2rem',
   },
+
   testimonialCard: {
-    backgroundColor: '#f4e1d2',
-    borderRadius: '16px',
+    backgroundColor: '#fef6f8',
     padding: '1.5rem',
-    boxShadow: '0 0 12px #f4e1d2',
+    borderRadius: '16px',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
   },
+
   testimonialComment: {
     fontStyle: 'italic',
+    color: '#3a0ca3',
     marginBottom: '1rem',
-    color: '#3a0ca3',
   },
+
   testimonialName: {
-    fontWeight: '700',
     textAlign: 'right',
-    color: '#3a0ca3',
+    fontWeight: '600',
+    color: '#333',
   },
 };
 
-export default Home;
+export default Home
