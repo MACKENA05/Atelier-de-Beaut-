@@ -1,29 +1,22 @@
 import React, { useState } from 'react';
+import backgroundImage from '../assets/images/cosmeticjar.png';
+import voucherImage from '../assets/images/Cosmetic voucher set.jpg';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [captchaChecked, setCaptchaChecked] = useState(false);
 
-  const validateEmail = (email) => {
-    // Simple email regex validation
-    return /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
-  };
+  const validateEmail = (email) => /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCaptchaChange = (e) => {
-    setCaptchaChecked(e.target.checked);
-  };
+  const handleCaptchaChange = (e) => setCaptchaChecked(e.target.checked);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,8 +37,6 @@ const Contact = () => {
     }
 
     setLoading(true);
-
-    // Simulate API call with timeout
     setTimeout(() => {
       setLoading(false);
       setSuccess('Message sent successfully!');
@@ -55,90 +46,155 @@ const Contact = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Contact Us</h1>
-      <form style={styles.form} onSubmit={handleSubmit} noValidate>
-        <input
-          style={styles.input}
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={handleInputChange}
-          required
-          disabled={loading}
-        />
-        <input
-          style={styles.input}
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          disabled={loading}
-        />
-        <textarea
-          style={styles.textarea}
-          name="message"
-          placeholder="Your Message"
-          value={formData.message}
-          onChange={handleInputChange}
-          required
-          disabled={loading}
-        />
-        <label style={styles.captchaLabel}>
+    <div style={styles.page}>
+      <style>
+        {`
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+          }
+
+          @media (max-width: 768px) {
+            .contact-container {
+              flex-direction: column;
+            }
+
+            .image-container {
+              display: none;
+            }
+          }
+        `}
+      </style>
+
+      {/* Left Image */}
+      <div className="image-container" style={{ ...styles.imageContainer, ...styles.leftImage }}>
+        <img src={backgroundImage} alt="Left visual" style={styles.sideImage} />
+      </div>
+
+      {/* Main Content */}
+      <div className="contact-container" style={styles.container}>
+        <h1 style={styles.title}>Contact Us</h1>
+        <form style={styles.form} onSubmit={handleSubmit} noValidate>
           <input
-            type="checkbox"
-            checked={captchaChecked}
-            onChange={handleCaptchaChange}
+            style={styles.input}
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleInputChange}
             disabled={loading}
-          />{' '}
-          I'm not a robot
-        </label>
-        <button type="submit" style={styles.button} disabled={loading}>
-          {loading ? 'Sending...' : 'Send Message'}
-        </button>
-        {error && <p style={styles.error}>{error}</p>}
-        {success && <p style={styles.success}>{success}</p>}
-      </form>
+          />
+          <input
+            style={styles.input}
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            value={formData.email}
+            onChange={handleInputChange}
+            disabled={loading}
+          />
+          <textarea
+            style={styles.textarea}
+            name="message"
+            placeholder="Your Message"
+            value={formData.message}
+            onChange={handleInputChange}
+            disabled={loading}
+          />
+          <label style={styles.captchaLabel}>
+            <input
+              type="checkbox"
+              checked={captchaChecked}
+              onChange={handleCaptchaChange}
+              disabled={loading}
+            />{' '}
+            I'm not a robot
+          </label>
+          <button type="submit" style={styles.button} disabled={loading}>
+            {loading ? 'Sending...' : 'Send Message'}
+          </button>
+          {error && <p style={styles.error}>{error}</p>}
+          {success && <p style={styles.success}>{success}</p>}
+        </form>
 
-      <div style={styles.contactInfo}>
-        <h2>Contact Information</h2>
-        <p>Address: Nairobi, Kenya</p>
-        <p>Phone: +254 707590734</p>
-        <p>Email: contact@atelierdebeaute.com</p>
+        {/* Contact Info */}
+        <div style={styles.contactInfo}>
+          <h2>Contact Information</h2>
+          <p>Address: Nairobi, Kenya</p>
+          <p>Phone: +254 707590734</p>
+          <p>Email: contact@atelierdebeaute.com</p>
+        </div>
+
+        {/* Google Map */}
+        <div style={styles.mapContainer}>
+          <iframe
+            title="Atelier de Beauté Location"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.2229985379032!2d36.82194665793493!3d-1.2920651999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d7e07935f7%3A0xf5cc3b849f2a9c34!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2ske!4v1714722406213!5m2!1sen!2ske"
+            width="100%"
+            height="300"
+            style={{ border: 0, borderRadius: '12px' }}
+            allowFullScreen=""
+            loading="lazy"
+          />
+        </div>
+
+        {/* Social Links */}
+        <div style={styles.socialMedia}>
+          <h2>Follow Us</h2>
+          <a href="https://facebook.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Facebook</a> |{' '}
+          <a href="https://instagram.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Instagram</a> |{' '}
+          <a href="https://tiktok.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Tiktok</a>
+        </div>
       </div>
 
-      <div style={styles.mapContainer}>
-        <iframe
-          title="Atelier de Beauté Location"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.9999999999995!2d2.292292615674999!3d48.85837307928744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66fdfd1f1f1f1%3A0x123456789abcdef!2sEiffel%20Tower!5e0!3m2!1sen!2sfr!4v1610000000000!5m2!1sen!2sfr"
-          width="100%"
-          height="300"
-          style={{ border: 0, borderRadius: '12px' }}
-          allowFullScreen=""
-          loading="lazy"
-        />
-      </div>
-
-      <div style={styles.socialMedia}>
-        <h2>Follow Us</h2>
-        <a href="https://facebook.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Facebook</a> |{' '}
-        <a href="https://instagram.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Instagram</a> |{' '}
-        <a href="https://twitter.com/atelierdebeaute" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>Twitter</a>
+      {/* Animated Voucher */}
+      <div className="image-container" style={{ ...styles.imageContainer, ...styles.rightImage }}>
+        <img src={voucherImage} alt="Voucher" style={styles.animatedImage} />
       </div>
     </div>
   );
 };
 
 const styles = {
+  page: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    minHeight: '100vh',
+    backgroundColor: '#D998A3',
+  },
+  imageContainer: {
+    flex: '1',
+    minWidth: '300px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1rem',
+  },
+  leftImage: { order: 0 },
+  rightImage: { order: 2 },
+  sideImage: {
+    width: '100%',
+    height: '90vh',
+    objectFit: 'cover',
+    borderRadius: '12px',
+    boxShadow: '0 0 12px rgba(0,0,0,0.2)',
+  },
+  animatedImage: {
+    maxWidth: '300px',
+    width: '100%',
+    height: 'auto',
+    objectFit: 'cover',
+    borderRadius: '12px',
+    animation: 'float 4s ease-in-out infinite',
+    boxShadow: '0 0 12px rgba(0,0,0,0.3)',
+  },
   container: {
+    flex: '2',
     padding: '2rem',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    backgroundColor: '#ffffff', // white background for body
-    color: '#3a0ca3', // deep purple text
-    minHeight: '100vh',
+    color: '#000000',
+    order: 1,
   },
   title: {
     textAlign: 'center',
@@ -157,75 +213,59 @@ const styles = {
   input: {
     padding: '0.75rem 1rem',
     borderRadius: '12px',
-    border: '1px solid #3a0ca3', // deep purple border
-    outline: 'none',
+    border: '1px solid #3a0ca3',
     fontSize: '1rem',
-    backgroundColor: '#f4e1d2', // cream background
-    color: '#3a0ca3', // deep purple text
-    boxShadow: '0 0 8px #a0a0a0',
-    transition: 'box-shadow 0.3s ease',
+    backgroundColor: '#f4e1d2',
+    color: '#3a0ca3',
   },
   textarea: {
     padding: '0.75rem 1rem',
     borderRadius: '12px',
-    border: '1px solid #3a0ca3', // deep purple border
-    outline: 'none',
+    border: '1px solid #3a0ca3',
     fontSize: '1rem',
     minHeight: '120px',
-    backgroundColor: '#f4e1d2', // cream background
-    color: '#3a0ca3', // deep purple text
-    boxShadow: '0 0 8px #a0a0a0',
-    transition: 'box-shadow 0.3s ease',
+    backgroundColor: '#f4e1d2',
+    color: '#3a0ca3',
     resize: 'vertical',
   },
   captchaLabel: {
     display: 'flex',
     alignItems: 'center',
     fontSize: '0.9rem',
-    userSelect: 'none',
   },
   button: {
-    marginTop: '1rem',
     padding: '0.75rem 1.5rem',
     borderRadius: '12px',
     border: 'none',
-    backgroundColor: '#ffb703', // gold button
-    color: '#3a0ca3', // deep purple text
+    backgroundColor: '#ffb703',
+    color: '#3a0ca3',
     fontWeight: '600',
     cursor: 'pointer',
-    boxShadow: '0 0 12px #cc7a3a',
-    transition: 'background-color 0.3s ease',
   },
   error: {
     color: '#ff4d4d',
-    marginTop: '1rem',
     textAlign: 'center',
   },
   success: {
     color: '#4caf50',
-    marginTop: '1rem',
     textAlign: 'center',
   },
   contactInfo: {
-    maxWidth: '600px',
-    margin: '2rem auto 0',
-    backgroundColor: '#f4e1d2', // cream background
+    backgroundColor: '#f4e1d2',
     padding: '1rem 2rem',
     borderRadius: '12px',
-    boxShadow: '0 0 12px #a0a0a0',
-    color: '#3a0ca3', // deep purple text
+    marginTop: '2rem',
+    color: '#3a0ca3',
   },
   mapContainer: {
-    maxWidth: '600px',
-    margin: '2rem auto',
+    marginTop: '2rem',
   },
   socialMedia: {
-    maxWidth: '600px',
-    margin: '2rem auto',
     textAlign: 'center',
+    marginTop: '2rem',
   },
   socialLink: {
-    color: '#3a0ca3', // deep purple
+    color: '#3a0ca3',
     textDecoration: 'none',
     fontWeight: '600',
   },

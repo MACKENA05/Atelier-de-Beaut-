@@ -77,6 +77,7 @@ const Home = () => {
           <div style={styles.searchContainer}>
             <span style={styles.searchIcon}>🔍</span>
             <input
+              placeholder="search featured products"
               type="text"
               value={searchTerm}
               onChange={handleSearchChange}
