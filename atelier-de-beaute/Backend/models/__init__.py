@@ -1,20 +1,15 @@
+from extensions import db
+
 from .user import User
-# from .product import Product
-# from .category import Category
-# from .address import Address
-# from .order import Order, OrderItem
-# from .payment import Payment
-# from .review import Review
-# from .cart import CartItem
+from .product import Product
+from .category import Category
+# from .cart import Cart, CartItem
 
 __all__ = [
+    'db',
     'User',
-    # 'Product',
-    # 'Category',
-    # 'Address',
-    # 'Order',
-    # 'OrderItem',
-    # 'Payment',
-    # 'Review',
+    'Product',
+    'Category',
+    # 'Cart',
     # 'CartItem'
 ]

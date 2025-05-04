@@ -3,10 +3,15 @@ import logging
 from sqlalchemy.sql import text
 from extensions import db
 from app import create_app
-from models.category import Category
-from models.product import Product
-from models.user import User
-from models.cart import Cart, CartItem
+from models import category
+from models import product
+from models import user
+# from models import cart
+Category = category.Category
+Product = product.Product
+User = user.User
+# Cart = cart.Cart
+# CartItem = cart.CartItem
 from werkzeug.security import generate_password_hash
 app = create_app()
 
@@ -20,9 +25,9 @@ def seed_data():
     try:
         # Clear existing data
         logger.info("Clearing existing data from all relevant tables...")
-        db.session.execute(text("DELETE FROM product_category"))
-        db.session.execute(text("DELETE FROM cart_items"))
-        db.session.execute(text("DELETE FROM carts"))
+        # db.session.execute(text("DELETE FROM product_category"))
+        # db.session.execute(text("DELETE FROM cart_items"))
+        # db.session.execute(text("DELETE FROM carts"))
         Product.query.delete()
         Category.query.delete()
         User.query.delete()
@@ -31,7 +36,7 @@ def seed_data():
     except Exception as e:
         logger.error(f"Error deleting existing data: {e}")
         db.session.rollback()
-        raise   
+        raise
 
     # Initialize variables for categories
     brands = makeup = fragrance = haircare = skincare = accessories = deals = None
@@ -407,8 +412,7 @@ def seed_data():
             name="L’Oréal Matte Lipstick",
             description="Long-lasting matte lipstick by L’Oréal",
             price=15.99,
-            discount_price=12.99,
-            stock_quantity=50,
+            stock=50,
             sku="LOREAL-LIP-001",
             brand="L’Oréal",
             image_urls=["https://i.pinimg.com/736x/7c/a2/30/7ca23058ebcda12889f4f26f60e9704d.jpg","https://i.pinimg.com/736x/f2/ca/c0/f2cac007b7bba1374c7bad53c87d583f.jpg","https://i.pinimg.com/736x/35/73/1a/35731ab409042621f52698e21742eaa7.jpg"],

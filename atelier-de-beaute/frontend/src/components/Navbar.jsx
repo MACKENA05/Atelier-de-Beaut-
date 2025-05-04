@@ -20,8 +20,11 @@ const Navbar = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    // Implement search functionality or navigation here
-    console.log('Search submitted:', searchTerm);
+    if (searchTerm.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      navigate('/shop');
+    }
   };
 
   // Removed handleLogout function as it is unused to fix eslint warning

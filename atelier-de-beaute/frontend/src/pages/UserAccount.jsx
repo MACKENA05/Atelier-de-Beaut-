@@ -16,14 +16,12 @@ const UserAccount = () => {
     signup: {
       username: '', email: '', password: '', first_name: '', last_name: '', phone: '',
     },
-    profilePicture: { file: null, preview: null },
     addFunds: { amount: '', mpesaNumber: '', paypalEmail: '' },
     paymentPopup: { show: false, method: '', amount: '' },
   });
 
   const [localError, setLocalError] = useState(null);
   const [addFundsError, setAddFundsError] = useState(null);
-  const [uploadingProfilePicture, setUploadingProfilePicture] = useState(false);
 
   // Error Toast Notifications
   useEffect(() => {
@@ -61,39 +59,9 @@ const UserAccount = () => {
     setFormData({
       login: { email: '', password: '' },
       signup: { username: '', email: '', password: '', first_name: '', last_name: '', phone: '' },
-      profilePicture: { file: null, preview: null },
       addFunds: { amount: '', mpesaNumber: '', paypalEmail: '' },
       paymentPopup: { show: false, method: '', amount: '' },
     });
-  };
-
-  // Profile Picture Upload Handler
-  const handleProfilePictureChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prev) => ({
-      ...prev,
-      profilePicture: {
-        file,
-        preview: file ? URL.createObjectURL(file) : null,
-      },
-    }));
-  };
-
-  const handleUploadProfilePicture = async () => {
-    if (!formData.profilePicture.file) {
-      toast.error('Please select a file to upload');
-      return;
-    }
-    setUploadingProfilePicture(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Mock upload delay
-      toast.success('Profile picture updated successfully (mock)');
-      setFormData((prev) => ({ ...prev, profilePicture: { file: null, preview: null } }));
-    } catch (err) {
-      toast.error(err.message || 'Failed to upload profile picture');
-    } finally {
-      setUploadingProfilePicture(false);
-    }
   };
 
   // Add Funds Popup Handler
@@ -205,17 +173,6 @@ const UserAccount = () => {
             {/* Account Info */}
             <div className="card">
               <h2 className="cardTitle">Account Info</h2>
-              <div className="profilePictureSection">
-                {formData.profilePicture.preview ? (
-                  <img src={formData.profilePicture.preview} alt="Profile Preview" className="profilePicture" />
-                ) : (
-                  user.profile_picture && <img src={user.profile_picture} alt="Profile" className="profilePicture" />
-                )}
-                <input type="file" onChange={handleProfilePictureChange} className="fileInput" />
-                <button onClick={handleUploadProfilePicture} className="button" disabled={uploadingProfilePicture}>
-                  {uploadingProfilePicture ? 'Uploading...' : 'Upload Profile Picture'}
-                </button>
-              </div>
               <div className="profileInfo">
                 <p>Name: {user.first_name} {user.last_name}</p>
                 <p>Email: {user.email}</p>

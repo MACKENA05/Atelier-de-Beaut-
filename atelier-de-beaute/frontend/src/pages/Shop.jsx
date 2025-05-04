@@ -5,17 +5,26 @@ import { useDispatch } from 'react-redux';
 import { addToCartThunk } from '../redux/cartSlice';
 import { toast } from 'react-toastify';
 import apiClient from '../services/apiClient';
+import { useLocation } from 'react-router-dom';
 
 const Shop = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const categories = ['Skincare', 'Haircare', 'Makeup', 'Fragrance'];
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get('search') || '';
+    setSearchTerm(search);
+  }, [location.search]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,7 +45,11 @@ const Shop = () => {
     const matchCategory = selectedCategory ? product.category === selectedCategory : true;
     const matchMinPrice = minPrice ? product.price >= parseFloat(minPrice) : true;
     const matchMaxPrice = maxPrice ? product.price <= parseFloat(maxPrice) : true;
-    return matchCategory && matchMinPrice && matchMaxPrice;
+    const matchSearch = searchTerm
+      ? product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase()))
+      : true;
+    return matchCategory && matchMinPrice && matchMaxPrice && matchSearch;
   });
 
   const handleAddToCart = (product) => {
