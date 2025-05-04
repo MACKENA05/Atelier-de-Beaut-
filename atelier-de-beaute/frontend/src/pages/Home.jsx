@@ -5,7 +5,8 @@ import { addToCart } from '../redux/cartSlice';
 import { fetchTestimonials } from '../services/api';
 import luxuryCreamImage from '../assets/images/Luxury cream.jpg';
 import silkHairSerumImage from '../assets/images/silk hair serum.jpg';
-import welcomeBanner from '../assets/images/welcome_homebanner.png'
+import welcomeBanner from '../assets/images/welcome_homebanner.png';
+import brandBanner from '../assets/images/loreal.jpg';
 
 const featuredProducts = [
   {
@@ -67,26 +68,26 @@ const Home = () => {
   );
 
   return (
+    <>
+      <section style={styles.bannerSection}>
+        <div style={styles.bannerOverlay}></div>
+        <img src={welcomeBanner} alt="Welcome Banner" style={styles.bannerImage} />
+        <button style={styles.ctaButton} onClick={handleShopNow}>Shop Now</button>
+
+        <div style={styles.searchWrapper}>
+          <span style={styles.searchIcon}>🔍</span>
+          <input
+            placeholder="search featured products"
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={styles.searchInput}
+            aria-label="Search"
+          />
+        </div>
+      </section>
+
       <div style={styles.container}>
-        <section style={styles.bannerSection}>
-          <div style={styles.bannerContent}>
-            <img src={welcomeBanner} alt="Welcome Banner" style={styles.bannerImage} />
-            <button style={styles.ctaButton} onClick={handleShopNow}>Shop Now</button>
-          </div>
-    
-          <div style={styles.searchContainer}>
-            <span style={styles.searchIcon}>🔍</span>
-            <input
-              placeholder="search featured products"
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              style={styles.searchInput}
-              aria-label="Search"
-            />
-          </div>
-        </section>
-    
         <section style={styles.featuredSection}>
           <h2 style={styles.sectionTitle}>Featured Products</h2>
           <div style={styles.productsGrid}>
@@ -105,7 +106,7 @@ const Home = () => {
             ))}
           </div>
         </section>
-    
+
         <section style={styles.testimonialsSection}>
           <h2 style={styles.sectionTitle}>What Our Customers Say</h2>
           <div style={styles.testimonialsGrid}>
@@ -124,8 +125,8 @@ const Home = () => {
           </div>
         </section>
       </div>
-    );
-    
+    </>
+  );
 };
 
 const styles = {
@@ -133,32 +134,48 @@ const styles = {
     fontFamily: 'Poppins, sans-serif',
     backgroundColor: '#fff',
     color: '#333',
-    maxWidth: '1200px',
-    margin: '0 auto',
     padding: '2rem 1rem',
+    // maxWidth and margin removed to allow full-width banner
   },
 
   bannerSection: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     textAlign: 'center',
-    padding: '1rem 1rem',
-    backgroundColor: '#ffffff',
-    borderRadius: '16px',
-    marginBottom: '2rem',
+    padding: '2rem 1rem',
+    backgroundImage: `url(${brandBanner})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    width: '100vw',
+    margin: '0 -1rem',
+    borderRadius: '0',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.08)',
-    maxHeight: '300px',   
+    overflow: 'hidden',
   },
 
-  bannerImage:{
-    width: '100%',
-    height: '200px',      
-    objectFit: 'cover',
-    borderRadius: '12px',
-    marginBottom: '1px',
+  bannerOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    zIndex: 0,
+    borderRadius: '0',
   },
-  
+
+  bannerImage: {
+    width: 'auto',
+    maxWidth: '80%',
+    height: 'auto',
+    objectFit: 'contain',
+    borderRadius: '12px',
+    marginBottom: '1rem',
+    zIndex: 1,
+  },
+
   ctaButton: {
     backgroundColor: '#d998a3',
     color: '#000',
@@ -169,39 +186,37 @@ const styles = {
     borderRadius: '4px',
     cursor: 'pointer',
     transition: 'background 0.3s ease',
-    marginTop: '1px'
+    marginTop: '0.5rem',
+    zIndex: 1,
   },
 
-  searchSection: {
-      flex: '1',
-      display: 'flex',
-      justifyContent: 'flex-start', 
-      padding: '20px',
-      alignitems:'left',
-    },
   searchWrapper: {
-      display: 'flex',
-      alignItems: 'center',
-      border: '1px solid #ccc',
-      borderRadius: '8px',
-      padding: '8px 12px',
-      width: '100%',
-      maxWidth: '300px',
-      backgroundColor: '#D9D9D9',
-    },
+    display: 'flex',
+    alignItems: 'center',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    padding: '8px 12px',
+    width: '100%',
+    maxWidth: '300px',
+    backgroundColor: '#D9D9D9',
+    marginTop: '1rem',
+    zIndex: 1,
+  },
+
   searchIcon: {
-      marginRight: '8px',
-      fontSize: '18px',
-      color: '#666',
-    },
+    marginRight: '8px',
+    fontSize: '18px',
+    color: '#666',
+  },
+
   searchInput: {
-      border: 'none',
-      outline: 'none',
-      fontSize: '16px',
-      flex: 1,
-      background: 'transparent',
-    },
-  
+    border: 'none',
+    outline: 'none',
+    fontSize: '16px',
+    flex: 1,
+    background: 'transparent',
+  },
+
   sectionTitle: {
     fontSize: '2rem',
     fontWeight: '700',
@@ -289,4 +304,4 @@ const styles = {
   },
 };
 
-export default Home
+export default Home;
