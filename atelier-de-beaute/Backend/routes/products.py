@@ -15,9 +15,8 @@ products_schema = ProductSchema(many=True)
 category_schema = CategorySchema()
 categories_schema = CategorySchema(many=True)
 
-@products_bp.route('/', methods=['GET'])
+@products_bp.route('/products', methods=['GET'])
 def get_all_products():
-    """Get all products with pagination and optional filtering."""
     try:
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
@@ -36,7 +35,7 @@ def get_all_products():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/<int:product_id>', methods=['GET'])
+@products_bp.route('/products/<int:product_id>', methods=['GET'])
 def get_product_by_id(product_id):
     """Get a specific product by ID."""
     try:
@@ -47,7 +46,7 @@ def get_product_by_id(product_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/<slug>', methods=['GET'])
+@products_bp.route('/products/<slug>', methods=['GET'])
 def get_product_by_slug(slug):
     """Get a specific product by slug."""
     try:
@@ -58,7 +57,7 @@ def get_product_by_slug(slug):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-@products_bp.route('/', methods=['POST'])
+@products_bp.route('/products', methods=['POST'])
 @jwt_required()
 @admin_or_manager_required
 def create_product():
@@ -74,7 +73,7 @@ def create_product():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/<slug>', methods=['PUT'])
+@products_bp.route('/products/<slug>', methods=['PUT'])
 @jwt_required()
 @admin_or_manager_required
 def update_product(slug):
@@ -90,7 +89,7 @@ def update_product(slug):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/<slug>', methods=['DELETE'])
+@products_bp.route('/products/<slug>', methods=['DELETE'])
 @jwt_required()
 @admin_or_manager_required
 def delete_product(slug):
@@ -104,7 +103,7 @@ def delete_product(slug):
         return jsonify({'error': str(e)}), 500
     
     
-@products_bp.route('/categories/<int:category_id>/products', methods=['GET'])
+@products_bp.route('/products/categories/<int:category_id>/products', methods=['GET'])
 def get_products_by_category_id(category_id):
     """Get products in a specific category by ID with pagination."""
     try:
@@ -128,7 +127,7 @@ def get_products_by_category_id(category_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/categories/<slug>/products', methods=['GET'])
+@products_bp.route('/products/categories/<slug>/products', methods=['GET'])
 def get_products_by_category_slug(slug):
     """Get products in a specific category by slug with pagination."""
     try:
@@ -152,7 +151,7 @@ def get_products_by_category_slug(slug):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/categories', methods=['GET'])
+@products_bp.route('/products/categories', methods=['GET'])
 def get_all_categories():
     """Get all categories with their hierarchy."""
     try:
@@ -161,7 +160,7 @@ def get_all_categories():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/categories/<slug>', methods=['GET'])
+@products_bp.route('/products/categories/<slug>', methods=['GET'])
 def get_category_by_slug(slug):
     """Get a specific category by slug."""
     try:
@@ -172,7 +171,7 @@ def get_category_by_slug(slug):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/featured', methods=['GET'])
+@products_bp.route('/products/featured', methods=['GET'])
 def get_featured_products():
     """Get featured products with pagination."""
     try:
@@ -190,7 +189,7 @@ def get_featured_products():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@products_bp.route('/deals', methods=['GET'])
+@products_bp.route('/products/deals', methods=['GET'])
 def get_deals():
     """Get products with discounts (deals)."""
     try:

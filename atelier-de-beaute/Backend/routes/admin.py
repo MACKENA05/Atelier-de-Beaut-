@@ -9,7 +9,7 @@ import jwt
 logger = logging.getLogger(__name__)
 admin_bp = Blueprint('admin', __name__)
 
-@admin_bp.route('/users', methods=['POST'])
+@admin_bp.route('/admin/users', methods=['POST'])
 @jwt_required()
 @admin_required
 def create_user():
@@ -26,7 +26,7 @@ def create_user():
         logger.error(f"Error in create_user from {request.remote_addr}: {str(e)}")
         return {"error": "Server error", "details": str(e), "status": 500}, 500
 
-@admin_bp.route('/users', methods=['GET'])
+@admin_bp.route('/admin/users', methods=['GET'])
 @jwt_required()
 @admin_required
 def list_users():
@@ -43,7 +43,7 @@ def list_users():
         logger.error(f"Error in list_users from {request.remote_addr}: {str(e)}")
         return {"error": "Server error", "details": str(e), "status": 500}, 500
 
-@admin_bp.route('/users/<int:user_id>', methods=['GET'])
+@admin_bp.route('/admin/users/<int:user_id>', methods=['GET'])
 @jwt_required()
 @admin_required
 def get_single_user(user_id):
@@ -59,7 +59,7 @@ def get_single_user(user_id):
         logger.error(f"Error in get_single_user from {request.remote_addr}: {str(e)}")
         return {"error": "Server error", "details": str(e), "status": 500}, 500
 
-@admin_bp.route('/users/<int:user_id>', methods=['PUT'])
+@admin_bp.route('/admin/users/<int:user_id>', methods=['PUT'])
 @jwt_required()
 @admin_required
 def update_single_user(user_id):
@@ -76,7 +76,7 @@ def update_single_user(user_id):
         logger.error(f"Error in update_single_user from {request.remote_addr}: {str(e)}")
         return {"error": "Server error", "details": str(e), "status": 500}, 500
 
-@admin_bp.route('/users/<int:user_id>', methods=['DELETE'])
+@admin_bp.route('/admin/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 @admin_required
 def delete_single_user(user_id):

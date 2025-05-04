@@ -7,11 +7,11 @@ from models.category import Category
 from models.product import Product
 from models.user import User, UserRole
 from models.cart import Cart, CartItem
-from models.order import Order, OrderItem, Address, Invoice, PaymentStatus, DeliveryStatus
+from models.order import Order, OrderItem, Address, Invoice, PaymentStatus, DeliveryStatus,OrderStatus
 from models.review import Review
 from werkzeug.security import generate_password_hash
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone,timedelta
 
 app = create_app()
 
@@ -996,15 +996,22 @@ def seed_data():
                 is_active=True
             ),
             User(
-                email="admin@gmail.com",
-                username="admin",
-                role="ADMIN",
+                email="test3@gmail.com",
+                username="testuser3",
+                role="CUSTOMER",
+                is_active=True
+            ),
+            User(
+                email="test4@gmail.com",
+                username="testuser4",
+                role="CUSTOMER",
                 is_active=True
             )
         ]
         users[0].set_password('Password@123')
         users[1].set_password('Password@123!')
         users[2].set_password('Password@12')
+        users[3].set_password('Password@12')
 
         db.session.add_all(users)
         db.session.commit()
@@ -1040,10 +1047,9 @@ def seed_data():
         raise
 
     try:
-        # 7. Orders
         logger.info("Seeding test orders...")
 
-        # Order 1: Completed M-Pesa order (standard shipping)
+        # Order 1: Completed M-Pesa order (standard shipping, delivered)
         order1 = Order(
             user_id=1,
             total=53.97,  # (2 * 12.99) + 12.99 + 10.99 + 5.00 (shipping)
@@ -1055,10 +1061,12 @@ def seed_data():
             shipping_method='standard',
             payment_method='mpesa',
             description='Test order with M-Pesa payment',
-            created_at=datetime.now(timezone.utc).replace(day=1, month=4, year=2025)
+            created_at=datetime.now(timezone.utc) - timedelta(days=10)  # ~2025-04-24
         )
+        order1.update_order_status()  # Explicitly set order_status
         db.session.add(order1)
         db.session.flush()
+        logger.debug(f"Order 1 created with order_status={order1.order_status}")
 
         order1_items = [
             OrderItem(order_id=order1.id, product_id=loreal_lipstick.id, quantity=2, unit_price=12.99),
@@ -1088,7 +1096,7 @@ def seed_data():
         )
         db.session.add(order1_invoice)
 
-        # Order 2: Pending pay on delivery order (express shipping)
+        # Order 2: Pending pay on delivery order (express shipping, pending)
         order2 = Order(
             user_id=1,
             total=90.99,  # 36.00 + 30.00 + 9.99 + 15.00 (shipping)
@@ -1098,8 +1106,9 @@ def seed_data():
             shipping_method='express',
             payment_method='pay_on_delivery',
             description='Test order with pay on delivery',
-            created_at=datetime.now(timezone.utc).replace(day=15, month=4, year=2025)
+            created_at=datetime.now(timezone.utc) - timedelta(days=5)  # ~2025-04-29
         )
+        order2.update_order_status()
         db.session.add(order2)
         db.session.flush()
 
@@ -1131,7 +1140,7 @@ def seed_data():
         )
         db.session.add(order2_invoice)
 
-        # Order 3: Failed M-Pesa order (standard shipping)
+        # Order 3: Failed M-Pesa order (standard shipping, pending)
         order3 = Order(
             user_id=1,
             total=159.98,  # 120.00 + 24.99 + 9.99 + 5.00 (shipping)
@@ -1142,8 +1151,9 @@ def seed_data():
             shipping_method='standard',
             payment_method='mpesa',
             description='Test order with failed M-Pesa payment',
-            created_at=datetime.now(timezone.utc).replace(day=20, month=4, year=2025)
+            created_at=datetime.now(timezone.utc) - timedelta(days=3)  # ~2025-05-01
         )
+        order3.update_order_status()
         db.session.add(order3)
         db.session.flush()
 
@@ -1175,19 +1185,20 @@ def seed_data():
         )
         db.session.add(order3_invoice)
 
-        # Order 4: Initiated M-Pesa order (standard shipping)
+        # Order 4: Initiated M-Pesa order (standard shipping, shipped)
         order4 = Order(
             user_id=3,
             total=84.98,  # 19.99 + 60.00 + 5.00 (shipping)
             shipping_cost=5.00,
             payment_status=PaymentStatus.INITIATED.value,
-            delivery_status=DeliveryStatus.PENDING.value,
+            delivery_status=DeliveryStatus.SHIPPED.value,
             checkout_request_id=f"CHECKOUT-{uuid.uuid4().hex[:8].upper()}",
             shipping_method='standard',
             payment_method='mpesa',
-            description='Test order with M-Pesa payment',
-            created_at=datetime.now(timezone.utc).replace(day=25, month=4, year=2025)
+            description='Test order with M-Pesa payment in progress',
+            created_at=datetime.now(timezone.utc) - timedelta(days=1)  # ~2025-05-03
         )
+        order4.update_order_status()
         db.session.add(order4)
         db.session.flush()
 
@@ -1221,7 +1232,7 @@ def seed_data():
         db.session.commit()
         logger.info("Test orders added successfully.")
     except Exception as e:
-        logger.error(f"Error adding test orders: {e}")
+        logger.error(f"Error adding test orders: {str(e)}")
         db.session.rollback()
         raise
 
