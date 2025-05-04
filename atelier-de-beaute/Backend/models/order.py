@@ -3,6 +3,9 @@ from enum import Enum
 import re
 from extensions import db
 from sqlalchemy.orm import validates
+import logging
+
+logger = logging.getLogger(__name__)
 
 class PaymentStatus(str, Enum):
     INITIATED = 'initiated'
@@ -15,6 +18,12 @@ class DeliveryStatus(str, Enum):
     SHIPPED = 'shipped'
     DELIVERED = 'delivered'
 
+class OrderStatus(str, Enum):
+    PENDING = 'pending'
+    PROCESSING = 'processing'
+    COMPLETED = 'completed'
+    CANCELLED = 'cancelled'
+
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
@@ -26,6 +35,7 @@ class Order(db.Model):
     shipping_method = db.Column(db.String(50))
     payment_method = db.Column(db.String(50))
     transaction_id = db.Column(db.String(50))
+    order_status = db.Column(db.String(20), nullable=False, default=OrderStatus.PENDING.value)
     checkout_request_id = db.Column(db.String(50))  # Added for M-Pesa STK Push
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -35,6 +45,39 @@ class Order(db.Model):
     items = db.relationship('OrderItem', back_populates='order', cascade='all, delete-orphan')
     address = db.relationship('Address', back_populates='order', uselist=False, cascade='all, delete-orphan')
     invoice = db.relationship('Invoice', back_populates='order', uselist=False, cascade='all, delete-orphan')
+
+    
+    def update_order_status(self):
+        """Automatically set order_status based on payment_status and delivery_status."""
+        logger.debug(f"Updating order_status for order_id={self.id or 'new'}: "
+                     f"payment_status={self.payment_status}, delivery_status={self.delivery_status}")
+        try:
+            if not self.payment_status or not self.delivery_status:
+                self.order_status = OrderStatus.PENDING.value
+                logger.warning(f"Set order_status={self.order_status} for order_id={self.id or 'new'} "
+                               f"(missing payment or delivery status)")
+                return
+            if self.payment_status not in [status.value for status in PaymentStatus]:
+                logger.error(f"Invalid payment_status: {self.payment_status}")
+                raise ValueError(f"Invalid payment_status: {self.payment_status}")
+            if self.delivery_status not in [status.value for status in DeliveryStatus]:
+                logger.error(f"Invalid delivery_status: {self.delivery_status}")
+                raise ValueError(f"Invalid delivery_status: {self.delivery_status}")
+            if self.payment_status == PaymentStatus.FAILED.value:
+                self.order_status = OrderStatus.CANCELLED.value
+            elif (self.payment_status == PaymentStatus.COMPLETED.value and 
+                  self.delivery_status == DeliveryStatus.DELIVERED.value):
+                self.order_status = OrderStatus.COMPLETED.value
+            elif (self.payment_status in [PaymentStatus.INITIATED.value, PaymentStatus.COMPLETED.value] or 
+                  self.delivery_status in [DeliveryStatus.SHIPPED.value, DeliveryStatus.DELIVERED.value]):
+                self.order_status = OrderStatus.PROCESSING.value
+            else:
+                self.order_status = OrderStatus.PENDING.value
+            logger.info(f"Set order_status={self.order_status} for order_id={self.id or 'new'}")
+        except Exception as e:
+            logger.error(f"Error in update_order_status for order_id={self.id or 'new'}: {str(e)}")
+            self.order_status = OrderStatus.PENDING.value
+            raise
 
     @validates('shipping_method')
     def validate_shipping_method(self, key, value):
@@ -46,6 +89,24 @@ class Order(db.Model):
     def validate_payment_method(self, key, value):
         if value not in ['mpesa', 'pay_on_delivery']:
             raise ValueError("Payment method must be 'mpesa' or 'pay_on_delivery'")
+        return value
+
+    @validates('order_status')
+    def validate_order_status(self, key, value):
+        if value not in [status.value for status in OrderStatus]:
+            raise ValueError(f"Order status must be one of: {', '.join(status.value for status in OrderStatus)}")
+        return value
+
+    @validates('payment_status')
+    def validate_payment_status(self, key, value):
+        if value not in [status.value for status in PaymentStatus]:
+            raise ValueError(f"Payment status must be one of: {', '.join(status.value for status in PaymentStatus)}")
+        return value
+
+    @validates('delivery_status')
+    def validate_delivery_status(self, key, value):
+        if value not in [status.value for status in DeliveryStatus]:
+            raise ValueError(f"Delivery status must be one of: {', '.join(status.value for status in DeliveryStatus)}")
         return value
 
 class OrderItem(db.Model):

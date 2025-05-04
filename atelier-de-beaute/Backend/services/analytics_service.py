@@ -1,15 +1,25 @@
+import logging
+from sqlalchemy.sql import text
+from sqlalchemy import Table, MetaData
+from datetime import datetime, timedelta
 from extensions import db
 from models.user import User
-from models.order import Order, PaymentStatus  # Use PaymentStatus instead of OrderStatus
+from models.order import Order, PaymentStatus, OrderStatus
 from models.order import OrderItem
 from models.product import Product
 from models.category import Category
-from datetime import datetime, timedelta
-import logging
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+# Define the product_category junction table
+metadata = MetaData()
+product_category = Table(
+    'product_category',
+    metadata,
+    autoload_with=db.engine
+)
 
 class AnalyticsService:
     @staticmethod
@@ -32,10 +42,13 @@ class AnalyticsService:
         """Returns total revenue from completed orders within a specified time period."""
         try:
             start_date = AnalyticsService.get_date_range(period)
-            total_revenue = db.session.query(db.func.sum(Order.total))\
-                .filter(Order.payment_status == PaymentStatus.COMPLETED.value,  # Use payment_status
+            logger.debug(f"Querying sales: period={period}, start_date={start_date}, order_status={OrderStatus.COMPLETED.value}")
+            completed_orders = db.session.query(Order)\
+                .filter(Order.order_status == OrderStatus.COMPLETED.value,
                         Order.created_at >= start_date)\
-                .scalar() or 0.0
+                .all()
+            logger.debug(f"Found {len(completed_orders)} completed orders: {[o.id for o in completed_orders]}")
+            total_revenue = sum(order.total for order in completed_orders) if completed_orders else 0.0
             result = {
                 "period": period,
                 "total_revenue": float(total_revenue),
@@ -52,24 +65,27 @@ class AnalyticsService:
         """Returns order-related statistics."""
         try:
             order_stats = db.session.query(
-                Order.payment_status,  # Use payment_status
+                Order.order_status,
                 db.func.count(Order.id).label('count')
-            ).group_by(Order.payment_status).all()
+            ).group_by(Order.order_status).all()
             
             stats = {
                 "total_orders": 0,
-                "completed": 0,
                 "pending": 0,
+                "processing": 0,
+                "completed": 0,
                 "cancelled": 0
             }
             
             for status, count in order_stats:
                 stats["total_orders"] += count
-                if status == PaymentStatus.COMPLETED.value:
-                    stats["completed"] = count
-                elif status == PaymentStatus.PENDING.value:
+                if status == OrderStatus.PENDING.value:
                     stats["pending"] = count
-                elif status == PaymentStatus.FAILED.value:  # Treat FAILED as cancelled
+                elif status == OrderStatus.PROCESSING.value:
+                    stats["processing"] = count
+                elif status == OrderStatus.COMPLETED.value:
+                    stats["completed"] = count
+                elif status == OrderStatus.CANCELLED.value:
                     stats["cancelled"] = count
             
             logger.info(f"Order analytics computed: {stats}")
@@ -118,21 +134,16 @@ class AnalyticsService:
 
     @staticmethod
     def get_revenue_by_category():
-        
+        """Returns revenue generated per product category."""
         try:
             revenue_by_category = db.session.query(
                 Category.name,
-                db.func.sum(OrderItem.quantity * Product.price).label('total_revenue')
-            ).join(
-                product_category, product_category.c.category_id == Category.id
-            ).join(
-                Product, Product.id == product_category.c.product_id
-            ).join(
-                OrderItem, OrderItem.product_id == Product.id
-            ).group_by(
-                Category.name
-            ).all()
-    
+                db.func.sum(OrderItem.quantity * db.func.coalesce(Product.discount_price, Product.price)).label('total_revenue')
+            ).join(product_category, product_category.c.category_id == Category.id)\
+             .join(Product, Product.id == product_category.c.product_id)\
+             .join(OrderItem, OrderItem.product_id == Product.id)\
+             .group_by(Category.name).all()
+            
             result = [{"category": name, "total_revenue": float(revenue)} for name, revenue in revenue_by_category]
             logger.info(f"Revenue by category computed: {result}")
             return result
@@ -144,10 +155,10 @@ class AnalyticsService:
     def get_conversion_rates():
         """Returns conversion metrics for user engagement and sales funnel."""
         try:
-            total_users = db.session.query(db.func.count(User.id)).scalar() or 1  # Avoid division by zero
+            total_users = db.session.query(db.func.count(User.id)).scalar() or 1
             total_orders = db.session.query(db.func.count(Order.id)).scalar() or 0
-            total_product_views = db.session.query(db.func.sum(Product.views)).scalar() or 1  # Avoid division by zero
-            total_cart_adds = db.session.query(db.func.sum(Product.cart_adds)).scalar() or 1  # Avoid division by zero
+            total_product_views = db.session.query(db.func.sum(Product.views)).scalar() or 1
+            total_cart_adds = db.session.query(db.func.sum(Product.cart_adds)).scalar() or 1
             
             overall_conversion = (total_orders / total_users) * 100 if total_users > 0 else 0
             product_conversion = (total_orders / total_product_views) * 100 if total_product_views > 0 else 0
@@ -169,7 +180,7 @@ class AnalyticsService:
         """Returns a summary of total sales, orders, and users."""
         try:
             total_revenue = db.session.query(db.func.sum(Order.total))\
-                .filter(Order.payment_status == PaymentStatus.COMPLETED.value).scalar() or 0.0
+                .filter(Order.order_status == OrderStatus.COMPLETED.value).scalar() or 0.0
             total_orders = db.session.query(db.func.count(Order.id)).scalar() or 0
             total_users = db.session.query(db.func.count(User.id)).scalar() or 0
             

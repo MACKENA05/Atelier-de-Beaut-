@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 analytics_bp = Blueprint('analytics', __name__)
 
 
-@analytics_bp.route('/sales', methods=['GET'])
+@analytics_bp.route('/analytic/sales', methods=['GET'])
 @admin_or_manager_required
 def get_sales_analytics():
     """Returns total revenue from completed orders within a specified time period."""
@@ -24,7 +24,7 @@ def get_sales_analytics():
         logger.error(f"Error retrieving sales analytics: {str(e)}")
         return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-@analytics_bp.route('/orders', methods=['GET'])
+@analytics_bp.route('/analytic/orders', methods=['GET'])
 @admin_or_manager_required
 def get_order_analytics():
     """Returns order-related statistics."""
@@ -36,7 +36,7 @@ def get_order_analytics():
         logger.error(f"Error retrieving order analytics: {str(e)}")
         return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-@analytics_bp.route('/users', methods=['GET'])
+@analytics_bp.route('/analytic/users', methods=['GET'])
 @admin_or_manager_required
 def get_user_analytics():
     """Returns user-related statistics."""
@@ -48,7 +48,7 @@ def get_user_analytics():
         logger.error(f"Error retrieving user analytics: {str(e)}")
         return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-@analytics_bp.route('/top-products', methods=['GET'])
+@analytics_bp.route('/analytic/top-products', methods=['GET'])
 @admin_or_manager_required
 def get_top_products():
     """Returns the top 10 best-selling products by quantity sold."""
@@ -60,7 +60,7 @@ def get_top_products():
         logger.error(f"Error retrieving top products: {str(e)}")
         return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-@analytics_bp.route('/revenue-by-category', methods=['GET'])
+@analytics_bp.route('/analytic/revenue-by-category', methods=['GET'])
 @admin_or_manager_required
 def get_revenue_by_category():
     """Returns revenue generated per product category."""
@@ -72,7 +72,7 @@ def get_revenue_by_category():
         logger.error(f"Error retrieving revenue by category: {str(e)}")
         return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-@analytics_bp.route('/conversion-rates', methods=['GET'])
+@analytics_bp.route('/analytic/conversion-rates', methods=['GET'])
 @admin_or_manager_required
 def get_conversion_rates():
     """Returns conversion metrics for user engagement and sales funnel."""
@@ -84,7 +84,7 @@ def get_conversion_rates():
         logger.error(f"Error retrieving conversion rates: {str(e)}")
         return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-@analytics_bp.route('/overview', methods=['GET'])
+@analytics_bp.route('/analytic/overview', methods=['GET'])
 @admin_or_manager_required
 def get_analytics_overview():
     """Returns a summary of total sales, orders, and users."""

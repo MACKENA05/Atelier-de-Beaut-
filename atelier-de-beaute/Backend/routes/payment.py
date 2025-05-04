@@ -13,7 +13,7 @@ import os
 payments_bp = Blueprint('payments', __name__)
 logger = logging.getLogger(__name__)
 
-@payments_bp.route('/checkout/<int:order_id>', methods=['POST'])
+@payments_bp.route('/payment/checkout/<int:order_id>', methods=['POST'])
 @customer_required
 def initiate_mpesa_payment(order_id):
     try:
@@ -97,7 +97,7 @@ def initiate_mpesa_payment(order_id):
         logger.error(f"Unexpected error initiating M-Pesa payment for order {order_id}: {str(e)}")
         return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
 
-@payments_bp.route('/callback', methods=['POST'])
+@payments_bp.route('/payment/callback', methods=['POST'])
 def payment_callback():
     try:
         data = request.get_json()
@@ -145,7 +145,7 @@ def payment_callback():
         logger.error(f"Error processing callback: {str(e)}")
         return jsonify({'error': 'Callback processing failed'}), 500
 
-@payments_bp.route('/mpesa/retry/<int:order_id>', methods=['POST'])
+@payments_bp.route('/payment/mpesa/retry/<int:order_id>', methods=['POST'])
 @customer_required
 def retry_mpesa_payment(order_id):
     try:
@@ -229,7 +229,7 @@ def retry_mpesa_payment(order_id):
         logger.error(f"Unexpected error retrying M-Pesa payment for order {order_id}: {str(e)}")
         return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
 
-@payments_bp.route('/mpesa/status/<int:order_id>', methods=['GET'])
+@payments_bp.route('/payment/mpesa/status/<int:order_id>', methods=['GET'])
 @customer_required
 def check_payment_status(order_id):
     try:

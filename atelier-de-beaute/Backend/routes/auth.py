@@ -3,7 +3,7 @@ from services.auth_service import unified_login, register_user
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/auth/login', methods=['POST'])
 def login():
     """Authenticate any user (customer, admin, etc.)"""
     if not request.is_json:
@@ -11,7 +11,7 @@ def login():
     data = request.get_json()
     return unified_login(data)
 
-@auth_bp.route('/register', methods=['POST'])
+@auth_bp.route('/auth/register', methods=['POST'])
 def register():
     """Register a new customer user"""
     if not request.is_json:

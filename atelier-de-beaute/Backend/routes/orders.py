@@ -13,8 +13,7 @@ import os
 orders_bp = Blueprint('orders', __name__)
 logger = logging.getLogger(__name__)
 
-@orders_bp.route('/checkout', methods=['POST'])
-@orders_bp.route('/api/orders/checkout', methods=['POST'])  # Support both endpoints
+@orders_bp.route('/orders/checkout', methods=['POST'])  # Support both endpoints
 @customer_required
 def checkout():
     data = request.get_json()
@@ -152,7 +151,7 @@ def checkout():
         logger.error(f"Checkout error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
-@orders_bp.route('/my-orders', methods=['GET'])
+@orders_bp.route('/orders/my-orders', methods=['GET'])
 @customer_required
 def get_my_orders():
     try:
@@ -162,7 +161,7 @@ def get_my_orders():
         logger.error(f"Error fetching user orders: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@orders_bp.route('', methods=['GET'])
+@orders_bp.route('/orders', methods=['GET'])
 @staff_required
 def get_orders():
     try:
@@ -172,7 +171,7 @@ def get_orders():
         logger.error(f"Error fetching orders: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@orders_bp.route('/<int:order_id>/invoice', methods=['GET'])
+@orders_bp.route('/orders/<int:order_id>/invoice', methods=['GET'])
 @admin_required
 def get_invoice(order_id):
     try:
@@ -185,7 +184,7 @@ def get_invoice(order_id):
         logger.error(f"Unexpected error fetching invoice for order {order_id}: {str(e)}")
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
 
-@orders_bp.route('/invoices', methods=['GET'])
+@orders_bp.route('/orders/invoices', methods=['GET'])
 @admin_required
 def get_all_invoices():
     try:
@@ -202,7 +201,7 @@ def get_all_invoices():
         logger.error(f"Error fetching all invoices: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@orders_bp.route('/<int:order_id>/status', methods=['PUT'])
+@orders_bp.route('/orders/<int:order_id>/status', methods=['PUT'])
 @staff_required
 def update_order_status_route(order_id):
     data = request.get_json()
