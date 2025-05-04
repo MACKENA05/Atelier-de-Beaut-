@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import Index, func
 from sqlalchemy.dialects.postgresql import ENUM as PGEnum
 import enum
+import re
 from email_validator import validate_email, EmailNotValidError
 from sqlalchemy.orm import validates
 from flask_bcrypt import Bcrypt
@@ -17,6 +18,7 @@ class UserRole(enum.Enum):
     ADMIN = 'admin'
     MANAGER = 'manager'
     SALES_REPRESENTATIVE = 'sales-representative'
+
 
     @classmethod
     def validate(cls, role_input: str):
@@ -40,7 +42,7 @@ class User(db.Model):
     username= db.Column(db.String(100),  nullable=False)
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
-    phone = db.Column(db.String(20))
+    phone = db.Column(db.String(15))
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     last_login = db.Column(db.DateTime)
@@ -53,10 +55,9 @@ class User(db.Model):
         Index('ix_user_email_lower', func.lower(email)),  # Case-insensitive email index
     )
 
-     # Relationships
-    # addresses = db.relationship('Address', backref='user', lazy=True, cascade='all, delete-orphan')
-    # orders = db.relationship('Order', backref='user', lazy='dynamic')
-    # reviews = db.relationship('Review', backref='user', lazy=True)
+    # Relationships
+    orders = db.relationship('Order', back_populates='user', lazy='dynamic')
+    reviews = db.relationship('Review', back_populates='user', lazy=True)
     carts = db.relationship('Cart', back_populates='user', lazy='dynamic')
 
     @validates('email')
@@ -67,6 +68,20 @@ class User(db.Model):
             return valid.email.lower()  # Normalize email
         except EmailNotValidError as e:
             raise ValueError(str(e))
+        
+    @validates('phone')
+    def validate_phone(self, key, phone):
+        if not phone:
+            return phone  
+        # Remove spaces, dashes, and parentheses
+        cleaned_phone = re.sub(r'[\s\-\(\)]+', '', phone)
+        # Validate format
+        if not re.match(r'^\+?\d{9,15}$', cleaned_phone):
+            raise ValueError('Phone number must be 9-15 digits, optionally starting with +')
+        # Normalize for M-Pesa (e.g., convert 07xxxxxxxx to +254xxxxxxxxx for Kenya)
+        if cleaned_phone.startswith('0'):
+            cleaned_phone = '+254' + cleaned_phone[1:]  # Assumes Kenyan numbers
+        return cleaned_phone
 
     def set_password(self, password: str) -> None:
         """Hashes the given password and stores it."""

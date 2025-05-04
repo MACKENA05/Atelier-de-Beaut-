@@ -33,9 +33,21 @@ class RegisterSchema(Schema):
         validate.Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$',
                       error="Must contain uppercase, lowercase and numbers")
     ], load_only=True)
-    first_name = fields.Str()
-    last_name = fields.Str()
-
+    first_name = fields.Str(validate=[
+        validate.Length(max=50),
+        validate.Regexp(r'^[a-zA-Z\- ]+$', 
+                       error="Only letters, spaces and hyphens allowed")
+    ])
+    last_name = fields.Str(validate=[
+        validate.Length(max=50),
+        validate.Regexp(r'^[a-zA-Z\- ]+$',
+                       error="Only letters, spaces and hyphens allowed")
+    ])
+    phone = fields.Str(validate=[
+        validate.Length(min=10, max=15, error="Phone number must be 13 digits"),
+        validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
+    ])
+    
     @validates('email')
     def validate_email(self, value, **kwargs):
         try:
@@ -67,7 +79,7 @@ class AdminUserCreateSchema(Schema):
         validate.Regexp(r'^[a-zA-Z\- ]+$')
     ])
     phone = fields.Str(validate=[
-        validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
+        validate.Length(min=10, max=15, error="Phone number must be 13 digits"),
         validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
     ])
     is_active = fields.Boolean(load_default=True)
@@ -117,7 +129,7 @@ class AdminUserUpdateSchema(Schema):
         validate.Regexp(r'^[a-zA-Z\- ]+$')
     ])
     phone = fields.Str(validate=[
-        validate.Length(min=10, max=10, error="Phone number must be 10 digits"),
+        validate.Length(min=10, max=15, error="Phone number must be 13 digits"),
         validate.Regexp(r'^[0-9]+$', error="Phone number must contain only digits")
     ])
 

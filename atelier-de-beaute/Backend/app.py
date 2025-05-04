@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from config import config
 from extensions import db, migrate, jwt, cache,cors
+from models.user import User
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -36,6 +37,20 @@ def create_app(config_name='development'):
     def unauthorized_callback(error):
         logger.warning(f"Missing token from {request.remote_addr}: {str(error)}")
         return jsonify({"error": "Missing authentication token", "details": str(error), "status": 401}), 401
+    
+  # JWT user lookup callback
+    @jwt.user_lookup_loader
+    def user_lookup_callback(_jwt_header, jwt_data):
+        identity = jwt_data['sub']  # 'sub' contains str(user.id)
+        logger.debug(f"Looking up user with identity: {identity}")
+        try:
+            user = User.query.filter_by(id=int(identity)).first()
+            if not user:
+                logger.warning(f"No user found for identity: {identity}")
+            return user
+        except ValueError:
+            logger.error(f"Invalid identity format: {identity}")
+            return None
 
     # from models.category import Category
     # from models.product import Product
@@ -48,11 +63,21 @@ def create_app(config_name='development'):
         from routes.admin import admin_bp
         from routes.products import products_bp
         from routes.cart import cart_bp     
+        from routes.orders import orders_bp
+        from routes.payment import payments_bp
+        from routes.review import reviews_bp
+        from routes.analytics import analytics_bp
         from utils.validators import handle_404, handle_500
-        app.register_blueprint(auth_bp, url_prefix='/auth')
-        app.register_blueprint(admin_bp, url_prefix='/admin')
-        app.register_blueprint(products_bp,url_prefix='/products')
+
+        
+        app.register_blueprint(payments_bp, url_prefix = '/api')
+        app.register_blueprint(auth_bp, url_prefix='/api')
+        app.register_blueprint(admin_bp, url_prefix='/api')
+        app.register_blueprint(products_bp,url_prefix='/api')
         app.register_blueprint(cart_bp, url_prefix='/api')
+        app.register_blueprint(orders_bp, url_prefix='/api')
+        app.register_blueprint(reviews_bp, url_prefix='/api')
+        app.register_blueprint(analytics_bp, url_prefix = '/api')
  
 
         app.register_error_handler(404, handle_404)

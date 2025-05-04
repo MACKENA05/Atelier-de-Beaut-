@@ -121,4 +121,3 @@ def register_user(data: dict):
 
 
 
-
