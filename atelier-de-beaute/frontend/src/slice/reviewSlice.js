@@ -28,7 +28,7 @@ export const postReview = createAsyncThunk(
   'reviews/postReview',
   async ({ productId, reviewData }, { rejectWithValue }) => {
     try {
-      const response = await api.post(`/products/${productId}/reviews`, reviewData);
+      const response = await api.post('/reviews', reviewData);
       return response.data;
     } catch (err) {
       if (!err.response) {

@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 
 const Navbar = ({ onSearch, onFilterPrice }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch('/products/categories')
+      .then(res => res.json())
+      .then(data => setCategories(data))
+      .catch(err => console.error('Failed to fetch categories:', err));
+  }, []);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -23,21 +31,33 @@ const Navbar = ({ onSearch, onFilterPrice }) => {
 
   const handleSearchClick = () => {
     if (onSearch) {
-      onSearch(searchTerm); // Trigger search when button is clicked
+      onSearch(searchTerm);
     }
+  };
+
+  const renderSubcategories = (subcategories) => {
+    if (!subcategories || subcategories.length === 0) return null;
+    return (
+      <ul className="dropdown-menu">
+        {subcategories.map(subcat => (
+          <li key={subcat.id} className="dropdown-item">
+            {subcat.name}
+            {renderSubcategories(subcat.subcategories)}
+          </li>
+        ))}
+      </ul>
+    );
   };
 
   return (
     <nav className="navbar">
       <ul className="navbar-list">
-        <li className="navbar-item">All Products</li>
-        <li className="navbar-item">Brands</li>
-        <li className="navbar-item">Makeup</li>
-        <li className="navbar-item">Fragrance</li>
-        <li className="navbar-item">Haircare</li>
-        <li className="navbar-item">Skincare</li>
-        <li className="navbar-item">Accessories</li>
-        <li className="navbar-item">Deals</li>
+        {categories.map(category => (
+          <li key={category.id} className="navbar-item dropdown">
+            {category.name}
+            {renderSubcategories(category.subcategories)}
+          </li>
+        ))}
       </ul>
       <div className="navbar-controls">
         <input

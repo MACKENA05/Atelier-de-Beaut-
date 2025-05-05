@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '../slice/productSlice';
@@ -6,7 +6,7 @@ import { addToCart, removeFromCart, updateQuantity } from '../slice/cartSlice';
 import StarRating from './StarRating';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { fetchReviewsByProduct, postReview } from '../slice/reviewSlice';
+import { fetchReviewsByProduct, postReview, updateReview, deleteReview } from '../slice/reviewSlice';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -19,11 +19,16 @@ const ProductDetail = () => {
   const cartItem = cartItems.find(item => item.id === product?.id);
   const quantityInCart = cartItem ? cartItem.quantity : 0;
 
-  const { reviews, loading: reviewsLoading, error: reviewError } = useSelector(state => state.reviews);
-  const averageRating = reviews && reviews.length > 0 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length : 0;
+  const reviewsState = useSelector(state => state.reviews || {});
+  const reviews = reviewsState.reviews || [];
+  const loading = reviewsState.loading || false;
+  const error = reviewsState.error || null;
+  const averageRating = reviews.length > 0 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length : 0;
 
   const imageUrls = product && product.image_urls && product.image_urls.length > 0 ? product.image_urls : [];
   const [mainImage, setMainImage] = React.useState(imageUrls.length > 0 ? (typeof imageUrls[0] === 'string' ? imageUrls[0] : '') : '');
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editValues, setEditValues] = useState({ rating: 0, comment: '' });
 
   useEffect(() => {
     if (!product) {
@@ -63,7 +68,36 @@ const ProductDetail = () => {
       .then(() => {
         resetForm();
       });
-    // No .catch here; error will be handled by reviewError state
+  };
+
+  const handleEditSubmit = (reviewId, values, { resetForm }) => {
+    if (!user) {
+      alert('You must be logged in to edit a review.');
+      return;
+    }
+    const reviewData = {
+      user_id: user.id,
+      product_id: id,
+      rating: values.rating,
+      comment: values.comment
+    };
+    dispatch(updateReview({ reviewId, reviewData }))
+      .unwrap()
+      .then(() => {
+        setEditingReviewId(null);
+        setEditValues({ rating: 0, comment: '' });
+        resetForm();
+      });
+  };
+
+  const handleDelete = (reviewId) => {
+    if (!user) {
+      alert('You must be logged in to delete a review.');
+      return;
+    }
+    if (window.confirm('Are you sure you want to delete this review?')) {
+      dispatch(deleteReview(reviewId));
+    }
   };
 
   return (
@@ -149,11 +183,80 @@ const ProductDetail = () => {
             const username = review.user && typeof review.user === 'object' && review.user.username
               ? review.user.username
               : (typeof review.user === 'string' ? review.user : 'Unknown User');
+            const isOwnReview = user && review.user_id === user.id;
             return (
               <div key={review.id} className="review-item">
-                <StarRating rating={review.rating} />
-                <p className="review-comment">{review.comment}</p>
-                <p className="review-author">- {username}</p>
+                {editingReviewId === review.id ? (
+                  <Formik
+                    initialValues={{ rating: editValues.rating || review.rating, comment: editValues.comment || review.comment }}
+                    validationSchema={Yup.object({
+                      rating: Yup.number().min(1, 'Rating must be between 1 and 5').max(5, 'Rating must be between 1 and 5').required('Required'),
+                      comment: Yup.string().required('Required')
+                    })}
+                    onSubmit={(values, { resetForm }) => handleEditSubmit(review.id, values, { resetForm })}
+                  >
+                    {({ values, setFieldValue }) => (
+                      <Form>
+                        <div className="rating-input">
+                          {[1, 2, 3, 4, 5].map(star => (
+                            <span
+                              key={star}
+                              className={values.rating >= star ? 'star filled' : 'star'}
+                              onClick={() => setFieldValue('rating', star)}
+                              role="button"
+                              tabIndex={0}
+                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFieldValue('rating', star); }}
+                            >
+                              ★
+                            </span>
+                          ))}
+                        </div>
+                        <ErrorMessage name="rating" component="div" className="error-message" />
+                        <Field as="textarea" name="comment" rows="2" />
+                        <ErrorMessage name="comment" component="div" className="error-message" />
+                        <button type="submit" className="submit-review-button">Save</button>
+                        <button
+                          type="button"
+                          className="cancel-edit-button"
+                          onClick={() => setEditingReviewId(null)}
+                        >
+                          Cancel
+                        </button>
+                      </Form>
+                    )}
+                  </Formik>
+                ) : (
+                  <>
+                    <StarRating rating={review.rating} />
+                    <p className="review-comment">{review.comment}</p>
+                    <p className="review-author">- {username}</p>
+                    {isOwnReview && (
+                      <div className="review-actions">
+                        <span
+                          className="edit-icon"
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
+                            setEditingReviewId(review.id);
+                            setEditValues({ rating: review.rating, comment: review.comment });
+                          }}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setEditingReviewId(review.id); setEditValues({ rating: review.rating, comment: review.comment }); } }}
+                        >
+                          ✏️
+                        </span>
+                        <span
+                          className="delete-icon"
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => handleDelete(review.id)}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleDelete(review.id); }}
+                        >
+                         🗑️
+                        </span>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             );
           })}
@@ -161,7 +264,7 @@ const ProductDetail = () => {
         {user && (
           <div className="product-detail-review-form">
             <h3>Add Your Review</h3>
-            {reviewError && <div className="error-message">{reviewError}</div>}
+            {error && <div className="error-message">{error}</div>}
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
@@ -178,7 +281,7 @@ const ProductDetail = () => {
                         onClick={() => setFieldValue('rating', star)}
                         role="button"
                         tabIndex={0}
-                        onKeyDown={() => setFieldValue('rating', star)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFieldValue('rating', star); }}
                       >
                         ★
                       </span>
@@ -188,8 +291,8 @@ const ProductDetail = () => {
                   <label htmlFor="comment">Comment:</label>
                   <Field as="textarea" id="comment" name="comment" rows="4" />
                   <ErrorMessage name="comment" component="div" className="error-message" />
-                  <button type="submit" className="submit-review-button" disabled={reviewsLoading}>
-                    {reviewsLoading ? 'Submitting...' : 'Submit Review'}
+                  <button type="submit" className="submit-review-button" disabled={loading}>
+                    {loading ? 'Submitting...' : 'Submit Review'}
                   </button>
                 </Form>
               )}

@@ -20,7 +20,6 @@ const Footer = () => {
             <li><a href="/account">Account</a></li>
             <li><a href="/contact">Contact</a></li>
             <li><a href="/privacy">Privacy Policy</a></li>
-            <li><a href="/admin">Login as Admin</a></li>
           </ul>
         </div>
 
@@ -29,13 +28,16 @@ const Footer = () => {
           <h3>Follow Us</h3>
           <div className="social-icons">
             <div className="social-item">
-              <p>Facebook: @atelierdebeaute</p>
+                <img src="/assets/facebook.png" alt="Facebook" className="social-logo" />
+                <span style={{color:'black'}}>@atelierdebeaute</span>
             </div>
             <div className="social-item">
-              <p>Instagram: @atelierdebeaute</p>
+                  <img src="/assets/instagram.png" alt="Instagram" className="social-logo" />
+                  <span style={{color:'black'}}>@atelierdebeaute</span>
             </div>
             <div className="social-item">
-              <p>Twitter: @atelierdebeaute</p>
+                  <img src="/assets/twitter.png" alt="Twitter" className="social-logo" />
+                  <span style={{color:'black'}}>@atelierdebeaute</span>
             </div>
           </div>
         </div>
