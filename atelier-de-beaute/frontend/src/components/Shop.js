@@ -3,34 +3,61 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   fetchProducts,
   fetchProductsBySearch,
-  setSearchTerm,
+  fetchProductsByCategory,
 } from '../slice/productSlice';
 import { addToCart, removeFromCart, updateQuantity } from '../slice/cartSlice';
 import { Link } from 'react-router-dom';
 import './Shop.css';
 
-const Shop = () => {
+const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
   const dispatch = useDispatch();
   const {
-    products,
-    searchTerm,
     loading,
     error,
-    pages,
   } = useSelector((state) => state.products);
   const cartItems = useSelector((state) => state.cart.items);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [addedProductIds, setAddedProductIds] = useState(new Set());
-  const [localSearchTerm, setLocalSearchTerm] = useState('');
+  const [allProducts, setAllProducts] = useState([]);
+  const [loadingAll, setLoadingAll] = useState(false);
+
+  // Helper function to fetch all pages of products for search or category or all
+  const fetchAllProducts = async () => {
+    setLoadingAll(true);
+    let allItems = [];
+    let currentPage = 1;
+    let totalPages = 1;
+
+    try {
+      do {
+        let result;
+        if (selectedCategoryId) {
+          result = await dispatch(fetchProductsByCategory({ categoryId: selectedCategoryId, page: currentPage, per_page: 50, priceOrder: priceFilter })).unwrap();
+          totalPages = result.products.pages;
+          allItems = allItems.concat(result.products.items);
+        } else if (searchTerm) {
+          result = await dispatch(fetchProductsBySearch({ searchTerm, page: currentPage, per_page: 50, priceOrder: priceFilter })).unwrap();
+          totalPages = result.pages;
+          allItems = allItems.concat(result.items);
+        } else {
+          result = await dispatch(fetchProducts({ page: currentPage, per_page: 50, priceOrder: priceFilter })).unwrap();
+          totalPages = result.pages;
+          allItems = allItems.concat(result.items);
+        }
+        currentPage++;
+      } while (currentPage <= totalPages);
+    } catch (error) {
+      console.error('Error fetching all products:', error);
+    }
+
+    setAllProducts(allItems);
+    setLoadingAll(false);
+  };
 
   useEffect(() => {
-    if (searchTerm) {
-      dispatch(fetchProductsBySearch({ searchTerm, page, per_page: perPage }));
-    } else {
-      dispatch(fetchProducts({ page, per_page: perPage }));
-    }
-  }, [dispatch, searchTerm, page, perPage]);
+    fetchAllProducts();
+  }, [selectedCategoryId, searchTerm, priceFilter]);
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
@@ -45,7 +72,8 @@ const Shop = () => {
   };
 
   const handleNextPage = () => {
-    if (page < pages) {
+    const totalPages = Math.ceil(allProducts.length / perPage);
+    if (page < totalPages) {
       setPage(page + 1);
       setAddedProductIds(new Set());
     }
@@ -57,22 +85,17 @@ const Shop = () => {
     setAddedProductIds(new Set());
   };
 
-  const handleSearchInputChange = (e) => {
-    setLocalSearchTerm(e.target.value);
-  };
-
-  const handleSearch = () => {
-    dispatch(setSearchTerm(localSearchTerm));
-    setPage(1);
-  };
-
-  if (loading) return <div>Loading products...</div>;
+  if (loading || loadingAll) return <div>Loading products...</div>;
   if (error) return <div>Error: {error}</div>;
+
+  // Pagination for allProducts in frontend
+  const totalPages = Math.ceil(allProducts.length / perPage);
+  const paginatedProducts = allProducts.slice((page - 1) * perPage, page * perPage);
 
   return (
     <div>
       <div className="product-grid">
-        {products.map((product) => {
+        {paginatedProducts.map((product) => {
           const isOutOfStock = product.stock_quantity === 0;
           const discountPercent =
             typeof product.discount_percentage === 'number' ? product.discount_percentage : 0;
@@ -164,7 +187,7 @@ const Shop = () => {
           </button>
           <button
             onClick={handleNextPage}
-            disabled={page === pages}
+            disabled={page === totalPages}
             aria-label="Next page"
             style={{ marginLeft: '10px' }}
           >
@@ -173,7 +196,7 @@ const Shop = () => {
         </div>
         <div style={{ flexGrow: 1, textAlign: 'center' }}>
           <span>
-            Page {page} of {pages}
+            Page {page} of {totalPages}
           </span>
         </div>
         <div>

@@ -2,6 +2,8 @@ from app import db
 from models.product import Product
 from models.product import product_category
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from sqlalchemy import or_
+from sqlalchemy.orm import joinedload
 from psycopg2.errors import UniqueViolation
 import logging
 
@@ -10,10 +12,10 @@ logger = logging.getLogger(__name__)
 
 class ProductService:
     @staticmethod
-    def get_all_products(page, per_page, is_featured=None, min_price=None, max_price=None):
-        logger.debug(f"Fetching products: page={page}, per_page={per_page}, is_featured={is_featured}, min_price={min_price}, max_price={max_price}")
+    def get_all_products(page, per_page, is_featured=None, min_price=None, max_price=None, price_order=None, search_term=None):
+        logger.debug(f"Fetching products: page={page}, per_page={per_page}, is_featured={is_featured}, min_price={min_price}, max_price={max_price}, price_order={price_order}, search_term={search_term}")
         try:
-            query = Product.query.filter_by(is_active=True)
+            query = Product.query.options(joinedload(Product.categories)).filter_by(is_active=True)
 
             if is_featured is not None:
                 query = query.filter_by(is_featured=is_featured)
@@ -21,6 +23,18 @@ class ProductService:
                 query = query.filter(Product.price >= min_price)
             if max_price is not None:
                 query = query.filter(Product.price <= max_price)
+            if search_term:
+                search_pattern = f"%{search_term}%"
+                query = query.filter(or_(
+                    Product.name.ilike(search_pattern),
+                    Product.description.ilike(search_pattern),
+                    Product.brand.ilike(search_pattern),
+                    Product.sku.ilike(search_pattern)
+                ))
+            if price_order == 'low':
+                query = query.order_by(Product.price.asc())
+            elif price_order == 'high':
+                query = query.order_by(Product.price.desc())
 
             page = max(1, page)
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
@@ -32,15 +46,16 @@ class ProductService:
                 'current_page': page,
                 'per_page': per_page
             }
-        except SQLAlchemyError as e:
-            logger.error(f"Database error in get_all_products: {str(e)}")
-            raise Exception("Database error occurred")
+        except Exception as e:
+            logger.error(f"Error in get_all_products: {str(e)}")
+            raise
+
 
     @staticmethod
     def get_product_by_id(product_id):
         logger.debug(f"Fetching product by ID: {product_id}")
         try:
-            product = Product.query.filter_by(id=product_id, is_active=True).first()
+            product = Product.query.options(joinedload(Product.categories)).filter_by(id=product_id, is_active=True).first()
             if not product:
                 logger.warning(f"Product not found: ID={product_id}")
                 raise ValueError("Product not found")
@@ -54,7 +69,7 @@ class ProductService:
     def get_product_by_slug(slug):
         logger.debug(f"Fetching product by slug: {slug}")
         try:
-            product = Product.query.filter_by(slug=slug, is_active=True).first()
+            product = Product.query.options(joinedload(Product.categories)).filter_by(slug=slug, is_active=True).first()
             if not product:
                 logger.warning(f"Product not found: slug={slug}")
                 raise ValueError(f"Product with slug '{slug}' not found")
@@ -65,12 +80,26 @@ class ProductService:
             raise Exception("Database error occurred")
 
     @staticmethod
-    def get_products_by_category(category_id, page, per_page):
-        logger.debug(f"Fetching products by category: category_id={category_id}, page={page}, per_page={per_page}")
+    def get_products_by_category(category_id, page, per_page, price_order=None, search_term=None):
+        logger.debug(f"Fetching products by category: category_id={category_id}, page={page}, per_page={per_page}, price_order={price_order}, search_term={search_term}")
         try:
-            query = Product.query.join(product_category).filter(
+            query = Product.query.options(joinedload(Product.categories)).join(product_category).filter(
                 product_category.c.category_id == category_id
             ).filter(Product.is_active == True)
+
+            if search_term:
+                search_pattern = f"%{search_term}%"
+                query = query.filter(or_(
+                    Product.name.ilike(search_pattern),
+                    Product.description.ilike(search_pattern),
+                    Product.brand.ilike(search_pattern),
+                    Product.sku.ilike(search_pattern)
+                ))
+
+            if price_order == 'low':
+                query = query.order_by(Product.price.asc())
+            elif price_order == 'high':
+                query = query.order_by(Product.price.desc())
 
             page = max(1, page)
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
@@ -82,15 +111,16 @@ class ProductService:
                 'current_page': page,
                 'per_page': per_page
             }
-        except SQLAlchemyError as e:
-            logger.error(f"Database error in get_products_by_category: {str(e)}")
-            raise Exception("Database error occurred")
+        except Exception as e:
+            logger.error(f"Error in get_products_by_category: {str(e)}")
+            raise
+
 
     @staticmethod
     def get_featured_products(page, per_page):
         logger.debug(f"Fetching featured products: page={page}, per_page={per_page}")
         try:
-            query = Product.query.filter_by(is_active=True, is_featured=True)
+            query = Product.query.options(joinedload(Product.categories)).filter_by(is_active=True, is_featured=True)
             page = max(1, page)
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
             logger.info(f"Retrieved {paginated.total} featured products, page {page}/{paginated.pages}")
@@ -109,7 +139,7 @@ class ProductService:
     def get_deals(page, per_page):
         logger.debug(f"Fetching deals: page={page}, per_page={per_page}")
         try:
-            query = Product.query.filter(
+            query = Product.query.options(joinedload(Product.categories)).filter(
                 Product.is_active == True,
                 Product.discount_price.isnot(None)
             )

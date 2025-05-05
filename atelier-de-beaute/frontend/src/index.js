@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider, useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import store from './slice/store';
 import { loadCartFromStorage, fetchCart, setCartItems } from './slice/cartSlice';
@@ -40,7 +41,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Root />
+      <Router>
+        <Root />
+      </Router>
     </Provider>
   </React.StrictMode>
 );

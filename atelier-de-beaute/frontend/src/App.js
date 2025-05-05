@@ -1,62 +1,68 @@
-import React, { useEffect } from 'react';
-import { Provider, useDispatch } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import store from './slice/store';
+import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Footer from './components/Footer';
 import Navbar from './components/Navbar';
-import AuthPage from './components/AuthPage';
 import Shop from './components/Shop';
+import Footer from './components/Footer';
+import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
-import AdminPanel from './components/AdminPanel';
-import ManagerPanel from './components/ManagerPanel';
-import SalesRepPanel from './components/SalesRepPanel';
-import ProductDetail from './components/ProductDetail';
-import { setUser } from './slice/authSlice';
+import AuthPage from './components/AuthPage';
 
-const AppContent = () => {
-  const dispatch = useDispatch();
+function App() {
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [priceFilter, setPriceFilter] = useState('');
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      dispatch(setUser(JSON.parse(storedUser)));
-    }
-  }, [dispatch]);
+  const handleCategorySelect = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+  };
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
+
+  const handleFilterPrice = (priceOrder) => {
+    setPriceFilter(priceOrder);
+  };
 
   return (
-    <>
+    <div className="App">
       <Header />
-      <Navbar />
-      <main className="flex-grow p-4">
-        <Routes>
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/manager" element={<ManagerPanel />} />
-          <Route path="/sales-rep" element={<SalesRepPanel />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/" element={<Shop />} />
-        </Routes>
-      </main>
+      <Navbar
+        onCategorySelect={handleCategorySelect}
+        onSearch={handleSearch}
+        onFilterPrice={handleFilterPrice}
+      />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Shop
+              selectedCategoryId={selectedCategoryId}
+              searchTerm={searchTerm}
+              priceFilter={priceFilter}
+            />
+          }
+        />
+        <Route
+          path="/shop"
+          element={
+            <Shop
+              selectedCategoryId={selectedCategoryId}
+              searchTerm={searchTerm}
+              priceFilter={priceFilter}
+            />
+          }
+        />
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/auth" element={<AuthPage />} />
+      </Routes>
       <Footer />
-    </>
+    </div>
   );
-};
-
-const App = () => {
-  return (
-    <Provider store={store}>
-      <Router>
-        <div className="min-h-screen flex flex-col">
-          <AppContent />
-        </div>
-      </Router>
-    </Provider>
-  );
-};
+}
 
 export default App;

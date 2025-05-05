@@ -73,50 +73,30 @@
   display: block;
 }
 
-.navbar-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Add arrow indicator for dropdown items with submenus */
+.dropdown-item.has-submenu::after {
+  content: "▶";
+  position: absolute;
+  right: 10px;
+  font-size: 0.7rem;
+  color: #888;
 }
 
-.navbar-search {
-  padding: 6px 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.navbar-search:focus {
-  border-color: #007bff;
-}
-
-.navbar-search-button {
-  background-color: #cc6c9c;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.navbar-search-button:hover {
-  background-color: #d64990;
-}
-
-.navbar-price-filter {
-  padding: 6px 10px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  outline: none;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
-}
-
-.navbar-price-filter:focus {
-  border-color: #007bff;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-list {
+    flex-direction: column;
+  }
+  .navbar-item {
+    padding: 10px;
+  }
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+  }
+  .dropdown-item .dropdown-menu {
+    margin-left: 0;
+  }
 }

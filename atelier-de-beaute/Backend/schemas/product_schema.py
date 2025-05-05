@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, validates, ValidationError
+from schemas.category_schema import CategorySchema
 
 class ProductSchema(Schema):
     id = fields.Int(dump_only=True)
@@ -18,6 +19,7 @@ class ProductSchema(Schema):
     average_rating = fields.Float(dump_only=True)
     review_count = fields.Int(dump_only=True)
     category_ids = fields.List(fields.Int, allow_none=True)
+    categories = fields.Nested(CategorySchema, many=True, dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
 

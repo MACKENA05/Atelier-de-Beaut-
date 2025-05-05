@@ -39,7 +39,7 @@ class Product(db.Model):
         'Category', 
         secondary=product_category,
         back_populates='products',
-        lazy='dynamic'
+        lazy='select'
     )
 
     @property

@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import api from '../services/api';
 import './Navbar.css';
 
-const Navbar = ({ onSearch, onFilterPrice }) => {
+const Navbar = ({ onSearch, onFilterPrice, onCategorySelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch('/products/categories')
-      .then(res => res.json())
-      .then(data => setCategories(data))
-      .catch(err => console.error('Failed to fetch categories:', err));
+    api.get('/products/categories')
+      .then(response => {
+        if (Array.isArray(response.data)) {
+          setCategories(response.data);
+        } else {
+          console.error('Categories data is not an array:', response.data);
+          setCategories([]);
+        }
+      })
+      .catch(error => {
+        console.error('Failed to fetch categories:', error);
+        setCategories([]);
+      });
   }, []);
 
   const handleSearchChange = (e) => {
@@ -35,12 +45,25 @@ const Navbar = ({ onSearch, onFilterPrice }) => {
     }
   };
 
+  const handleCategoryClick = (categoryId) => {
+    if (onCategorySelect) {
+      onCategorySelect(categoryId);
+    }
+  };
+
   const renderSubcategories = (subcategories) => {
     if (!subcategories || subcategories.length === 0) return null;
     return (
       <ul className="dropdown-menu">
         {subcategories.map(subcat => (
-          <li key={subcat.id} className="dropdown-item">
+          <li
+            key={subcat.id}
+            className={`dropdown-item ${subcat.subcategories && subcat.subcategories.length > 0 ? 'has-submenu' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCategoryClick(subcat.id);
+            }}
+          >
             {subcat.name}
             {renderSubcategories(subcat.subcategories)}
           </li>
@@ -52,12 +75,27 @@ const Navbar = ({ onSearch, onFilterPrice }) => {
   return (
     <nav className="navbar">
       <ul className="navbar-list">
-        {categories.map(category => (
-          <li key={category.id} className="navbar-item dropdown">
-            {category.name}
-            {renderSubcategories(category.subcategories)}
-          </li>
-        ))}
+        <li
+          key="all-products"
+          className="navbar-item"
+          onClick={() => handleCategoryClick(null)}
+        >
+          All Products
+        </li>
+        {categories.length > 0 ? (
+          categories.map(category => (
+            <li
+              key={category.id}
+              className={`navbar-item dropdown ${category.subcategories && category.subcategories.length > 0 ? 'has-submenu' : ''}`}
+              onClick={() => handleCategoryClick(category.id)}
+            >
+              {category.name}
+              {renderSubcategories(category.subcategories)}
+            </li>
+          ))
+        ) : (
+          <li className="navbar-item">No categories available</li>
+        )}
       </ul>
       <div className="navbar-controls">
         <input

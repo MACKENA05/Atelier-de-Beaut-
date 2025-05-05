@@ -24,9 +24,25 @@ class CategoryService:
             raise Exception("Database error occurred")
 
     @staticmethod
+    def serialize_category(category):
+        """Recursively serialize category and its subcategories."""
+        return {
+            'id': category.id,
+            'name': category.name,
+            'slug': category.slug,
+            'description': category.description,
+            'image_urls': category.image_urls,
+            'is_featured': category.is_featured,
+            'display_order': category.display_order,
+            'subcategories': [CategoryService.serialize_category(subcat) for subcat in sorted(category.subcategories, key=lambda c: c.display_order)]
+        }
+
+    @staticmethod
     def get_all_categories():
         try:
             top_level_categories = Category.query.filter_by(parent_id=None).order_by(Category.display_order).all()
-            return top_level_categories
+            # Serialize with subcategories recursively
+            serialized = [CategoryService.serialize_category(cat) for cat in top_level_categories]
+            return serialized
         except SQLAlchemyError:
             raise Exception("Database error occurred")

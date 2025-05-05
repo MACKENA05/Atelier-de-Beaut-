@@ -817,7 +817,7 @@ def seed_data():
             stock_quantity=18,
             sku="MAC-COL-001",
             brand="MAC Cosmetics",
-            image_urls=["https://images.unsplash.com/photo-1587017977600-5866789dadf8"],
+            image_urls=["https://dimg.dillards.com/is/image/DillardsZoom/mainProduct/mac-shadescents-crme-dnude-eau-de-parfum/05011609_zi.jpg","https://www.ashleybrookenicholas.com/wp-content/uploads/2016/12/mac-shadescents-perfume-lipstick-collection-candy-yum-yum-7121.jpg","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlJ7SHZDHgH4Q1ZLq4SaR_xnDSKHknrALyMT5FtFsV5Gr8fdko-NS81OEYwM-N8fAFrvI&usqp=CAU"],
             is_active=True
         )
         mac_woody_cologne.generate_slug()
@@ -832,7 +832,7 @@ def seed_data():
             stock_quantity=25,
             sku="MAYBELLINE-FRG-001",
             brand="Maybelline",
-            image_urls=["https://images.unsplash.com/photo-1587017977600-5866789dadf8"],
+            image_urls=["https://i.pinimg.com/736x/37/7e/be/377ebeed05569d8c836966187c6eae14.jpg","https://assets.myntassets.com/h_1440,q_100,w_1080/v1/assets/images/22281864/2023/3/30/f9c1eeba-1890-4b6e-9867-c115e55c18751680169749619MaybellineNewYorkFitMeSetofFreshTintFoundation-Shade5Blush-H1.jpg","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiQ3hQO_QoBUzol5XVJHVb9yd_m9JQrW-m2o4LhtMaBns3kFvnWfFzSN8YAActYEAZ8Pk&usqp=CAU"],
             is_active=True
         )
         maybelline_unisex_fragrance.generate_slug()
@@ -861,7 +861,7 @@ def seed_data():
             stock_quantity=25,
             sku="ESTEE-SHM-001",
             brand="Estée Lauder",
-            image_urls=[""],
+            image_urls=["https://esteelauderhair.com/wp-content/uploads/2024/10/2147483648_-210041-1.jpg","https://esteelauderhair.com/wp-content/uploads/2024/10/2147483648_-210063-1.jpg","https://esteelauderhair.com/wp-content/uploads/2024/10/2147483648_-210055.jpg"],
             is_active=True
         )
         estee_lauder_curly_shampoo.generate_slug()

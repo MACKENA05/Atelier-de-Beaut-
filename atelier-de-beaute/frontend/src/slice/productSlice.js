@@ -7,31 +7,42 @@ export const fetchCategories = createAsyncThunk('products/fetchCategories', asyn
   return response.data;
 });
 
-// Async thunk to fetch products by category id with pagination and optional search term
+// Async thunk to fetch products by category id with pagination and optional search term and price order
 export const fetchProductsByCategory = createAsyncThunk(
   'products/fetchProductsByCategory',
-  async ({ categoryId, page = 1, per_page = 20, searchTerm = '' }) => {
+  async ({ categoryId, page = 1, per_page = 20, searchTerm = '', priceOrder = '' }) => {
     const params = { page, per_page };
     if (searchTerm) {
       params.search = searchTerm;
+    }
+    if (priceOrder) {
+      params.priceOrder = priceOrder;
     }
     const response = await api.get(`/products/categories/${categoryId}/products`, { params });
     return response.data;
   }
 );
 
-// Async thunk to fetch products by search term with pagination
+// Async thunk to fetch products by search term with pagination and price order
 export const fetchProductsBySearch = createAsyncThunk(
   'products/fetchProductsBySearch',
-  async ({ searchTerm, page = 1, per_page = 20 }) => {
+  async ({ searchTerm, page = 1, per_page = 20, priceOrder = '' }) => {
     const params = { page, per_page, search: searchTerm };
+    if (priceOrder) {
+      params.priceOrder = priceOrder;
+    }
     const response = await api.get('/products', { params });
     return response.data;
   }
 );
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async ({ page = 1, per_page = 20 } = {}) => {
-  const response = await api.get('/products', { params: { page, per_page } });
+// Async thunk to fetch products with pagination and price order
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async ({ page = 1, per_page = 20, priceOrder = '' } = {}) => {
+  const params = { page, per_page };
+  if (priceOrder) {
+    params.priceOrder = priceOrder;
+  }
+  const response = await api.get('/products', { params });
   return response.data;
 });
 
