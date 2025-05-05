@@ -93,7 +93,7 @@
 }
 
 .navbar-search-button {
-  background-color: #007bff;
+  background-color: #cc6c9c;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -104,7 +104,7 @@
 }
 
 .navbar-search-button:hover {
-  background-color: #0056b3;
+  background-color: #d64990;
 }
 
 .navbar-price-filter {

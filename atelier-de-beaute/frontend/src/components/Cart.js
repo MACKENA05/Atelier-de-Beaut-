@@ -73,15 +73,13 @@ const Cart = () => {
       return defaultImage;
     }
 
-    // If the URL is absolute (starts with http or data:), return it as is
+
     if (cleanUrl.startsWith('http') || cleanUrl.startsWith('data:')) {
       console.log(`Item ${itemId}: Using absolute URL: ${cleanUrl}`);
       return cleanUrl;
     }
 
-    // Handle relative paths by prepending the backend base URL
     const baseUrl = api.defaults.baseURL ? api.defaults.baseURL.replace('/api', '') : 'http://localhost:5000/';
-    // Remove leading slash to avoid double slashes
     const finalUrl = cleanUrl.startsWith('/') ? cleanUrl.slice(1) : cleanUrl;
     const resolvedUrl = `${baseUrl}${finalUrl}`;
     console.log(`Item ${itemId}: Constructed URL: ${resolvedUrl}`);
@@ -118,15 +116,9 @@ const Cart = () => {
         {cartItems.map(item => (
           <div key={item.id} className="cart-item">
             <img
-              src={imageUrls[item.id] || '/assets/default-product.png'}
+              src={item.image_urls[0]  || '/assets/default-product.png'}
               alt={item.name}
               className="cart-item-image"
-              onError={(e) => {
-                if (e.target.src !== '/assets/default-product.png') {
-                  console.log(`Item ${item.id}: Failed to load image ${e.target.src}, falling back to default`);
-                  e.target.src = '/assets/default-product.png';
-                }
-              }}
             />
             <div className="cart-item-details">
               <h3>{item.name}</h3>
