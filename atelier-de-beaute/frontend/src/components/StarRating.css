@@ -1,0 +1,15 @@
+.star-rating {
+  display: inline-block;
+  color: #ddd;
+  font-size: 1.25rem;
+}
+
+.star {
+  cursor: default;
+  color: #ccc;
+  margin-right: 0.1rem;
+}
+
+.star.filled {
+  color: #ffc107; /* Bootstrap gold color for stars */
+}

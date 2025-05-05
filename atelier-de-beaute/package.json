@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "bootstrap": "^5.3.0"
+    "formik": "^2.4.6",
+    "yup": "^1.6.1"
   }
 }

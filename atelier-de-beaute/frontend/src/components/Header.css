@@ -1,0 +1,64 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color:  #f7c6c7;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.logo-image {
+  height: 40px;
+  width: 40px;
+  margin-right: 0.5rem;
+}
+
+.site-name {
+  font-family: 'Dancing Script', cursive;
+}
+
+.header-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #555;
+  font-weight: 600;
+  font-size: 1rem;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #007bff;
+}
+
+.cart-count {
+  background-color: #dc3545;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 50%;
+  padding: 0.15rem 0.5rem;
+  position: absolute;
+  top: -8px;
+  right: -12px;
+}

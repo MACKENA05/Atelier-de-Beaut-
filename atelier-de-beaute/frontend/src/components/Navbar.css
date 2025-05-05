@@ -1,90 +1,159 @@
+/* Navbar Container */
 .navbar {
+  background-color: #ffffff;
+  border-bottom: 2px solid #e0e0e0;
+  padding: 12px 24px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffffff; /* white */
-  padding: 1rem 2rem;
-  font-family: 'Georgia', serif;
-  color: #f4e1d2; /* cream */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: relative;
+  flex-wrap: wrap;
 }
 
-.navbar-logo .logo-text {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #3a0ca3; /* deep purple */
-  text-decoration: none;
-  letter-spacing: 2px;
-}
-
-.menu-toggle {
-  display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: #3a0ca3; /* deep purple */
-  cursor: pointer;
-}
-
-.navbar-links {
+/* Navbar Item List */
+.navbar-list {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  flex: 1;
 }
 
-.navbar-links li a {
-  color: #3a0ca3; /* deep purple */
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
+/* Navbar Item Style */
+.navbar-item {
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: #333333;
+  font-weight: 600;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
 }
 
-.navbar-links li a:hover,
-.navbar-links li a.active {
-  color: #ffb703; /* gold */
+/* Navbar Item Hover Effect */
+.navbar-item:hover {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0,123,255,0.4);
+  transform: translateY(-2px);
 }
 
-.navbar-search input {
-  padding: 0.3rem 0.5rem;
-  border-radius: 12px;
-  border: 1px solid #3a0ca3;
+/* Navbar Item Active Effect */
+.navbar-item:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Navbar Controls (Search + Price Filter) */
+.navbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Search Input */
+.navbar-search {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
   font-size: 1rem;
-  outline: none;
-  color: #3a0ca3;
+  transition: border 0.3s ease;
+  min-width: 200px; /* Ensures the input doesn't shrink too much */
 }
 
-/* Responsive styles */
+/* Search Input Focus Effect */
+.navbar-search:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Price Filter Select */
+.navbar-price-filter {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border 0.3s ease;
+  min-width: 150px; /* Ensures the select box has a minimum width */
+}
+
+/* Price Filter Focus Effect */
+.navbar-price-filter:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Search Button Styling */
+.navbar-search-button {
+  padding: 8px 16px;
+  background-color: #cc6c9c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar-search-button:hover {
+  background-color: #ce4f8f;
+  transform: scale(1.05);
+}
+
+/* Search Button Icon (Optional) */
+.navbar-search-button i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-  }
-
-  .navbar-links {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: #ffffff;
+  .navbar {
     flex-direction: column;
-    gap: 0;
-    display: none;
+    padding: 12px 16px;
   }
 
-  .navbar-links.active {
-    display: flex;
+  /* Navbar Item List for Mobile */
+  .navbar-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
   }
 
-  .navbar-links li {
-    border-top: 1px solid #3a0ca3;
+  /* Navbar Controls for Mobile */
+  .navbar-controls {
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
   }
 
-  .navbar-links li a {
-    padding: 1rem 2rem;
-    display: block;
+  /* Search and Price Filter for Mobile */
+  .navbar-search, .navbar-price-filter {
+    min-width: 100%; /* Full-width on mobile */
+    margin-bottom: 10px;
   }
 
-  .navbar-search {
-    display: none;
+  .navbar-search-button {
+    width: 100%; /* Full width for the search button */
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 10px 12px;
+  }
+
+  .navbar-list {
+    gap: 12px; /* Reduced gap on mobile */
+  }
+
+  .navbar-search, .navbar-price-filter {
+    font-size: 0.9rem; /* Slightly smaller input fields */
   }
 }
