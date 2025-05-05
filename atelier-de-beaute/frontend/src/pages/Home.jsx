@@ -265,7 +265,7 @@ const styles = {
   },
 
   productButton: {
-    backgroundColor: '#3a0ca3',
+    backgroundColor: '#D998A3',
     color: '#fff',
     border: 'none',
     padding: '0.6rem 1.2rem',
