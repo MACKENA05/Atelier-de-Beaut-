@@ -1,7 +1,7 @@
 .footer {
   background-color: #F7C6B6; /* Light pinkish background from Figma */
   color: #9C3D4B; /* Text color, soft dark brownish */
-  padding: 0.5rem 1rem; /* Padding for spacing */
+  padding: 2rem 1rem; /* Padding for spacing */
   font-family: 'Georgia', serif;
   display: flex;
   flex-direction: column;

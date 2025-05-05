@@ -34,7 +34,7 @@
 .cart-item-info h4 {
   margin: 0;
   font-size: 1rem;
-  color: #3a0ca3;
+  color: #D998A3;
 }
 
 .quantity-controls {
@@ -44,7 +44,7 @@
 }
 
 .quantity-button {
-  background-color: #ffb703;
+  background-color: #D998A3;
   border: none;
   padding: 0.25rem 0.5rem;
   color: #3a0ca3;
@@ -68,9 +68,9 @@
 
 .remove-button {
   background-color: transparent;
-  border: 1px solid #ffb703;
+  border: 1px solid #D998A3;
   padding: 0.25rem 0.75rem;
-  color: #ffb703;
+  color: #D998A3;
   font-weight: 700;
   border-radius: 8px;
   cursor: pointer;
@@ -79,6 +79,6 @@
 }
 
 .remove-button:hover {
-  background-color: #ffb703;
+  background-color: #D998A3;
   color: #3a0ca3;
 }

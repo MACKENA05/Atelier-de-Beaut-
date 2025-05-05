@@ -60,7 +60,7 @@
 }
 
 .clear-cart-button {
-  background-color: #ffb703;
+  background-color: #D998A3;
   color: #3a0ca3;
   border: none;
   padding: 0.5rem 1rem;
@@ -72,7 +72,7 @@
 }
 
 .clear-cart-button:hover {
-  background-color: #e6a700;
+  background-color: #D998A3;
 }
 
 .discount-section {
@@ -92,7 +92,7 @@
 }
 
 .apply-discount-button {
-  background-color: #ffb703;
+  background-color: #D998A3;
   color: #3a0ca3;
   border: none;
   padding: 0.4rem 1rem;
@@ -104,7 +104,7 @@
 }
 
 .apply-discount-button:hover {
-  background-color: #e6a700;
+  background-color: #D998A3;
 }
 
 .discount-error {
@@ -140,8 +140,8 @@
 }
 
 .checkout-button {
-  background-color: #3a0ca3;
-  color: #f4e1d2;
+  background-color: #D998A3;
+  color: #3a0ca3;
   padding: 0.5rem 1.5rem;
   border-radius: 16px;
   font-weight: 700;
@@ -152,7 +152,7 @@
 }
 
 .checkout-button:hover {
-  background-color: #2a068e;
+  background-color: #D998A3;
 }
 
 @media (max-width: 768px) {

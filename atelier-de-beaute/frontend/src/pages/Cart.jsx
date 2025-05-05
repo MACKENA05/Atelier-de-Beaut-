@@ -12,12 +12,13 @@ import {
 } from '../redux/cartSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import  promoBanner from  '../assets/images/sale banner.jpg'
+import  voucherSet from '../assets/images/Cosmetic voucher set.jpg'
 
 const Slideshow = () => {
   const slides = [
-    { id: 1, image: 'https://via.placeholder.com/600x200?text=Promo+1', alt: 'Promo 1' },
-    { id: 2, image: 'https://via.placeholder.com/600x200?text=Promo+2', alt: 'Promo 2' },
-    { id: 3, image: 'https://via.placeholder.com/600x200?text=Promo+3', alt: 'Promo 3' },
+    { id: 1, image: promoBanner, alt: 'Promo 1' },
+    { id: 2, image: voucherSet, alt: 'Promo 2' },
   ];
   const [current, setCurrent] = useState(0);
 
