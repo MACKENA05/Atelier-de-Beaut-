@@ -40,7 +40,7 @@ const Shop = () => {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
 
-  const categories = ['Skincare', 'Haircare', 'Makeup', 'Fragrance'];
+  const categories = ['Skincare', 'Haircare', 'Makeup', 'Fragrance','Deals'];
 
   const filteredProducts = mockProducts.filter((product) => {
     const matchCategory = selectedCategory ? product.category === selectedCategory : true;
