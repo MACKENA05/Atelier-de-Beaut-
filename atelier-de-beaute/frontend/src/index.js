@@ -27,7 +27,7 @@ const Root = () => {
       } else {
         dispatch(fetchCart());
       }
-      dispatch(setCartItems([])); // Clear local guest cart in state
+      dispatch(setCartItems([])); 
     } else {
       // Load cart from local storage for guest
       dispatch(loadCartFromStorage());

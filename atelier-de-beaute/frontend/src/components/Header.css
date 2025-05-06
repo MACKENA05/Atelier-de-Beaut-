@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color:  #f7c6c7;
+  background-color:  #ffe2e2;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
@@ -19,29 +19,51 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #333;
+  color: blue;
   font-weight: 700;
   font-size: 1.5rem;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .logo-image {
-  height: 40px;
-  width: 40px;
+  height: 50px;
+  width: 50px;
   margin-right: 0.5rem;
 }
 
 .site-name {
   font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  white-space: nowrap; 
 }
+
 
 .header-nav {
   display: flex;
+  width: 100%;
+}
+
+.header-nav-main {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+}
+
+.header-nav-auth {
+  display: flex;
+  justify-content: flex-end;
   gap: 1.5rem;
 }
 
 .nav-link {
   text-decoration: none;
-  color: #555;
+  color: blue;
   font-weight: 600;
   font-size: 1rem;
   position: relative;

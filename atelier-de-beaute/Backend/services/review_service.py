@@ -210,3 +210,10 @@ class ReviewService:
             'avg_rating': float(r.avg_rating) if r.avg_rating else 0.0,
             'review_count': r.review_count
         } for r in result]
+
+    @staticmethod
+    def get_reviews_by_user(user_id, eager_load=False):
+        query = Review.query.filter_by(user_id=user_id)
+        if eager_load:
+            query = query.join(Product).join(User)
+        return query.all()

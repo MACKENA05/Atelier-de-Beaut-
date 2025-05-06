@@ -82,6 +82,54 @@
   color: #888;
 }
 
+.navbar-search{
+  position: relative;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 5px 20px;
+  border-radius: 6px;
+
+  
+}
+
+
+.navbar-search-button {
+  padding: 8px 16px;
+  background-color: #cc6c9c; /* Primary color */
+  border: 1px solid #5a3447; /* Darker border for contrast */
+  border-left: none;
+  margin: 20px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Added transition for border color */
+}
+
+.navbar-search-button:hover,
+.navbar-search-button:focus {
+  background-color: #ee7bb4; /* Lighter shade for hover */
+  border-color: #5a3447; /* Keep the dark border when hovered */
+  outline: none;
+}
+
+.navbar-price-filter {
+  margin-left: 20px;
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added transition for box-shadow */
+}
+
+.navbar-price-filter:hover,
+.navbar-price-filter:focus {
+  border-color: #5a3447; /* Darker border to match the theme */
+  box-shadow: 0 0 6px rgba(90, 52, 71, 0.6); /* Subtle shadow with the same color as the border */
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .navbar-list {

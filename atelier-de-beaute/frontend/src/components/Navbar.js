@@ -116,7 +116,7 @@ const Navbar = ({ onSearch, onFilterPrice, onCategorySelect }) => {
           onChange={handlePriceFilterChange}
           className="navbar-price-filter"
         >
-          <option value="">Filter by price</option>
+          <option value="">Sort by price</option>
           <option value="low">Low to High</option>
           <option value="high">High to Low</option>
         </select>

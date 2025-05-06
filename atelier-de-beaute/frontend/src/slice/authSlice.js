@@ -1,22 +1,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../services/api';
+import { fetchCart } from './cartSlice';
 
-export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
+export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue, dispatch }) => {
   try {
     const response = await api.post('/auth/login', credentials);
     localStorage.setItem('access_token', response.data.access_token);
     localStorage.setItem('user', JSON.stringify(response.data.user));
+    // After login, fetch authenticated user's cart and update state
+    await dispatch(fetchCart());
     return response.data.user;
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || 'Login failed');
   }
 });
 
-export const register = createAsyncThunk('auth/register', async (userData, { rejectWithValue }) => {
+export const register = createAsyncThunk('auth/register', async (userData, { rejectWithValue, dispatch }) => {
   try {
     const response = await api.post('/auth/register', userData);
     localStorage.setItem('access_token', response.data.access_token);
     localStorage.setItem('user', JSON.stringify(response.data.user));
+    // After registration, fetch authenticated user's cart and update state
+    await dispatch(fetchCart());
     return response.data.user;
   } catch (err) {
     return rejectWithValue(err.response?.data || 'Registration failed');
@@ -27,6 +32,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
+    authenticated: false,
     loading: false,
     error: null,
   },
@@ -35,11 +41,13 @@ const authSlice = createSlice({
       localStorage.removeItem('access_token');
       localStorage.removeItem('user');
       state.user = null;
+      state.authenticated = false;
       state.error = null;
       state.loading = false;
     },
     setUser: (state, action) => {
       state.user = action.payload;
+      state.authenticated = !!action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -50,11 +58,13 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.authenticated = true;
         state.loading = false;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.authenticated = false;
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -62,11 +72,13 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.authenticated = true;
         state.loading = false;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.authenticated = false;
       });
   },
 });

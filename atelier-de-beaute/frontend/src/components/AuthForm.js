@@ -11,6 +11,7 @@ const AuthForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const initialLoginValues = {
     username: '',
@@ -46,7 +47,6 @@ const AuthForm = () => {
       navigate(from, { replace: true });
     } catch (err) {
       if (err && typeof err === 'object' && err.details) {
-        // Set field-specific validation errors and a general submit error
         setErrors({ ...err.details, submit: err.error || (isLogin ? 'Login failed' : 'Registration failed') });
       } else {
         setErrors({ submit: typeof err === 'string' ? err : err.error || err.message || (isLogin ? 'Login failed' : 'Registration failed') });
@@ -58,6 +58,11 @@ const AuthForm = () => {
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
+    setShowPassword(false);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -76,13 +81,41 @@ const AuthForm = () => {
                 <label className="auth-label" htmlFor="username">
                   Email or Username:
                 </label>
-                <Field name="username" type="text" className="auth-input" />
+                <Field name="username" type="text" autoComplete="username" className="auth-input" />
                 <ErrorMessage name="username" component="div" className="auth-error" />
 
                 <label className="auth-label" htmlFor="password">
                   Password:
                 </label>
-                <Field name="password" type="password" className="auth-input" />
+                <div className="password-input-wrapper" style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+                  <Field
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    className="auth-input"
+                    style={{ paddingRight: '2.5rem' }}
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-button"
+                    onClick={togglePasswordVisibility}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '1.2rem',
+                      position: 'absolute',
+                      right: '10px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      padding: 0,
+                      color: '#cc6c9c',
+                    }}
+                  >
+                    {showPassword ? '👁️' : '👁️‍🗨️'}
+                  </button>
+                </div>
                 <ErrorMessage name="password" component="div" className="auth-error" />
               </>
             ) : (
@@ -90,19 +123,34 @@ const AuthForm = () => {
                 <label className="auth-label" htmlFor="username">
                   Username:
                 </label>
-                <Field name="username" type="text" className="auth-input" />
+                <Field name="username" type="text" autoComplete="username" className="auth-input" />
                 <ErrorMessage name="username" component="div" className="auth-error" />
 
                 <label className="auth-label" htmlFor="email">
                   Email:
                 </label>
-                <Field name="email" type="email" className="auth-input" />
+                <Field name="email" type="email" autoComplete="email" className="auth-input" />
                 <ErrorMessage name="email" component="div" className="auth-error" />
 
                 <label className="auth-label" htmlFor="password">
                   Password:
                 </label>
-                <Field name="password" type="password" className="auth-input" />
+                <div className="password-input-wrapper">
+                  <Field
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    className="auth-input"
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-button"
+                    onClick={togglePasswordVisibility}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
                 <ErrorMessage name="password" component="div" className="auth-error" />
               </>
             )}

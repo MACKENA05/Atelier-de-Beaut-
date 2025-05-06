@@ -1,0 +1,168 @@
+.checkout-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.checkout-container h1,
+.checkout-container h2,
+.checkout-container h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.checkout-form div {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-form label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.checkout-form input[type="text"],
+.checkout-form input[type="email"],
+.checkout-form select,
+.checkout-form textarea {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.checkout-form input[type="text"]:focus,
+.checkout-form input[type="email"]:focus,
+.checkout-form select:focus,
+.checkout-form textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.error {
+  color: #d9534f;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.payment-message {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #dff0d8;
+  color: #3c763d;
+  border-radius: 4px;
+}
+
+.review-section p {
+  margin: 6px 0;
+  color: #444;
+}
+
+.review-section ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.review-section li {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.review-section strong {
+  color: #222;
+}
+
+/* Step indicator styles */
+.step-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  position: relative;
+  padding: 0 10px;
+}
+
+.step-indicator::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background-color: #ccc;
+  z-index: 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  cursor: pointer;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ccc;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.step.active .step-circle,
+.step.completed .step-circle {
+  background-color: #007bff;
+}
+
+.step-description {
+  font-size: 0.875rem;
+  color: #555;
+  text-align: center;
+  max-width: 80px;
+}
+
+/* Line between steps */
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  right: 0;
+  width: calc(100% - 40px);
+  height: 2px;
+  background-color: #ccc;
+  z-index: 0;
+}
+
+.step.completed:not(:last-child)::after {
+  background-color: #007bff;
+}

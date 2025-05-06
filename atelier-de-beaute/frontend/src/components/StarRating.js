@@ -9,7 +9,7 @@ const StarRating = ({ rating }) => {
     <div className="star-rating">
       {[...Array(totalStars)].map((_, index) => {
         const starClass = index < rating ? 'star filled' : 'star';
-        return <span key={index} className={starClass}>&#9733;</span>; // Unicode star character
+        return <span key={index} className={starClass}>&#9733;</span>; 
       })}
     </div>
   );

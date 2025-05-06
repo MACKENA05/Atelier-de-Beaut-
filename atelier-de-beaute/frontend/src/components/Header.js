@@ -23,20 +23,25 @@ const Header = () => {
         </Link>
       </div>
       <nav className="header-nav">
-        <Link to="/" className="nav-link">Home</Link>
-        <Link to="/shop" className="nav-link">Shop</Link>
-        <Link to="/cart" className="nav-link">
-          Cart
-          {cartItemsCount > 0 && <span className="cart-count">{cartItemsCount}</span>}
-        </Link>
-        {user ? (
-          <>
-            <span className="nav-link">Hello, {user.username}</span>
-            <button onClick={handleLogout} className="nav-link logout-button">Logout</button>
-          </>
-        ) : (
-          <Link to="/auth" state={{ from: location }} className="nav-link">Login</Link>
-        )}
+        <div className="header-nav-main">
+          <Link to="/" className="nav-link">Home</Link>
+          <Link to="/shop" className="nav-link">Shop</Link>
+          <Link to="/cart" className="nav-link">
+            Cart
+            {cartItemsCount > 0 && <span className="cart-count">{cartItemsCount}</span>}
+          </Link>
+          <Link to="/my-orders" className='nav-link'>My Orders</Link>
+        </div>
+        <div className="header-nav-auth">
+          {user ? (
+            <>
+              <span className="nav-link">Hello, {user.username}</span>
+              <button onClick={handleLogout} className="nav-link logout-button">🚪 Logout</button>
+            </>
+          ) : (
+            <Link to="/auth" state={{ from: location }} className="nav-link">🔐 Login</Link>
+          )}
+        </div>
       </nav>
     </header>
   );

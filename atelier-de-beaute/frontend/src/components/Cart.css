@@ -1,9 +1,9 @@
 .cart-container-with-image {
   display: flex;
-  max-width: 900px;
+  max-width: 100%;
   margin: 30px auto;
-  padding: 20px;
-  background-image: ('/assets/cart2.jpeg');
+  padding: 100px;
+  background-color: #ffe7e9;
   background-size: cover;
   background-position: center;
   border-radius: 12px;
@@ -14,9 +14,9 @@
 }
 
 .cart-container {
-  background-color: #ffe7e9;
+  background-color: #f0f0f0;
   border-radius: 12px;
-  padding: 20px;
+  padding: 10px;
   flex: 1;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
@@ -161,7 +161,7 @@
 .continue-shopping-button {
   background-color: #cc6c9c;
   color: white;
-  padding: 14px 30px;
+  padding: 4px 8px;
   border-radius: 10px;
   font-size: 1.1rem;
   font-weight: 700;

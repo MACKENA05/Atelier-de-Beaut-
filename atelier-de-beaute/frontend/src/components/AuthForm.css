@@ -2,7 +2,7 @@
   max-width: 400px;
   margin: 2rem auto;
   padding: 2rem;
-  border: 1px solid #f0c0d0; /* Light pink border */
+  border: 1px solid #f0c0d0; 
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -12,11 +12,11 @@
   text-align: center;
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
-  color: #d18c9b; /* Light pink color for title */
+  color: #d18c9b; 
 }
 
 .auth-error {
-  color: #e74c3c; /* Red color for error messages */
+  color: #e74c3c; 
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -29,26 +29,26 @@
 .auth-label {
   margin-bottom: 1rem;
   font-weight: 600;
-  color: #d18c9b; /* Light pink color for labels */
+  color: #d18c9b;
 }
 
 .auth-input {
-  width: 100%;
+  width: 90%;
   padding: 0.5rem;
   margin-top: 0.3rem;
-  border: 1px solid #f0c0d0; /* Light pink border */
+  border: 1px solid #f0c0d0; 
   border-radius: 4px;
   font-size: 1rem;
   transition: border 0.3s ease;
 }
 
 .auth-input:focus {
-  border-color: #e0a1b6; /* Slightly darker pink when input is focused */
+  border-color: #e0a1b6; 
 }
 
 .auth-button {
   padding: 0.75rem;
-  background: linear-gradient(135deg, #f7a7b9, #e0a1b6); /* Gradient from light pink to darker pink */
+  background: linear-gradient(135deg, #f7a7b9, #e0a1b6); 
   color: white;
   font-weight: 00;
   font-size: 15px;
@@ -57,12 +57,12 @@
   cursor: pointer;
   margin-top: 1rem;
   transition: background 0.3s ease, transform 0.2s ease;
-  width: 100%; /* Makes the button take up full width */
+  width: 100%; 
 }
 
 .auth-button:hover {
-  background: linear-gradient(135deg, #f28d9f, #d78c9e); /* Darker pink gradient on hover */
-  transform: translateY(-2px); /* Adds a slight hover effect */
+  background: linear-gradient(135deg, #f28d9f, #d78c9e); 
+  transform: translateY(-2px);
 }
 
 .auth-toggle-text {
@@ -89,26 +89,25 @@
   color: #130409; 
 }
 
-/* Responsive styles for smaller screens */
+
 @media (max-width: 600px) {
   .auth-container {
-    padding: 1.5rem; /* Slightly smaller padding for smaller screens */
+    padding: 1.5rem; 
   }
 
   .auth-title {
-    font-size: 1.5rem; /* Adjust title font size for smaller screens */
+    font-size: 1.5rem; 
   }
 
   .auth-input {
-    padding: 0.75rem; /* Increase padding for better touch targets */
-    font-size: 1.1rem; /* Slightly larger font size for inputs */
+    padding: 0.75rem; 
+    font-size: 1.1rem; 
   }
 
   .auth-button {
-    padding: 1rem; /* Increase button padding for better touch targets */
+    padding: 1rem; 
   }
-
   .auth-toggle-text {
-    font-size: 1rem; /* Increase toggle text size for better readability */
+    font-size: 1rem; 
   }
 }

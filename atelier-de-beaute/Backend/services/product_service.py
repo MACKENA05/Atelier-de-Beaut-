@@ -10,7 +10,31 @@ import logging
 # Configure logging
 logger = logging.getLogger(__name__)
 
+from app import db
+from models.product import Product
+from models.product import product_category
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from sqlalchemy import or_
+from sqlalchemy.orm import joinedload
+from psycopg2.errors import UniqueViolation
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
 class ProductService:
+    @staticmethod
+    def get_descendant_category_ids(category_id):
+        from models.category import Category
+        category_ids = set()
+        def recurse(cat_id):
+            category_ids.add(cat_id)
+            subcats = Category.query.filter_by(parent_id=cat_id).all()
+            for subcat in subcats:
+                recurse(subcat.id)
+        recurse(category_id)
+        return list(category_ids)
+
     @staticmethod
     def get_all_products(page, per_page, is_featured=None, min_price=None, max_price=None, price_order=None, search_term=None):
         logger.debug(f"Fetching products: page={page}, per_page={per_page}, is_featured={is_featured}, min_price={min_price}, max_price={max_price}, price_order={price_order}, search_term={search_term}")
@@ -86,7 +110,7 @@ class ProductService:
             query = Product.query.options(joinedload(Product.categories)).join(product_category).filter(
                 product_category.c.category_id == category_id
             ).filter(Product.is_active == True)
-
+    
             if search_term:
                 search_pattern = f"%{search_term}%"
                 query = query.filter(or_(
@@ -95,12 +119,12 @@ class ProductService:
                     Product.brand.ilike(search_pattern),
                     Product.sku.ilike(search_pattern)
                 ))
-
+    
             if price_order == 'low':
                 query = query.order_by(Product.price.asc())
             elif price_order == 'high':
                 query = query.order_by(Product.price.desc())
-
+    
             page = max(1, page)
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
             logger.info(f"Retrieved {paginated.total} products for category ID={category_id}, page {page}/{paginated.pages}")
@@ -114,8 +138,7 @@ class ProductService:
         except Exception as e:
             logger.error(f"Error in get_products_by_category: {str(e)}")
             raise
-
-
+        
     @staticmethod
     def get_featured_products(page, per_page):
         logger.debug(f"Fetching featured products: page={page}, per_page={per_page}")

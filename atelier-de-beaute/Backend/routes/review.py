@@ -92,6 +92,16 @@ def get_featured_reviews():
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
 
+@reviews_bp.route('/user/reviews', methods=['GET'])
+@jwt_required()
+def get_user_reviews():
+    try:
+        current_user_id = int(get_jwt_identity())
+        reviews = ReviewService.get_reviews_by_user(user_id=current_user_id, eager_load=True)
+        return jsonify(ReviewsSchema().dump({'reviews': reviews})), 200
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+
 @reviews_bp.route('/reviews/<int:review_id>/toggle-featured', methods=['PATCH'])
 @jwt_required()
 @admin_or_manager_required

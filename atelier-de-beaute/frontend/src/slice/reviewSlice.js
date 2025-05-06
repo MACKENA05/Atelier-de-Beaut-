@@ -103,6 +103,47 @@ export const deleteReview = createAsyncThunk(
   }
 );
 
+// Async thunk to fetch featured reviews
+export const fetchFeaturedReviews = createAsyncThunk(
+  'reviews/fetchFeaturedReviews',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/reviews/featured');
+      return response.data.reviews;
+    } catch (err) {
+      if (!err.response) {
+        return rejectWithValue('Failed to fetch featured reviews: Network error or server is down');
+      }
+      const { status, data } = err.response;
+      if (status === 500) {
+        return rejectWithValue('Failed to fetch featured reviews: Server error');
+      }
+      return rejectWithValue(data?.error || `Failed to fetch featured reviews: ${err.message}`);
+    }
+  }
+);
+
+// Async thunk to fetch reviews by current user
+export const fetchUserReviews = createAsyncThunk(
+  'reviews/fetchUserReviews',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/user/reviews');
+      return response.data.reviews;
+    } catch (err) {
+      if (!err.response) {
+        return rejectWithValue('Failed to fetch user reviews: Network error or server is down');
+      }
+      const { status, data } = err.response;
+      if (status === 401) {
+        return rejectWithValue('Failed to fetch user reviews: Unauthorized - please log in');
+      }
+      return rejectWithValue(data?.error || `Failed to fetch user reviews: ${err.message}`);
+    }
+  }
+);
+
+
 const reviewSlice = createSlice({
   name: 'reviews',
   initialState: {
@@ -169,7 +210,31 @@ const reviewSlice = createSlice({
       .addCase(deleteReview.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
-      });
+      })
+      .addCase(fetchFeaturedReviews.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchFeaturedReviews.fulfilled, (state, action) => {
+        state.reviews = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchFeaturedReviews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(fetchUserReviews.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserReviews.fulfilled, (state, action) => {
+        state.reviews = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchUserReviews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
   },
 });
 
