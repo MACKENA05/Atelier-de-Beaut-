@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../slice/authSlice';
+import { FiLogOut } from 'react-icons/fi';
 import './Header.css';
 
 const Header = () => {
@@ -42,7 +43,7 @@ const Header = () => {
           {user ? (
             <>
               <span className="nav-link">Hello, {user.username}</span>
-              <button onClick={handleLogout} className="nav-link logout-button">🚪 Logout</button>
+              <button onClick={handleLogout} className="nav-link logout-button"><FiLogOut size={18} style={{ verticalAlign: 'middle', marginRight: '6px' }} /> Logout</button>
             </>
           ) : (
             <Link to="/auth" state={{ from: location }} className="nav-link">🔐 Login</Link>

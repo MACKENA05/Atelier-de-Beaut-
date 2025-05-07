@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../services/api';
-import { fetchCart, syncMergedCart } from './cartSlice';
+import { fetchCart } from './cartSlice';
 
 export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue, dispatch }) => {
   try {
@@ -8,12 +8,18 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
     localStorage.setItem('access_token', response.data.access_token);
     localStorage.setItem('user', JSON.stringify(response.data.user));
 
-    // Merge guest cart after login using syncMergedCart thunk
+    // Merge guest cart after login
     const guestCart = localStorage.getItem('guest_cart');
     if (guestCart) {
       try {
-        console.log('Merging guest cart via syncMergedCart thunk');
-        await dispatch(syncMergedCart());
+        console.log('Merging guest cart:', guestCart);
+        // Transform guestCart array to object with 'items' key and product_id field
+        const guestCartItems = JSON.parse(guestCart).map(item => ({
+          product_id: item.id,
+          quantity: item.quantity
+        }));
+        await api.post('/cart/merge', { items: guestCartItems });
+        localStorage.removeItem('guest_cart');
         console.log('Guest cart merged successfully');
       } catch (mergeError) {
         console.error('Failed to merge guest cart:', mergeError);

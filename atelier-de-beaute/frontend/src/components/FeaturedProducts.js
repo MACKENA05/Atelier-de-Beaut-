@@ -24,13 +24,13 @@ const FeaturedProducts = () => {
             <div key={product.id} className="featured-product-item">
               <img src={product.image_urls?.[0] || '/default-product.png'} alt={product.name} />
               <h3>{product.name}</h3>
-              {product.discounted_price && product.discounted_price < product.price ? (
+              {product.discount_price && product.discount_price < product.price ? (
                 <p>
                   <span style={{ textDecoration: 'line-through', color: 'red', marginRight: '8px' }}>
                     KES {product.price.toFixed(2)}
                   </span>
                   <span style={{ fontWeight: 'bold', color: 'green' }}>
-                    KES {product.discounted_price.toFixed(2)}
+                    KES {product.discount_price.toFixed(2)}
                   </span>
                 </p>
               ) : (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateQuantity, clearCart, fetchCart, clearCartBackend ,removeFromCartBackend} from '../slice/cartSlice';
+import { removeFromCart, updateQuantity, clearCart, fetchCart, clearCartBackend, removeFromCartBackend } from '../slice/cartSlice';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
 import './Cart.css';
@@ -81,7 +81,12 @@ const Cart = () => {
     }
   };
 
-  const totalPrice = deduplicatedCartItems.reduce((total, item) => total + (item.price || item.current_price) * item.quantity, 0);
+  // Calculate total price using discount_price if available and less than original price
+  const totalPrice = deduplicatedCartItems.reduce((total, item) => {
+    const price = item.discount_price && item.discount_price < item.price ? item.discount_price : item.price;
+    return total + price * item.quantity;
+  }, 0);
+
 
   const getImageUrl = (urls) => {
     const placeholderImage = 'https://via.placeholder.com/150';
@@ -153,6 +158,7 @@ const Cart = () => {
           })
           .map((item) => {
             const imageUrl = imageUrls[item.id] || '/assets/default-product.png';
+            const hasDiscount = item.discount_price && item.discount_price < item.price;
             return (
               <div key={item.id} className="cart-item">
                 <img
@@ -162,7 +168,18 @@ const Cart = () => {
                 />
                 <div className="cart-item-details">
                   <h3>{item.name}</h3>
-                  <p>Price: KES {item.price}</p>
+                  {hasDiscount ? (
+                    <p>
+                      <span style={{ textDecoration: 'line-through', color: 'red', marginRight: '8px' }}>
+                        KES {item.price.toFixed(2)}
+                      </span>
+                      <span style={{ fontWeight: 'bold', color: 'green' }}>
+                        KES {item.discount_price.toFixed(2)}
+                      </span>
+                    </p>
+                  ) : (
+                    <p>Price: KES {item.price.toFixed(2)}</p>
+                  )}
                   <p>
                     Quantity: 
                     <input

@@ -306,7 +306,7 @@ const Checkout = () => {
           <h1>Thank you for your order!</h1>
           <p>Your order has been placed successfully.</p>
           <button onClick={() => navigate('/shop')}>Continue Shopping</button>
-          <button onClick={() => navigate('/my_orders')}>View My Orders</button>
+          <button onClick={() => navigate('/my-orders')}>View My Orders</button>
         </div>
       )}
     </div>
