@@ -152,11 +152,28 @@ def get_invoice_data(order_id):
         logger.error(f"Unexpected error in get_invoice_data: {str(e)}")
         raise
 
+from sqlalchemy.orm import joinedload
+
+from sqlalchemy.orm import joinedload
+from sqlalchemy import desc
+
 def get_user_orders():
     user_id = get_jwt_identity()
-    orders = Order.query.filter_by(user_id=user_id).all()
+    orders = Order.query.options(
+        joinedload(Order.items).joinedload(OrderItem.product)
+    ).filter_by(user_id=user_id).order_by(desc(Order.created_at)).all()
     schema = OrderSchema(many=True)
-    return schema.dump(orders)
+    orders_data = schema.dump(orders)
+    for order_obj, order_dict in zip(orders, orders_data):
+        try:
+            order_obj.update_order_status()
+            order_dict['order_status'] = order_obj.order_status
+        except Exception:
+            order_dict['order_status'] = 'pending'
+    return orders_data
+
+
+
 
 def get_all_orders():
     orders = Order.query.all()

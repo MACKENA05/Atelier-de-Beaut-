@@ -15,6 +15,18 @@ import Contact from './components/Contact';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import AuthPage from './components/AuthPage';
 import LandingPage from './components/LandingPage';
+import AdminPanel from './components/AdminPanel';
+import SalesRepPanel from './components/SalesRepPanel';
+import ManagerPanel from './components/ManagerPanel';
+import MyOrders from './components/MyOrders';
+
+function ProtectedRoute({ children, allowedRoles }) {
+  const user = useSelector(state => state.auth.user);
+  if (!user || !allowedRoles.includes(user.role.toLowerCase())) {
+    return <Navigate to="/auth" replace />;
+  }
+  return children;
+}
 
 function App() {
   const dispatch = useDispatch();
@@ -78,6 +90,31 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPanel />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sales-rep"
+          element={
+            <ProtectedRoute allowedRoles={['sales_rep']}>
+              <SalesRepPanel />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manager"
+          element={
+            <ProtectedRoute allowedRoles={['manager']}>
+              <ManagerPanel />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/my-orders" element={<MyOrders />} />
       </Routes>
       <Footer />
     </div>

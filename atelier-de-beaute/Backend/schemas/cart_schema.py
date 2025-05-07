@@ -2,7 +2,7 @@ from marshmallow import Schema, fields, validates, ValidationError, post_dump
 import json
 
 class CartItemSchema(Schema):
-    product_id = fields.Int()
+    id = fields.Int(attribute="product_id")
     name = fields.Str(attribute="product.name")
     price = fields.Float(attribute="product.current_price")
     discount_percentage = fields.Float(attribute="product.discount_percentage")

@@ -417,8 +417,8 @@ def seed_data():
         loreal_lipstick = Product(
             name="L’Oréal Matte Lipstick",
             description="Long-lasting matte lipstick by L’Oréal",
-            price=15.99,
-            discount_price=12.99,
+            price=1549.99,
+            discount_price=120.99,
             stock_quantity=50,
             sku="LOREAL-LIP-001",
             brand="L’Oréal",
@@ -433,7 +433,7 @@ def seed_data():
         maybelline_foundation = Product(
             name="Maybelline Fit Me Foundation",
             description="Natural finish foundation by Maybelline",
-            price=12.99,
+            price=450.99,
             stock_quantity=30,
             sku="MAYBELLINE-FND-001",
             brand="Maybelline",
@@ -447,7 +447,7 @@ def seed_data():
         loreal_mascara = Product(
             name="L’Oréal Voluminous Mascara",
             description="Volumizing mascara by L’Oréal",
-            price=10.99,
+            price=245.99,
             stock_quantity=40,
             sku="LOREAL-MSC-001",
             brand="L’Oréal",
@@ -461,7 +461,7 @@ def seed_data():
         fenty_highlighter = Product(
             name="Fenty Killawatt Highlighter",
             description="Radiant highlighter by Fenty Beauty",
-            price=36.00,
+            price=360.00,
             stock_quantity=25,
             sku="FENTY-HLT-001",
             brand="Fenty Beauty",
@@ -476,7 +476,7 @@ def seed_data():
         mac_eyeshadow = Product(
             name="MAC Eyeshadow Palette",
             description="Vibrant eyeshadow palette by MAC",
-            price=45.00,
+            price=450.00,
             stock_quantity=20,
             sku="MAC-EYE-001",
             brand="MAC Cosmetics",
@@ -490,7 +490,7 @@ def seed_data():
         chanel_lip_gloss = Product(
             name="Chanel Rouge Coco Gloss",
             description="Hydrating lip gloss by Chanel",
-            price=38.00,
+            price=380.00,
             discount_price=30.00,
             stock_quantity=15,
             sku="CHANEL-GLS-001",
@@ -506,7 +506,7 @@ def seed_data():
         estee_lauder_concealer = Product(
             name="Estée Lauder Double Wear Concealer",
             description="Long-wear concealer by Estée Lauder",
-            price=29.00,
+            price=900.00,
             stock_quantity=35,
             sku="ESTEE-CON-001",
             brand="Estée Lauder",
@@ -520,7 +520,7 @@ def seed_data():
         chanel_floral_perfume = Product(
             name="Chanel Chance Eau Tendre",
             description="Floral perfume for women by Chanel",
-            price=120.00,
+            price=1200.00,
             stock_quantity=10,
             sku="CHANEL-PRF-001",
             brand="Chanel",
@@ -535,7 +535,7 @@ def seed_data():
         loreal_men_cologne = Product(
             name="L’Oréal Men Expert Cologne",
             description="Fresh cologne for men by L’Oréal",
-            price=45.00,
+            price=1450.00,
             discount_price=35.00,
             stock_quantity=20,
             sku="LOREAL-COL-001",
@@ -550,7 +550,7 @@ def seed_data():
         fenty_unisex_fragrance = Product(
             name="Fenty Eau de Parfum",
             description="Citrus unisex fragrance by Fenty",
-            price=135.00,
+            price=1350.00,
             stock_quantity=12,
             sku="FENTY-FRG-001",
             brand="Fenty Beauty",
@@ -564,7 +564,7 @@ def seed_data():
         loreal_dry_shampoo = Product(
             name="L’Oréal Elvive Dry Shampoo",
             description="Revitalizing shampoo for dry hair",
-            price=14.99,
+            price=1499.99,
             stock_quantity=40,
             sku="LOREAL-SHM-001",
             brand="L’Oréal",
@@ -578,7 +578,7 @@ def seed_data():
         maybelline_hair_mask = Product(
             name="Maybelline Express Repair Mask",
             description="Deep conditioning hair mask",
-            price=19.99,
+            price=1199.99,
             stock_quantity=25,
             sku="MAYBELLINE-MSK-001",
             brand="Maybelline",
@@ -592,7 +592,7 @@ def seed_data():
         fenty_hair_spray = Product(
             name="Fenty Hold & Shine Spray",
             description="Strong hold hair spray",
-            price=22.00,
+            price=1200.00,
             stock_quantity=30,
             sku="FENTY-SPR-001",
             brand="Fenty Beauty",
@@ -606,7 +606,7 @@ def seed_data():
         estee_lauder_gel_cleanser = Product(
             name="Estée Lauder Perfectly Clean Gel",
             description="Refreshing gel cleanser",
-            price=28.00,
+            price=800.00,
             stock_quantity=20,
             sku="ESTEE-CLS-001",
             brand="Estée Lauder",
@@ -620,8 +620,8 @@ def seed_data():
         loreal_hyaluronic_serum = Product(
             name="L’Oréal Revitalift Serum",
             description="Hydrating hyaluronic acid serum",
-            price=24.99,
-            discount_price=19.99,
+            price=2400.99,
+            discount_price=199.99,
             stock_quantity=50,
             sku="LOREAL-SER-001",
             brand="L’Oréal",
@@ -650,7 +650,7 @@ def seed_data():
         fenty_spf_50 = Product(
             name="Fenty Skin Hydra Vizor SPF 50",
             description="Lightweight SPF 50 sunscreen",
-            price=38.00,
+            price=1800.00,
             stock_quantity=25,
             sku="FENTY-SPF-001",
             brand="Fenty Beauty",
@@ -679,7 +679,7 @@ def seed_data():
         mac_makeup_brushes = Product(
             name="MAC Brush Set",
             description="Professional makeup brush set",
-            price=80.00,
+            price=400.00,
             discount_price=60.00,
             stock_quantity=10,
             sku="MAC-BRS-001",
@@ -724,8 +724,8 @@ def seed_data():
         loreal_blush = Product(
             name="L’Oréal True Match Blush",
             description="Natural glow blush by L’Oréal",
-            price=11.99,
-            discount_price=9.99,
+            price=240.99,
+            discount_price=49.99,
             stock_quantity=45,
             sku="LOREAL-BLS-001",
             brand="L’Oréal",
@@ -740,7 +740,7 @@ def seed_data():
         fenty_lip_balm = Product(
             name="Fenty Skin Plush Puddin Lip Balm",
             description="Hydrating lip balm by Fenty Beauty",
-            price=16.00,
+            price=160.00,
             stock_quantity=30,
             sku="FENTY-LIP-002",
             brand="Fenty Beauty",
@@ -754,7 +754,7 @@ def seed_data():
         chanel_setting_powder = Product(
             name="Chanel Poudre Universelle",
             description="Translucent setting powder by Chanel",
-            price=52.00,
+            price=520.00,
             stock_quantity=15,
             sku="CHANEL-PWD-001",
             brand="Chanel",
@@ -768,7 +768,7 @@ def seed_data():
         mac_brow_pencil = Product(
             name="MAC Veluxe Brow Pencil",
             description="Precision brow pencil by MAC",
-            price=22.00,
+            price=100.00,
             stock_quantity=25,
             sku="MAC-BRW-001",
             brand="MAC Cosmetics",
@@ -782,7 +782,7 @@ def seed_data():
         estee_lauder_lip_liner = Product(
             name="Estée Lauder Double Wear Lip Liner",
             description="Long-lasting lip liner by Estée Lauder",
-            price=27.00,
+            price=270.00,
             discount_price=20.00,
             stock_quantity=20,
             sku="ESTEE-LIP-001",
@@ -798,8 +798,8 @@ def seed_data():
         estee_lauder_fruity_perfume = Product(
             name="Estée Lauder Beautiful Belle",
             description="Fruity floral perfume for women by Estée Lauder",
-            price=95.00,
-            stock_quantity=12,
+            price=959.59,
+            stock_quantity=49.15,
             sku="ESTEE-PRF-001",
             brand="Estée Lauder",
             image_urls=["https://i.pinimg.com/736x/1b/1e/a3/1b1ea318ddcfef9e7c44739a85b3015d.jpg","https://i.pinimg.com/736x/3d/d8/9f/3dd89fe4d80bbf56a1cf1408ee19e5d0.jpg","https://i.pinimg.com/736x/ea/de/4a/eade4a40aedbd3c016cec2485d187483.jpg"],
@@ -813,7 +813,7 @@ def seed_data():
         mac_woody_cologne = Product(
             name="MAC Shade Woody Cologne",
             description="Rich woody cologne for men by MAC",
-            price=65.00,
+            price=1899.49,
             stock_quantity=18,
             sku="MAC-COL-001",
             brand="MAC Cosmetics",
@@ -827,8 +827,8 @@ def seed_data():
         maybelline_unisex_fragrance = Product(
             name="Maybelline Fresh Breeze",
             description="Citrus unisex fragrance by Maybelline",
-            price=40.00,
-            discount_price=32.00,
+            price=4000.00,
+            discount_price=320.00,
             stock_quantity=25,
             sku="MAYBELLINE-FRG-001",
             brand="Maybelline",
@@ -843,8 +843,8 @@ def seed_data():
         chanel_hydrating_conditioner = Product(
             name="Chanel Coco Nourish Conditioner",
             description="Hydrating conditioner for all hair types",
-            price=48.00,
-            stock_quantity=20,
+            price=480.00,
+            stock_quantity=60,
             sku="CHANEL-CND-001",
             brand="Chanel",
             image_urls=["https://i.pinimg.com/1200x/59/ea/e4/59eae4fc1634c0dcac61db0ce14cb3c5.jpg"],
@@ -857,8 +857,8 @@ def seed_data():
         estee_lauder_curly_shampoo = Product(
             name="Estée Lauder Curl Perfect Shampoo",
             description="Shampoo for curly hair by Estée Lauder",
-            price=30.00,
-            stock_quantity=25,
+            price=1300.00,
+            stock_quantity=250,
             sku="ESTEE-SHM-001",
             brand="Estée Lauder",
             image_urls=["https://esteelauderhair.com/wp-content/uploads/2024/10/2147483648_-210041-1.jpg","https://esteelauderhair.com/wp-content/uploads/2024/10/2147483648_-210063-1.jpg","https://esteelauderhair.com/wp-content/uploads/2024/10/2147483648_-210055.jpg"],
@@ -871,8 +871,8 @@ def seed_data():
         mac_hair_oil = Product(
             name="MAC Smooth Shine Oil",
             description="Nourishing hair oil by MAC",
-            price=35.00,
-            discount_price=28.00,
+            price=500.00,
+            discount_price=50.00,
             stock_quantity=15,
             sku="MAC-OIL-001",
             brand="MAC Cosmetics",
@@ -887,7 +887,7 @@ def seed_data():
         maybelline_day_cream = Product(
             name="Maybelline Dream Fresh Day Cream",
             description="Lightweight day cream by Maybelline",
-            price=15.99,
+            price=1549.99,
             stock_quantity=40,
             sku="MAYBELLINE-CRM-001",
             brand="Maybelline",
@@ -901,7 +901,7 @@ def seed_data():
         fenty_clay_mask = Product(
             name="Fenty Skin Cookies N Clean Mask",
             description="Purifying clay mask by Fenty Beauty",
-            price=32.00,
+            price=320.00,
             stock_quantity=20,
             sku="FENTY-MSK-002",
             brand="Fenty Beauty",
@@ -915,8 +915,8 @@ def seed_data():
         loreal_night_cream = Product(
             name="L’Oréal Age Perfect Night Cream",
             description="Anti-aging night cream by L’Oréal",
-            price=29.99,
-            discount_price=24.99,
+            price=2999.99,
+            discount_price=249.99,
             stock_quantity=30,
             sku="LOREAL-CRM-001",
             brand="L’Oréal",
@@ -932,7 +932,7 @@ def seed_data():
         estee_lauder_earrings = Product(
             name="Estée Lauder Gold Hoop Earrings",
             description="Elegant gold hoop earrings",
-            price=120.00,
+            price=250.00,
             stock_quantity=10,
             sku="ESTEE-ERR-001",
             brand="Estée Lauder",
@@ -947,8 +947,8 @@ def seed_data():
         maybelline_crossbody_bag = Product(
             name="Maybelline Crossbody Bag",
             description="Chic crossbody bag by Maybelline",
-            price=45.00,
-            discount_price=35.00,
+            price=2000.00,
+            discount_price=350.00,
             stock_quantity=15,
             sku="MAYBELLINE-BAG-001",
             brand="Maybelline",
@@ -962,7 +962,7 @@ def seed_data():
         chanel_hair_dryer = Product(
             name="Chanel Luxe Hair Dryer",
             description="High-performance hair dryer by Chanel",
-            price=200.00,
+            price=2500.00,
             stock_quantity=8,
             sku="CHANEL-DRY-001",
             brand="Chanel",

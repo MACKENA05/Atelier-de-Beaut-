@@ -26,19 +26,58 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
+// New thunk to sync merged cart to backend
+export const syncMergedCart = createAsyncThunk(
+  'cart/syncMergedCart',
+  async (_, { getState, dispatch }) => {
+    const state = getState();
+    const guestCartItems = JSON.parse(localStorage.getItem(LOCAL_STORAGE_CART_KEY)) || [];
+    const backendCartItems = state.cart.items || [];
+
+    // Merge guest and backend cart items, summing quantities
+    const mergedItemsMap = new Map();
+
+    backendCartItems.forEach(item => {
+      mergedItemsMap.set(item.id, { ...item });
+    });
+
+    guestCartItems.forEach(guestItem => {
+      if (mergedItemsMap.has(guestItem.id)) {
+        mergedItemsMap.get(guestItem.id).quantity += guestItem.quantity;
+      } else {
+        mergedItemsMap.set(guestItem.id, { ...guestItem });
+      }
+    });
+
+    const mergedItems = Array.from(mergedItemsMap.values());
+
+    // Sync merged items to backend by dispatching addToCartBackend or updateCartBackend
+    for (const item of mergedItems) {
+      // Assuming addToCartBackend handles both add and update
+      await dispatch(addToCartBackend(item));
+    }
+
+    // Clear guest cart from localStorage after syncing
+    localStorage.removeItem(LOCAL_STORAGE_CART_KEY);
+
+    return mergedItems;
+  }
+);
+
 // Async thunk to add item to backend cart
 export const addToCartBackend = createAsyncThunk(
   'cart/addToCartBackend',
   async (product, { getState, rejectWithValue }) => {
+    console.log("cart details",product);
     const state = getState();
     const userId = state.auth.user?.id;
     if (!userId) return rejectWithValue('User not authenticated');
-    try {
-      const response = await api.post('/cart/add', { product_id: product.id, quantity: 1 });
+    
+      const response = await api.post('cart/add', { product_id: product.product_id, quantity: 1 });
+      console.log("add cart response ",response)
+
       return response.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.error || err.message);
-    }
+   
   }
 );
 
@@ -103,11 +142,14 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const product = action.payload;
-      const existingItem = state.items.find(item => item.id === product.id);
-      if (existingItem) {
-        existingItem.quantity += 1;
+      const existingItemIndex = state.items.findIndex(item => item.id === product.id);
+      if (existingItemIndex !== -1) {
+        // Create a new array with updated quantity to ensure immutability
+        state.items = state.items.map((item, index) =>
+          index === existingItemIndex ? { ...item, quantity: item.quantity + 1 } : item
+        );
       } else {
-        state.items.push({ ...product, quantity: 1 });
+        state.items = [...state.items, { ...product, quantity: 1 }];
       }
       if (!state.authenticated) {
         saveGuestCart(state.items);
@@ -162,9 +204,31 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
-        state.items = action.payload;
+        const guestCartItems = loadGuestCart();
+
+        // Merge guest cart items with fetched cart items, summing quantities for duplicates
+        const mergedItemsMap = new Map();
+
+        // Add fetched cart items first
+        action.payload.forEach(item => {
+          mergedItemsMap.set(item.id, { ...item });
+        });
+
+        // Merge guest cart items
+        guestCartItems.forEach(guestItem => {
+          if (mergedItemsMap.has(guestItem.id)) {
+            mergedItemsMap.get(guestItem.id).quantity += guestItem.quantity;
+          } else {
+            mergedItemsMap.set(guestItem.id, { ...guestItem });
+          }
+        });
+
+        state.items = Array.from(mergedItemsMap.values());
         state.loading = false;
         state.authenticated = true;
+
+        // Clear guest cart from localStorage after merging
+        localStorage.removeItem(LOCAL_STORAGE_CART_KEY);
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.loading = false;
@@ -173,7 +237,11 @@ const cartSlice = createSlice({
         state.items = loadGuestCart();
       })
       .addCase(addToCartBackend.fulfilled, (state, action) => {
-        const product = action.payload;
+        let product = action.payload;
+        // Map product_id to id for frontend consistency
+        if (product.product_id && !product.id) {
+          product = { ...product, id: product.product_id };
+        }
         const existingItem = state.items.find(item => item.id === product.id);
         if (existingItem) {
           existingItem.quantity = product.quantity;

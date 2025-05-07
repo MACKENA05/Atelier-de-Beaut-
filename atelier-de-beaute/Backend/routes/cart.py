@@ -24,12 +24,18 @@ def add_to_cart():
     """Add an item to the cart."""
     user_id = get_jwt_identity()
     data = request.get_json()
+    logger.info(f"Received data for add_to_cart: {data}")  # Added logging for debugging
     try:
-        Cart_Services.add_to_cart(user_id, data)
-        return jsonify({'message': 'Item added to cart'}), 200
+        cart_item = Cart_Services.add_to_cart(user_id, data)
+        from schemas.cart_schema import CartItemSchema
+        serialized_item = CartItemSchema().dump(cart_item)
+        response = jsonify(serialized_item)
+    
+        return response, 200
     except ValueError as e:
         logger.error(f"Error adding to cart for user {user_id}: {str(e)}")
-        return jsonify({'error': str(e)}), 400
+        response = jsonify({'error': str(e)})
+        return response, 400
 
 @cart_bp.route('/cart/update', methods=['PUT'])
 @jwt_required(optional=True)

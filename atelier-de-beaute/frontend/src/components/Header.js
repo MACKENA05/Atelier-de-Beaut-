@@ -14,6 +14,8 @@ const Header = () => {
     dispatch(logout());
   };
 
+
+
   return (
     <header className="header">
       <div className="header-left">
@@ -30,7 +32,11 @@ const Header = () => {
             Cart
             {cartItemsCount > 0 && <span className="cart-count">{cartItemsCount}</span>}
           </Link>
-          <Link to="/my-orders" className='nav-link'>My Orders</Link>
+          {user && (
+            <Link to="/my-orders" className="nav-link">
+              My Orders
+            </Link>
+          )}
         </div>
         <div className="header-nav-auth">
           {user ? (

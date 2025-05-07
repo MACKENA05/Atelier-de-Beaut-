@@ -5,6 +5,8 @@ import cartReducer from './cartSlice';
 import userReducer from './userSlice';
 import analyticsReducer from './analyticsSlice';
 import reviewReducer from './reviewSlice';
+import orderReducer from './orderSlice';
+
 
 export default configureStore({
   reducer: {
@@ -14,5 +16,6 @@ export default configureStore({
     users: userReducer,
     analytics: analyticsReducer,
     reviews: reviewReducer,
+    orders: orderReducer,
   },
 });

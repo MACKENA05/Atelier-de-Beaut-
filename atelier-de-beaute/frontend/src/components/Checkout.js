@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { clearCart, fetchCart, loadCartFromStorage } from '../slice/cartSlice';
 import api from '../services/api';
+import { fetchUserOrders } from '../slice/orderSlice';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -50,9 +51,9 @@ const Checkout = () => {
     return <div className="error">Error loading cart: {cartError}</div>;
   }
 
-  if (!cartItems || cartItems.length === 0) {
-    return <div>Your cart is empty. Add products before checkout.</div>;
-  }
+  // if (!cartItems || cartItems.length === 0) {
+  //   return <div>Your cart is empty. Add products before checkouT.</div>;
+  // }
 
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
@@ -105,7 +106,7 @@ const Checkout = () => {
         payment_method: orderData.paymentMethod,
         description: orderData.deliveryInstructions || '',
       };
-
+  
       if (orderData.paymentMethod === 'pay_on_delivery') {
         payload.cod_phone = orderData.phoneNumber;
       } else if (orderData.paymentMethod === 'mpesa') {
@@ -120,28 +121,31 @@ const Checkout = () => {
         }
         payload.phone_number = phone;
       }
-
+  
       const orderResponse = await api.post('/orders/checkout', payload);
-
+  
       const orderId = orderResponse.data.id;
-
+  
       if (orderData.paymentMethod === 'mpesa') {
         const paymentResponse = await api.post(`/payment/checkout/${orderId}`, {
           phone_number: payload.phone_number,
         });
-
+  
         setPaymentMessage(paymentResponse.data.message);
       } else {
         setPaymentMessage('Order placed successfully. Please pay on delivery.');
       }
-
+  
       dispatch(clearCart());
+      dispatch(fetchUserOrders()); // Fetch updated orders after placing order
       setStep(3);
+      // navigate('/orders'); // Navigate to orders page to refresh view
+      
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to place order');
     }
   };
-
+  
   return (
     <div className="checkout-container">
       <h1>Checkout</h1>
@@ -248,7 +252,9 @@ const Checkout = () => {
                 </li>
               ))}
             </ul>
-            <p><strong>Total Cost:</strong> KES {totalPrice}</p>
+            <p><strong>Subtotal:</strong> KES {totalPrice.toFixed(2)}</p>
+            <p><strong>Shipping Fee:</strong> KES {orderData.shippingMethod === 'express' ? 15.00 : 5.00}</p>
+            <p><strong>Total:</strong> KES {(totalPrice + (orderData.shippingMethod === 'express' ? 15.00 : 5.00)).toFixed(2)}</p>
           </div>
           {error && <div className="error">{error}</div>}
           {paymentMessage && <div className="payment-message">{paymentMessage}</div>}

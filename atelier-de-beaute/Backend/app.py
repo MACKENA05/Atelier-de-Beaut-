@@ -24,7 +24,10 @@ def create_app(config_name='development'):
     migrate.init_app(app, db)
     jwt.init_app(app)
     cache.init_app(app)
-    cors.init_app(app)
+    cors.init_app(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+
+    # Add after cors init to handle OPTIONS preflight globally
+
     
 
     # JWT error handlers

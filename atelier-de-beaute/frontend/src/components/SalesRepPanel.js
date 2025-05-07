@@ -1,34 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+import React, { useState } from 'react';
+import Products from './admin/Products';
+import OrdersChart from './charts/OrdersChart';
 
 const SalesRepPanel = () => {
-  const [analytics, setAnalytics] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('products');
 
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const response = await api.get('/analytics/sales');
-        setAnalytics(response.data);
-      } catch (err) {
-        setError('Failed to fetch sales analytics');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAnalytics();
-  }, []);
-
-  if (loading) return <div>Loading sales analytics...</div>;
-  if (error) return <div>{error}</div>;
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'products':
+        return <Products />;
+      case 'orders':
+        return <OrdersChart />;
+      default:
+        return <Products />;
+    }
+  };
 
   return (
-    <div>
-      <h1>Sales Representative Panel</h1>
-      <h2>Sales Analytics</h2>
-      <pre>{JSON.stringify(analytics, null, 2)}</pre>
-      {/* Add more detailed analytics and features here */}
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <nav style={{ width: '200px', background: '#f0f0f0', padding: '1rem' }}>
+        <h2>Sales Representative Panel</h2>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          <li
+            style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'products' ? '#ddd' : 'transparent' }}
+            onClick={() => setActiveTab('products')}
+          >
+            Products
+          </li>
+          <li
+            style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'orders' ? '#ddd' : 'transparent' }}
+            onClick={() => setActiveTab('orders')}
+          >
+            Orders
+          </li>
+        </ul>
+      </nav>
+      <main style={{ flexGrow: 1, padding: '1rem', overflowY: 'auto' }}>
+        {renderTabContent()}
+      </main>
     </div>
   );
 };

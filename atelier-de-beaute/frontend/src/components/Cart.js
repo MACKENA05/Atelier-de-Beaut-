@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateQuantity, clearCart } from '../slice/cartSlice';
+import { removeFromCart, updateQuantity, clearCart, fetchCart } from '../slice/cartSlice';
 import { FaTrashAlt } from 'react-icons/fa';
 import api from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
@@ -10,10 +10,31 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector(state => state.cart.items);
+  const cartStatus = useSelector(state => state.cart.status); // Add status to handle loading/errors
+  const cartError = useSelector(state => state.cart.error); // Add error state
   const isAuthenticated = useSelector(state => state.auth.authenticated);
 
-  // State to store resolved image URLs to prevent re-render loops
+  // Deduplicate cart items by id, summing quantities
+  const deduplicatedCartItems = useMemo(() => {
+    return cartItems.reduce((acc, item) => {
+      const existing = acc.find(i => i.id === item.id);
+      if (existing) {
+        existing.quantity += item.quantity;
+      } else {
+        acc.push({ ...item });
+      }
+      return acc;
+    }, []);
+  }, [cartItems]);
+
+  // State to store resolved image URLs
   const [imageUrls, setImageUrls] = useState({});
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchCart());
+    }
+  }, [dispatch, isAuthenticated]);
 
   const handleRemove = (id) => {
     dispatch(removeFromCart(id));
@@ -38,68 +59,56 @@ const Cart = () => {
     }
   };
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = deduplicatedCartItems.reduce((total, item) => total + (item.price || item.current_price) * item.quantity, 0);
 
-  const getImageUrl = (url, itemId) => {
-    const defaultImage = '/assets/default-product.png';
-    if (!url) {
-      console.log(`Item ${itemId}: No image URL provided, using default: ${defaultImage}`);
-      return defaultImage;
-    }
+  const getImageUrl = (urls) => {
+    const placeholderImage = 'https://via.placeholder.com/150';
+    if (!urls) return placeholderImage;
 
-    let cleanUrl = url;
-
-    // Handle potential JSON string from local storage (e.g., '"/images/product.jpg"' or '["/images/product.jpg"]')
-    if (typeof url === 'string') {
-      // Try parsing as JSON array
-      if (url.startsWith('[') && url.endsWith(']')) {
-        try {
-          const parsedUrls = JSON.parse(url);
-          if (Array.isArray(parsedUrls) && parsedUrls.length > 0) {
-            cleanUrl = parsedUrls[0];
-            console.log(`Item ${itemId}: Parsed JSON array to URL: ${cleanUrl}`);
-          } else {
-            console.log(`Item ${itemId}: Parsed JSON array is empty, using default: ${defaultImage}`);
-            return defaultImage;
-          }
-        } catch (e) {
-          console.error(`Item ${itemId}: Failed to parse JSON: ${e}, treating as string`);
-          // Try removing extra quotes from potential string encoding
-          cleanUrl = url.replace(/^"|"$/g, '');
-        }
+    let cleanUrl = '';
+    if (Array.isArray(urls) && urls.length > 0) {
+      cleanUrl = urls[0];
+    } else if (typeof urls === 'string') {
+      try {
+        const parsedUrls = JSON.parse(urls);
+        cleanUrl = Array.isArray(parsedUrls) && parsedUrls.length > 0 ? parsedUrls[0] : urls;
+      } catch {
+        cleanUrl = urls;
       }
-    } else {
-      console.log(`Item ${itemId}: Unexpected image_url type (${typeof url}), using default: ${defaultImage}`);
-      return defaultImage;
     }
 
-
-    if (cleanUrl.startsWith('http') || cleanUrl.startsWith('data:')) {
-      console.log(`Item ${itemId}: Using absolute URL: ${cleanUrl}`);
-      return cleanUrl;
+    if (!cleanUrl || !cleanUrl.startsWith('http')) {
+      return placeholderImage;
     }
-
-    const baseUrl = api.defaults.baseURL ? api.defaults.baseURL.replace('/api', '') : 'http://localhost:5000/';
-    const finalUrl = cleanUrl.startsWith('/') ? cleanUrl.slice(1) : cleanUrl;
-    const resolvedUrl = `${baseUrl}${finalUrl}`;
-    console.log(`Item ${itemId}: Constructed URL: ${resolvedUrl}`);
-    return resolvedUrl;
+    return cleanUrl;
   };
 
-  // Resolve image URLs when cartItems change
+
   useEffect(() => {
-    console.log('Cart items updated:', cartItems);
     const newImageUrls = {};
-    cartItems.forEach(item => {
-      const resolvedUrl = getImageUrl(item.image_url, item.id);
+    deduplicatedCartItems.forEach(item => {
+      const resolvedUrl = getImageUrl(item.image_urls || item.image_url);
       newImageUrls[item.id] = resolvedUrl;
-      // Save image URL in localStorage
-      localStorage.setItem(`product_image_${item.id}`, resolvedUrl);
     });
     setImageUrls(newImageUrls);
-  }, [cartItems]);
+  }, [deduplicatedCartItems]);
 
-  if (cartItems.length === 0) {
+  if (cartStatus === 'loading') {
+    return <div className="cart-loading">Loading cart...</div>;
+  }
+
+  if (cartError) {
+    return (
+      <div className="cart-error">
+        Error loading cart: {cartError}
+        <br />
+        <button onClick={() => dispatch(fetchCart())}>Retry</button>
+        <Link to="/shop" className="continue-shopping-button-empty">Continue Shopping</Link>
+      </div>
+    );
+  }
+
+  if (deduplicatedCartItems.length === 0) {
     return (
       <div className="empty-cart">
         Your cart is empty.
@@ -113,31 +122,42 @@ const Cart = () => {
     <div className="cart-container-with-image">
       <div className="cart-container">
         <h1>Your Cart</h1>
-        {cartItems.map(item => (
-          <div key={item.id} className="cart-item">
-            <img
-              src={item.image_urls[0]  || '/assets/default-product.png'}
-              alt={item.name}
-              className="cart-item-image"
-            />
-            <div className="cart-item-details">
-              <h3>{item.name}</h3>
-              <p>Price: KES {item.price}</p>
-              <p>
-                Quantity: 
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
-                  min="1"
+        {deduplicatedCartItems
+          .filter(item => {
+            if (!item.id) {
+              console.warn('Cart item missing id:', item);
+              return false;
+            }
+            return true;
+          })
+          .map((item) => {
+            const imageUrl = imageUrls[item.id] || '/assets/default-product.png';
+            return (
+              <div key={item.id} className="cart-item">
+                <img
+                  src={imageUrl}
+                  alt={item.name}
+                  className="cart-item-image"
                 />
-              </p>
-            </div>
-            <button className="remove-button" onClick={() => handleRemove(item.id)} aria-label="Remove item">
-              <FaTrashAlt />
-            </button>
-          </div>
-        ))}
+                <div className="cart-item-details">
+                  <h3>{item.name}</h3>
+                  <p>Price: KES {item.price}</p>
+                  <p>
+                    Quantity: 
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
+                      min="1"
+                    />
+                  </p>
+                </div>
+                <button className="remove-button" onClick={() => handleRemove(item.id)} aria-label="Remove item">
+                  <FaTrashAlt />
+                </button>
+              </div>
+            );
+          })}
         <h2 className="cart-total">Total: KES {totalPrice.toFixed(2)}</h2>
         <button className="clear-cart-button" onClick={handleClearCart}>Clear Cart</button>
         <div className="cart-actions">

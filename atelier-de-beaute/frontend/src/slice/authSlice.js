@@ -7,10 +7,26 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
     const response = await api.post('/auth/login', credentials);
     localStorage.setItem('access_token', response.data.access_token);
     localStorage.setItem('user', JSON.stringify(response.data.user));
+
+    // Merge guest cart after login
+    const guestCart = localStorage.getItem('guest_cart');
+    if (guestCart) {
+      try {
+        console.log('Merging guest cart:', guestCart);
+        await api.post('/cart/merge', JSON.parse(guestCart));
+        localStorage.removeItem('guest_cart');
+        console.log('Guest cart merged successfully');
+      } catch (mergeError) {
+        console.error('Failed to merge guest cart:', mergeError);
+      }
+    }
+
     // After login, fetch authenticated user's cart and update state
     await dispatch(fetchCart());
+    console.log('Fetched authenticated user cart');
     return response.data.user;
   } catch (err) {
+    console.error('Login failed:', err);
     return rejectWithValue(err.response?.data?.error || 'Login failed');
   }
 });

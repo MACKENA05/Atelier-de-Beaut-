@@ -5,7 +5,7 @@ import {
   fetchProductsBySearch,
   fetchProductsByCategory,
 } from '../slice/productSlice';
-import { addToCart, removeFromCart, updateQuantity } from '../slice/cartSlice';
+import { addToCart, removeFromCart, updateQuantity, addToCartBackend } from '../slice/cartSlice';
 import { Link } from 'react-router-dom';
 import './Shop.css';
 
@@ -16,6 +16,7 @@ const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
     error,
   } = useSelector((state) => state.products);
   const cartItems = useSelector((state) => state.cart.items);
+  const authenticated = useSelector((state) => state.cart.authenticated);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [addedProductIds, setAddedProductIds] = useState(new Set());
@@ -60,9 +61,16 @@ const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
   }, [selectedCategoryId, searchTerm, priceFilter]);
 
   const handleAddToCart = (product) => {
+    if (authenticated) {
+    // Pass quantity 1 explicitly to addToCartBackend
+    dispatch(addToCartBackend({ product_id: product.id, quantity: 1 }));
+    } else {
     dispatch(addToCart(product));
+    }
     setAddedProductIds((prev) => new Set(prev).add(product.id));
-  };
+    };
+    
+    
 
   const handlePrevPage = () => {
     if (page > 1) {

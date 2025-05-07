@@ -26,6 +26,9 @@ def create_review():
     except ValueError as e:
         logger.error(f"ValueError creating review: {str(e)}")
         return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        logger.error(f"Exception creating review: {str(e)}")
+        return jsonify({'error': 'An unexpected error occurred'}), 400
 
 @reviews_bp.route('/api/reviews/<int:review_id>', methods=['GET'])
 @jwt_required()
