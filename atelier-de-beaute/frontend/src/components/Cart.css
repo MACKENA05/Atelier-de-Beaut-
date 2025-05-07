@@ -91,7 +91,7 @@
 }
 
 .remove-button:hover {
-  background-color: #d9363e;
+  background-color: darkblue;
 }
 
 .cart-total {
@@ -119,7 +119,7 @@
 }
 
 .clear-cart-button:hover {
-  background-color: #091725;
+  background-color: darkblue;
 }
 
 .empty-cart {
@@ -155,7 +155,7 @@
 }
 
 .proceed-checkout-button:hover {
-  background-color: #e24493;
+  background-color: darkblue;
 }
 
 .continue-shopping-button {
@@ -176,5 +176,5 @@
 }
 
 .continue-shopping-button:hover {
-  background-color: #d83f8c;
+  background-color: darkblue;
 }

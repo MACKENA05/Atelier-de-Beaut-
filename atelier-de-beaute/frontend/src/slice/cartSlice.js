@@ -72,12 +72,14 @@ export const addToCartBackend = createAsyncThunk(
     const state = getState();
     const userId = state.auth.user?.id;
     if (!userId) return rejectWithValue('User not authenticated');
-    
-      const response = await api.post('cart/add', { product_id: product.product_id, quantity: 1 });
-      console.log("add cart response ",response)
 
+    try {
+      const response = await api.post('/cart/add', { product_id: product.product_id || product.id, quantity: product.quantity });
+      console.log("add cart response ", response);
       return response.data;
-   
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || err.message);
+    }
   }
 );
 

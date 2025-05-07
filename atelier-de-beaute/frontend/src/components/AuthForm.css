@@ -67,7 +67,7 @@
 }
 
 .auth-button:hover {
-  background: linear-gradient(135deg, #f28d9f, #d78c9e); 
+  background: linear-gradient(135deg, darkblue, darkblue); 
   transform: translateY(-2px);
 }
 

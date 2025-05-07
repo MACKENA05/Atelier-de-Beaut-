@@ -71,6 +71,25 @@
   text-align: center;
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   }
+/* 
+  .shop-button-overlay {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    background-color: #cc6c9c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+  } */
+  
+  .shop-button-overlay:hover {
+    background-color: #da5999;
+  }
   
   .cards-container {
   display: flex;

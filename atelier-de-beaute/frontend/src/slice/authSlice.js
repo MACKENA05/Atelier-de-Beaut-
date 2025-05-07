@@ -13,7 +13,12 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
     if (guestCart) {
       try {
         console.log('Merging guest cart:', guestCart);
-        await api.post('/cart/merge', JSON.parse(guestCart));
+        // Transform guestCart array to object with 'items' key and product_id field
+        const guestCartItems = JSON.parse(guestCart).map(item => ({
+          product_id: item.id,
+          quantity: item.quantity
+        }));
+        await api.post('/cart/merge', { items: guestCartItems });
         localStorage.removeItem('guest_cart');
         console.log('Guest cart merged successfully');
       } catch (mergeError) {

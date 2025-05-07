@@ -5,6 +5,9 @@ import { FaTrashAlt } from 'react-icons/fa';
 import api from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 import './Cart.css';
+import './ErrorMessages.css';
+import ConfirmDialog from './ConfirmDialog';
+import './ConfirmDialog.css';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -30,6 +33,9 @@ const Cart = () => {
   // State to store resolved image URLs
   const [imageUrls, setImageUrls] = useState({});
 
+  // State for confirm dialog visibility
+  const [showConfirmClear, setShowConfirmClear] = useState(false);
+
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchCart());
@@ -46,10 +52,18 @@ const Cart = () => {
   };
 
   const handleClearCart = () => {
-    if (window.confirm('Are you sure you want to clear the cart?')) {
-      dispatch(clearCart());
-    }
+    setShowConfirmClear(true);
   };
+
+  const confirmClearCart = () => {
+    dispatch(clearCart());
+    setShowConfirmClear(false);
+  };
+
+  const cancelClearCart = () => {
+    setShowConfirmClear(false);
+  };
+
 
   const handleProceedToCheckout = () => {
     if (isAuthenticated) {
@@ -165,6 +179,13 @@ const Cart = () => {
           <Link to="/shop" className="continue-shopping-button">Continue Shopping</Link>
         </div>
       </div>
+      {showConfirmClear && (
+        <ConfirmDialog
+          message="Are you sure you want to clear the cart?"
+          onConfirm={confirmClearCart}
+          onCancel={cancelClearCart}
+        />
+      )}
     </div>
   );
 };

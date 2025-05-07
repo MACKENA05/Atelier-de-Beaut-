@@ -133,3 +133,29 @@
   color: red;
   font-weight: bold;
 }
+.no-orders-message {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.no-orders-message p {
+  margin-bottom: 20px;
+}
+
+.go-to-shop-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #cc6c9c;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.go-to-shop-link:hover {
+  background-color: darkblue;
+}
+

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { fetchUserOrders } from '../slice/orderSlice';
 import './MyOrders.css';
+import './ErrorMessages.css';
 
 const statusClassMap = {
   pending: 'status-pending',
@@ -31,8 +33,13 @@ const MyOrders = () => {
 
   if (loading) return <div>Loading your orders...</div>;
   if (error) return <div>Error loading orders: {error}</div>;
-  if (!orders.length) return <div>You have no orders yet.</div>;
-
+  if (!orders.length) return (
+    <div className="no-orders-message">
+      <p>You have no orders yet.</p>
+      <Link to="/shop" className="go-to-shop-link">Go to Shopping</Link>
+    </div>
+  );
+  
   return (
     <div className="my-orders-container">
       <h2>My Orders</h2>

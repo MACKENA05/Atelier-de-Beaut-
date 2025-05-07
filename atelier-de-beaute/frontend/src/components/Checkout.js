@@ -7,6 +7,7 @@ import { clearCart, fetchCart, loadCartFromStorage } from '../slice/cartSlice';
 import api from '../services/api';
 import { fetchUserOrders } from '../slice/orderSlice';
 import './Checkout.css';
+import './ErrorMessages.css';
 
 const Checkout = () => {
   const dispatch = useDispatch();
@@ -267,7 +268,7 @@ const Checkout = () => {
           <h1>Thank you for your order!</h1>
           <p>Your order has been placed successfully.</p>
           <button onClick={() => navigate('/shop')}>Continue Shopping</button>
-          <button onClick={() => navigate('/orders')}>View My Orders</button>
+          <button onClick={() => navigate('/my_orders')}>View My Orders</button>
         </div>
       )}
     </div>

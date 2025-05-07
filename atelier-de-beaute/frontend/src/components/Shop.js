@@ -62,13 +62,15 @@ const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
 
   const handleAddToCart = (product) => {
     if (authenticated) {
-    // Pass quantity 1 explicitly to addToCartBackend
-    dispatch(addToCartBackend({ product_id: product.id, quantity: 1 }));
+      // Optimistically update UI
+      dispatch(addToCart(product));
+      // Sync with backend
+      dispatch(addToCartBackend({ product_id: product.id, quantity: 1 }));
     } else {
-    dispatch(addToCart(product));
+      dispatch(addToCart(product));
     }
     setAddedProductIds((prev) => new Set(prev).add(product.id));
-    };
+  };
     
     
 

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './Pages.css';
+import Alert from './Alert';
+import './Alert.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,16 +17,27 @@ const Contact = () => {
     });
   };
 
+  const [alertMessage, setAlertMessage] = React.useState('');
+  const [alertType, setAlertType] = React.useState('info');
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Message sent! We will get back to you soon.');
+    setAlertMessage('Message sent! We will get back to you soon.');
+    setAlertType('success');
     setFormData({ name: '', email: '', message: '' });
+  };
+
+  const handleCloseAlert = () => {
+    setAlertMessage('');
   };
 
   return (
     <div className="container">
       <h1>Contact Page</h1>
       <p>This is the contact page. Contact information and form will be displayed here.</p>
+      {alertMessage && (
+        <Alert message={alertMessage} type={alertType} onClose={handleCloseAlert} />
+      )}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">Name:</label>
