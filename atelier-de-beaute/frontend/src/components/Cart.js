@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateQuantity, clearCart, fetchCart } from '../slice/cartSlice';
+import { removeFromCart, updateQuantity, clearCart, fetchCart, clearCartBackend } from '../slice/cartSlice';
 import { FaTrashAlt } from 'react-icons/fa';
-import api from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 import './Cart.css';
 import './ErrorMessages.css';
@@ -13,11 +12,10 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector(state => state.cart.items);
-  const cartStatus = useSelector(state => state.cart.status); // Add status to handle loading/errors
-  const cartError = useSelector(state => state.cart.error); // Add error state
+  const cartStatus = useSelector(state => state.cart.status);
+  const cartError = useSelector(state => state.cart.error);
   const isAuthenticated = useSelector(state => state.auth.authenticated);
 
-  // Deduplicate cart items by id, summing quantities
   const deduplicatedCartItems = useMemo(() => {
     return cartItems.reduce((acc, item) => {
       const existing = acc.find(i => i.id === item.id);
@@ -30,10 +28,7 @@ const Cart = () => {
     }, []);
   }, [cartItems]);
 
-  // State to store resolved image URLs
   const [imageUrls, setImageUrls] = useState({});
-
-  // State for confirm dialog visibility
   const [showConfirmClear, setShowConfirmClear] = useState(false);
 
   useEffect(() => {
@@ -55,8 +50,17 @@ const Cart = () => {
     setShowConfirmClear(true);
   };
 
-  const confirmClearCart = () => {
-    dispatch(clearCart());
+  const confirmClearCart = async () => {
+    if (isAuthenticated) {
+      try {
+        await dispatch(clearCartBackend());
+        await dispatch(fetchCart());
+      } catch (error) {
+        console.error('Failed to clear backend cart:', error);
+      }
+    } else {
+      dispatch(clearCart());
+    }
     setShowConfirmClear(false);
   };
 
@@ -64,12 +68,11 @@ const Cart = () => {
     setShowConfirmClear(false);
   };
 
-
   const handleProceedToCheckout = () => {
     if (isAuthenticated) {
       navigate('/checkout');
     } else {
-      navigate('/login');
+      navigate('/login', { state: { from: '/checkout' } });
     }
   };
 
@@ -96,7 +99,6 @@ const Cart = () => {
     }
     return cleanUrl;
   };
-
 
   useEffect(() => {
     const newImageUrls = {};

@@ -55,7 +55,7 @@ const MyOrders = () => {
               <span className="order-status">{formatStatus(order.order_status)}</span>
               <span className="order-number">Order #{order.id}</span>
               <span className="order-items-count">{order.items.length} item{order.items.length !== 1 ? 's' : ''}</span>
-              <span className="order-total">Total: ${order.total.toFixed(2)}</span>
+              <span className="order-total">Total: KES {order.total.toFixed(2)}</span>
               <span className="order-date">{new Date(order.created_at).toLocaleString()}</span>
             </div>
             {selectedOrderId === order.id && selectedOrder && (
@@ -73,9 +73,9 @@ const MyOrders = () => {
                 )}
                 <h4>Summary of Cost</h4>
                 <div>
-                <p>Subtotal: ${(selectedOrder.total - selectedOrder.shipping_cost).toFixed(2)}</p>
-                <p>Shipping Cost: ${selectedOrder.shipping_cost.toFixed(2)}</p>
-                <p>Total: ${selectedOrder.total.toFixed(2)}</p>
+                <p>Subtotal: KES {(selectedOrder.total - selectedOrder.shipping_cost).toFixed(2)}</p>
+                <p>Shipping Cost: KES {selectedOrder.shipping_cost.toFixed(2)}</p>
+                <p>Total: KES {selectedOrder.total.toFixed(2)}</p>
                 </div>
                 <h4>Payment Method</h4>
                 <div><p>{selectedOrder.payment_method || 'N/A'}</p></div>
@@ -95,7 +95,7 @@ const MyOrders = () => {
                       />
                       <span className="order-item-name">{item.product?.name || 'Unnamed product'}</span>
                       <span className="order-item-quantity">Qty: {item.quantity}</span>
-                      <span className="order-item-price">${item.unit_price.toFixed(2)}</span>
+                      <span className="order-item-price">KES {item.unit_price.toFixed(2)}</span>
                     </li>
                   ))}
                 </ul>

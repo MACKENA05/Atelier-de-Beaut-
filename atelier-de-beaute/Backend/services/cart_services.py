@@ -171,6 +171,8 @@ class Cart_Services:
             raise ValueError("User not found")
         cart = Cart_Services.get_or_create_user_cart(user_id)
 
+        logger.info(f"Received guest cart for merge: {guest_cart}")
+
         for item in guest_cart.get('items', []):
             try:
                 product_id = item['product_id']
@@ -194,6 +196,10 @@ class Cart_Services:
                 continue
         try:
             db.session.commit()
+
+            cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+            logger.info(f"Cart items after merge: {[{'product_id': item.product_id, 'quantity': item.quantity} for item in cart_items]}")
+
             logger.info(f"Merged guest cart with user {user_id}'s cart")
         except SQLAlchemyError as e:
             db.session.rollback()

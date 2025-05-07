@@ -23,6 +23,8 @@ const Checkout = () => {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [error, setError] = useState(null);
   const [paymentMessage, setPaymentMessage] = useState(null);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(null);
 
   // useEffect(() => {
   //   if (user) {
@@ -93,6 +95,8 @@ const Checkout = () => {
   const handlePlaceOrder = async () => {
     setError(null);
     setPaymentMessage(null);
+    setPaymentLoading(true);
+    setPaymentStatus(null);
     try {
       // Construct payload matching backend expectations
       const payload = {
@@ -133,8 +137,12 @@ const Checkout = () => {
         });
   
         setPaymentMessage(paymentResponse.data.message);
+        setPaymentStatus('initiated');
+        // Start polling payment status
+        pollPaymentStatus(orderId);
       } else {
         setPaymentMessage('Order placed successfully. Please pay on delivery.');
+        setPaymentStatus('completed');
       }
   
       dispatch(clearCart());
@@ -144,7 +152,36 @@ const Checkout = () => {
       
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to place order');
+      setPaymentStatus('failed');
+    } finally {
+      setPaymentLoading(false);
     }
+  };
+
+  const pollPaymentStatus = (orderId) => {
+    const interval = setInterval(async () => {
+      try {
+        const statusResponse = await api.get(`/payment/mpesa/status/${orderId}`);
+        const statusData = statusResponse.data;
+        if (statusData.status === 'completed') {
+          setPaymentMessage('Payment successful! Your order has been placed.');
+          setPaymentStatus('completed');
+          clearInterval(interval);
+        } else if (statusData.status === 'failed') {
+          setPaymentMessage('Payment failed. Please try again.');
+          setPaymentStatus('failed');
+          clearInterval(interval);
+        } else {
+          // Still pending, continue polling
+          setPaymentMessage('Payment pending. Please complete the payment on your phone.');
+          setPaymentStatus('pending');
+        }
+      } catch (error) {
+        setPaymentMessage('Error checking payment status.');
+        setPaymentStatus('error');
+        clearInterval(interval);
+      }
+    }, 5000); // Poll every 5 seconds
   };
   
   return (
@@ -258,9 +295,10 @@ const Checkout = () => {
             <p><strong>Total:</strong> KES {(totalPrice + (orderData.shippingMethod === 'express' ? 15.00 : 5.00)).toFixed(2)}</p>
           </div>
           {error && <div className="error">{error}</div>}
-          {paymentMessage && <div className="payment-message">{paymentMessage}</div>}
+          {paymentMessage && <div className={`payment-message ${paymentStatus}`}>{paymentMessage}</div>}
+          {paymentLoading && <div>Processing payment, please wait...</div>}
           <button onClick={handleBack}>Back</button>
-          <button onClick={handlePlaceOrder}>Place Order</button>
+          <button onClick={handlePlaceOrder} disabled={paymentLoading}>Place Order</button>
         </div>
       )}
       {step === 3 && (

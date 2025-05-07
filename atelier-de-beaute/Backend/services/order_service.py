@@ -12,10 +12,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 def get_shipping_cost(shipping_method):
-    """Calculate shipping cost based on the selected shipping method."""
+    # Calculate shipping cost based on the selected shipping method
     shipping_costs = {
-        'standard': 5.00,
-        'express': 15.00
+        'standard': 1.00,
+        'express': 300.00
     }
     return shipping_costs.get(shipping_method, 0.00)
 

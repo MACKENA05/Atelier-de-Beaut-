@@ -138,7 +138,7 @@ const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
                   {isOutOfStock && <div className="out-of-stock-badge">Out of Stock</div>}
                 </div>
                 <h3 className="product-name">{productName}</h3>
-                <p className="product-price">${productPrice}</p>
+                <p className="product-price">KES {productPrice}</p>
               </Link>
               {!isOutOfStock &&
                 (showQuantityControls ? (

@@ -24,7 +24,7 @@ const FeaturedProducts = () => {
             <div key={product.id} className="featured-product-item">
               <img src={product.image_urls?.[0] || '/default-product.png'} alt={product.name} />
               <h3>{product.name}</h3>
-              <p>${product.price.toFixed(2)}</p>
+              <p>KES {product.price.toFixed(2)}</p>
             </div>
           ))
         ) : (

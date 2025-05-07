@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../services/api';
+import axios from 'axios';
 
 const LOCAL_STORAGE_CART_KEY = 'guest_cart';
 
@@ -27,40 +28,29 @@ export const fetchCart = createAsyncThunk(
 );
 
 // New thunk to sync merged cart to backend
+
 export const syncMergedCart = createAsyncThunk(
   'cart/syncMergedCart',
-  async (_, { getState, dispatch }) => {
+  async (_, { getState, rejectWithValue }) => {
     const state = getState();
     const guestCartItems = JSON.parse(localStorage.getItem(LOCAL_STORAGE_CART_KEY)) || [];
-    const backendCartItems = state.cart.items || [];
-
-    // Merge guest and backend cart items, summing quantities
-    const mergedItemsMap = new Map();
-
-    backendCartItems.forEach(item => {
-      mergedItemsMap.set(item.id, { ...item });
-    });
-
-    guestCartItems.forEach(guestItem => {
-      if (mergedItemsMap.has(guestItem.id)) {
-        mergedItemsMap.get(guestItem.id).quantity += guestItem.quantity;
-      } else {
-        mergedItemsMap.set(guestItem.id, { ...guestItem });
-      }
-    });
-
-    const mergedItems = Array.from(mergedItemsMap.values());
-
-    // Sync merged items to backend by dispatching addToCartBackend or updateCartBackend
-    for (const item of mergedItems) {
-      // Assuming addToCartBackend handles both add and update
-      await dispatch(addToCartBackend(item));
+    if (guestCartItems.length === 0) {
+      return [];
     }
-
-    // Clear guest cart from localStorage after syncing
-    localStorage.removeItem(LOCAL_STORAGE_CART_KEY);
-
-    return mergedItems;
+    try {
+      // Call backend /cart/merge endpoint with guest cart items
+      const response = await axios.post('http://localhost:5000/api/cart/merge', { items: guestCartItems }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      // Clear guest cart from localStorage after successful merge
+      localStorage.removeItem(LOCAL_STORAGE_CART_KEY);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || err.message);
+    }
   }
 );
 
@@ -109,6 +99,22 @@ export const removeFromCartBackend = createAsyncThunk(
     try {
       await api.delete(`/cart/remove/${id}`);
       return id;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || err.message);
+    }
+  }
+);
+
+// Async thunk to clear the backend cart
+export const clearCartBackend = createAsyncThunk(
+  'cart/clearCartBackend',
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState();
+    const userId = state.auth.user?.id;
+    if (!userId) return rejectWithValue('User not authenticated');
+    try {
+      await api.delete('/cart');
+      return;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || err.message);
     }
@@ -260,6 +266,9 @@ const cartSlice = createSlice({
       })
       .addCase(removeFromCartBackend.fulfilled, (state, action) => {
         state.items = state.items.filter(item => item.id !== action.payload);
+      })
+      .addCase(clearCartBackend.fulfilled, (state) => {
+        state.items = [];
       });
   },
 });
