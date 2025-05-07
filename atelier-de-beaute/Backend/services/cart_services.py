@@ -173,6 +173,10 @@ class Cart_Services:
 
         logger.info(f"Received guest cart for merge: {guest_cart}")
 
+        # Defensive check: if guest_cart is a list, wrap it in dict with 'items' key
+        if isinstance(guest_cart, list):
+            guest_cart = {'items': guest_cart}
+
         for item in guest_cart.get('items', []):
             try:
                 product_id = item['product_id']

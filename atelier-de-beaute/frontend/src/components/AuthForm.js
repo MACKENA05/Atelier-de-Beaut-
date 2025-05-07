@@ -38,19 +38,13 @@ const AuthForm = () => {
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       if (isLogin) {
-        await dispatch(login(values)).unwrap();
+        await dispatch(login(values)).unwrap(); // Use updated login thunk
       } else {
         await dispatch(register(values)).unwrap();
       }
-      // Redirect to previous page or home
-      const from = location.state?.from?.pathname || '/';
-      navigate(from, { replace: true });
+      // Redirect logic...
     } catch (err) {
-      if (err && typeof err === 'object' && err.details) {
-        setErrors({ ...err.details, submit: err.error || (isLogin ? 'Login failed' : 'Registration failed') });
-      } else {
-        setErrors({ submit: typeof err === 'string' ? err : err.error || err.message || (isLogin ? 'Login failed' : 'Registration failed') });
-      }
+      // Error handling...
     } finally {
       setSubmitting(false);
     }

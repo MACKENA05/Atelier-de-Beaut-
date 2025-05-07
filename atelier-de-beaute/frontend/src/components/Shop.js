@@ -115,6 +115,7 @@ const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
               : '';
           const productName = typeof product.name === 'string' ? product.name : 'Unnamed Product';
           const productPrice = typeof product.price === 'number' ? product.price.toFixed(2) : 'N/A';
+          const discountedPrice = typeof product.discount_price === 'number' ? product.discount_price.toFixed(2) : null;
           const cartItem = cartItems.find((item) => item.id === product.id);
           const quantityInCart = cartItem ? cartItem.quantity : 0;
           const justAdded = addedProductIds.has(product.id);
@@ -138,7 +139,18 @@ const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
                   {isOutOfStock && <div className="out-of-stock-badge">Out of Stock</div>}
                 </div>
                 <h3 className="product-name">{productName}</h3>
-                <p className="product-price">KES {productPrice}</p>
+                {discountedPrice && discountedPrice < productPrice ? (
+                  <p>
+                    <span style={{ textDecoration: 'line-through', color: 'red', marginRight: '8px' }}>
+                      KES {productPrice}
+                    </span>
+                    <span style={{ fontWeight: 'bold', color: 'green' }}>
+                      KES {discountedPrice}
+                    </span>
+                  </p>
+                ) : (
+                  <p className="product-price">KES {productPrice}</p>
+                )}
               </Link>
               {!isOutOfStock &&
                 (showQuantityControls ? (

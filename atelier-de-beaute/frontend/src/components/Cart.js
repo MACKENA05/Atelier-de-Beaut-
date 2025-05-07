@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateQuantity, clearCart, fetchCart, clearCartBackend } from '../slice/cartSlice';
+import { removeFromCart, updateQuantity, clearCart, fetchCart, clearCartBackend ,removeFromCartBackend} from '../slice/cartSlice';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
 import './Cart.css';
@@ -38,8 +38,13 @@ const Cart = () => {
   }, [dispatch, isAuthenticated]);
 
   const handleRemove = (id) => {
-    dispatch(removeFromCart(id));
+    if (isAuthenticated) {
+      dispatch(removeFromCartBackend(id));
+    } else {
+      dispatch(removeFromCart(id));
+    }
   };
+  
 
   const handleQuantityChange = (id, quantity) => {
     if (quantity < 1) return;
