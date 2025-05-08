@@ -13,6 +13,7 @@ const initialState = {
 };
 
 // Async thunk to fetch cart for authenticated user
+// Async thunk to fetch cart for authenticated user
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
   async (_, { getState, rejectWithValue }) => {
@@ -21,6 +22,7 @@ export const fetchCart = createAsyncThunk(
     if (!userId) return rejectWithValue('User not authenticated');
     try {
       const response = await api.get('/cart');
+      console.log('fetchCart response:', response.data);
       return response.data.items;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || err.message);
@@ -28,32 +30,37 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
-// New thunk to sync merged cart to backend
-
+// Async thunk to fetch cart for authenticated user
 export const syncMergedCart = createAsyncThunk(
   'cart/syncMergedCart',
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState();
-    const guestCartItems = JSON.parse(localStorage.getItem(LOCAL_STORAGE_CART_KEY)) || [];
+  async (_, { rejectWithValue }) => {
+    const guestCartItems = JSON.parse(localStorage.getItem('guest_cart')) || [];
+    console.log('syncMergedCart guestCartItems:', guestCartItems);
     if (guestCartItems.length === 0) {
       return [];
     }
+
     try {
-      // Call backend /cart/merge endpoint with guest cart items
-      const response = await axios.post('http://localhost:5000/api/cart/merge', { items: guestCartItems }, {
+      const response = await axios.post('http://localhost:5000/api/cart/merge', {
+        items: guestCartItems
+      }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       });
-      // Clear guest cart from localStorage after successful merge
-      localStorage.removeItem(LOCAL_STORAGE_CART_KEY);
-      return response.data;
+      console.log('syncMergedCart response:', response.data);
+
+      localStorage.removeItem('guest_cart');
+
+      return response.data.items;
     } catch (err) {
+      console.error('syncMergedCart error:', err);
       return rejectWithValue(err.response?.data?.error || err.message);
     }
   }
 );
+
+
 
 // Async thunk to add item to backend cart
 export const addToCartBackend = createAsyncThunk(
@@ -213,7 +220,9 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
+        console.log('fetchCart fulfilled payload:', action.payload);
         const guestCartItems = loadGuestCart();
+        console.log('fetchCart fulfilled guestCartItems:', guestCartItems);
 
         // Merge guest cart items with fetched cart items, summing quantities for duplicates
         const mergedItemsMap = new Map();
@@ -270,7 +279,11 @@ const cartSlice = createSlice({
       })
       .addCase(clearCartBackend.fulfilled, (state) => {
         state.items = [];
-      });
+      })
+      .addCase(syncMergedCart.fulfilled, (state, action) => {
+        state.items = action.payload;
+        state.authenticated = true;
+      })
   },
 });
 

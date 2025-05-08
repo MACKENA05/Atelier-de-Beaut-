@@ -165,14 +165,14 @@ class Cart_Services:
 
     @staticmethod
     def merge_guest_cart(user_id, guest_cart):
-        """Merge guest cart (from local storage) with authenticated user's cart."""
+        """Merge guest cart (from local storage) with authenticated user's cart and return updated cart data."""
         user = User.query.get(user_id)
         if not user:
             raise ValueError("User not found")
         cart = Cart_Services.get_or_create_user_cart(user_id)
-
+    
         logger.info(f"Received guest cart for merge: {guest_cart}")
-
+    
         for item in guest_cart.get('items', []):
             try:
                 product_id = item['product_id']
@@ -196,36 +196,15 @@ class Cart_Services:
                 continue
         try:
             db.session.commit()
-
+    
             cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
             logger.info(f"Cart items after merge: {[{'product_id': item.product_id, 'quantity': item.quantity} for item in cart_items]}")
-
+    
             logger.info(f"Merged guest cart with user {user_id}'s cart")
+    
+            # ✅ Return updated cart
+            return Cart_Services.get_cart_data(user_id)
         except SQLAlchemyError as e:
             db.session.rollback()
             logger.error(f"Error merging guest cart for user {user_id}: {str(e)}")
             raise
-
-    @staticmethod
-    def clear_cart(user_id):
-        """Clear all items from the cart."""
-        if user_id:
-            user = User.query.get(user_id)
-            if not user:
-                raise ValueError("User not found")
-            cart = Cart.query.filter_by(user_id=user_id).first()
-            if not cart:
-                return  # No cart exists, nothing to clear
-            # Delete all cart items
-            CartItem.query.filter_by(cart_id=cart.id).delete()
-            try:
-                db.session.commit()
-                logger.info(f"Cleared cart for user {user_id}")
-            except SQLAlchemyError as e:
-                db.session.rollback()
-                logger.error(f"Error clearing cart for user {user_id}: {str(e)}")
-                raise
-        else:
-            # Guest cart is cleared client-side
-            logger.info("Guest cart clear requested; handled client-side")
-            pass

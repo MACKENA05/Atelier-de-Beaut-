@@ -141,7 +141,10 @@ class UserResponseSchema(Schema):
     first_name = fields.Str(dump_only=True)
     last_name = fields.Str(dump_only=True)
     phone = fields.Str(dump_only=True)
-    role = fields.Str(dump_only=True)
+    role = fields.Method("get_role", dump_only=True)
     is_active = fields.Boolean(dump_only=True)
     created_at = fields.DateTime(dump_only=True, format='iso8601')
     last_login = fields.DateTime(dump_only=True, format='iso8601', allow_none=True)
+
+    def get_role(self, obj):
+        return obj.role.value if obj.role else None

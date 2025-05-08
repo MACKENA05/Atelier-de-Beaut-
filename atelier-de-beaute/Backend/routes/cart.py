@@ -69,8 +69,8 @@ def merge_guest_cart():
     user_id = get_jwt_identity()
     guest_cart = request.get_json()
     try:
-        Cart_Services.merge_guest_cart(user_id, guest_cart)
-        return jsonify({'message': 'Guest cart merged successfully'}), 200
+        merged_cart = Cart_Services.merge_guest_cart(user_id, guest_cart)
+        return jsonify(merged_cart), 200
     except ValueError as e:
         logger.error(f"Error merging guest cart for user {user_id}: {str(e)}")
         return jsonify({'error': str(e)}), 400
