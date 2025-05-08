@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../services/api';
-import { fetchCart } from './cartSlice';
+import { fetchCart, syncMergedCart } from './cartSlice';
+
 
 export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue, dispatch }) => {
   try {
@@ -19,15 +20,21 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
           quantity: item.quantity
         }));
         await api.post('/cart/merge', { items: guestCartItems });
-        localStorage.removeItem('guest_cart');
         console.log('Guest cart merged successfully');
+
+        // Sync merged cart to update frontend state
+        await dispatch(syncMergedCart());
+
+        // Clear guest cart from localStorage after successful merge and sync
+        localStorage.removeItem('guest_cart');
       } catch (mergeError) {
         console.error('Failed to merge guest cart:', mergeError);
       }
+    } else {
+      // No guest cart to merge, just fetch cart
+      await dispatch(fetchCart());
     }
 
-    // After login, fetch authenticated user's cart and update state
-    await dispatch(fetchCart());
     console.log('Fetched authenticated user cart');
     return response.data.user;
   } catch (err) {
@@ -52,8 +59,8 @@ export const register = createAsyncThunk('auth/register', async (userData, { rej
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null,
-    authenticated: false,
+    user: JSON.parse(localStorage.getItem('user')) || null,
+    authenticated: !!localStorage.getItem('user'),
     loading: false,
     error: null,
   },
@@ -69,6 +76,11 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.authenticated = !!action.payload;
+      if (action.payload) {
+        localStorage.setItem('user', JSON.stringify(action.payload));
+      } else {
+        localStorage.removeItem('user');
+      }
     },
   },
   extraReducers: (builder) => {
@@ -81,6 +93,7 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.authenticated = true;
         state.loading = false;
+        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -95,6 +108,7 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.authenticated = true;
         state.loading = false;
+        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
