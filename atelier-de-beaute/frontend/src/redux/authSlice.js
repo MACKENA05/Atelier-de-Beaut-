@@ -6,7 +6,7 @@ const API_URL = '/auth';
 export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
     const response = await apiClient.post(`${API_URL}/login`, credentials);
-    return response.data.user;
+    return response.data; // return full data including token and user
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || 'Login failed');
   }
@@ -15,7 +15,7 @@ export const login = createAsyncThunk('auth/login', async (credentials, { reject
 export const signup = createAsyncThunk('auth/signup', async (userData, { rejectWithValue }) => {
   try {
     const response = await apiClient.post(`${API_URL}/register`, userData);
-    return response.data.user;
+    return response.data; // return full data
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || 'Signup failed');
   }
@@ -32,7 +32,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
 export const fetchCurrentUser = createAsyncThunk('auth/fetchCurrentUser', async (_, { rejectWithValue }) => {
   try {
     const response = await apiClient.get(`${API_URL}/me`);
-    return response.data.user;
+    return response.data; // return full data
   } catch (err) {
     return rejectWithValue(err.response?.data?.error || 'Fetch user failed');
   }
@@ -56,7 +56,8 @@ const persistedUser = localStorage.getItem('user') ? JSON.parse(localStorage.get
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: persistedUser,
+    user: persistedUser ? persistedUser.user : null,
+    token: persistedUser ? persistedUser.access_token : null,
     loading: false,
     error: null,
   },
@@ -70,7 +71,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.access_token;
         localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(login.rejected, (state, action) => {
@@ -84,7 +86,8 @@ const authSlice = createSlice({
       })
       .addCase(signup.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.access_token;
         localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(signup.rejected, (state, action) => {
@@ -94,6 +97,7 @@ const authSlice = createSlice({
       // logout
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+        state.token = null;
         localStorage.removeItem('user');
       })
       // fetchCurrentUser
@@ -103,13 +107,15 @@ const authSlice = createSlice({
       })
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.access_token;
         localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.user = null;
+        state.token = null;
         localStorage.removeItem('user');
       })
       // addFunds
@@ -120,7 +126,7 @@ const authSlice = createSlice({
       .addCase(addFunds.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        localStorage.setItem('user', JSON.stringify(action.payload));
+        localStorage.setItem('user', JSON.stringify({ user: action.payload, access_token: state.token }));
       })
       .addCase(addFunds.rejected, (state, action) => {
         state.loading = false;

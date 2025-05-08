@@ -1,109 +1,99 @@
 import React, { useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import './ContactForm.css';
 
 const ContactForm = ({ onSubmit }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-  const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
   const [captchaChecked, setCaptchaChecked] = useState(false);
 
-  const validateEmail = (email) => {
-    return /^[\\w.-]+@([\\w-]+\\.)+[\\w-]{2,4}$/.test(email);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Please enter your name'),
+    email: Yup.string().email('Invalid email').required('Please enter your email'),
+    message: Yup.string().required('Please enter your message'),
+  });
 
   const handleCaptchaChange = (e) => {
     setCaptchaChecked(e.target.checked);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError('');
+  const handleFormSubmit = async (values, { setSubmitting, setErrors, resetForm }) => {
     setSuccess('');
-
-    if (!formData.name || !formData.email || !formData.message) {
-      setError('Please fill in all fields.');
-      return;
-    }
-    if (!validateEmail(formData.email)) {
-      setError('Please enter a valid email address.');
-      return;
-    }
     if (!captchaChecked) {
-      setError('Please verify that you are not a robot.');
+      setErrors({ captcha: 'Please verify that you are not a robot.' });
+      setSubmitting(false);
       return;
     }
 
-    setLoading(true);
+    try {
+      // Replace URL with your backend endpoint
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
 
-    // Simulate API call with timeout
-    setTimeout(() => {
-      setLoading(false);
+      if (!response.ok) {
+        throw new Error('Server error');
+      }
+
       setSuccess('Message sent successfully!');
-      setFormData({ name: '', email: '', message: '' });
+      resetForm();
       setCaptchaChecked(false);
       if (onSubmit) onSubmit();
-    }, 2000);
+    } catch (err) {
+      setErrors({ submit: 'Failed to send message. Please try again later.' });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit} noValidate>
-      <label htmlFor="name">Your Name</label>
-      <input
-        id="name"
-        type="text"
-        name="name"
-        placeholder="Your Name"
-        value={formData.name}
-        onChange={handleInputChange}
-        required
-        disabled={loading}
-      />
-      <label htmlFor="email">Your Email</label>
-      <input
-        id="email"
-        type="email"
-        name="email"
-        placeholder="Your Email"
-        value={formData.email}
-        onChange={handleInputChange}
-        required
-        disabled={loading}
-      />
-      <label htmlFor="message">Your Message</label>
-      <textarea
-        id="message"
-        name="message"
-        placeholder="Your Message"
-        value={formData.message}
-        onChange={handleInputChange}
-        required
-        disabled={loading}
-      />
-      <label className="captcha-label">
-        <input
-          type="checkbox"
-          checked={captchaChecked}
-          onChange={handleCaptchaChange}
-          disabled={loading}
-        />{' '}
-        I'm not a robot
-      </label>
-      <button type="submit" disabled={loading}>
-        {loading ? 'Sending...' : 'Send Message'}
-      </button>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
-    </form>
+    <Formik
+      initialValues={{ name: '', email: '', message: '' }}
+      validationSchema={validationSchema}
+      onSubmit={handleFormSubmit}
+    >
+      {({ isSubmitting, errors }) => (
+        <Form className="contact-form" noValidate>
+          <label htmlFor="name">Your Name</label>
+          <Field id="name" name="name" placeholder="Your Name" disabled={isSubmitting} />
+          <ErrorMessage name="name" component="p" className="error" />
+
+          <label htmlFor="email">Your Email</label>
+          <Field id="email" name="email" type="email" placeholder="Your Email" disabled={isSubmitting} />
+          <ErrorMessage name="email" component="p" className="error" />
+
+          <label htmlFor="message">Your Message</label>
+          <Field
+            as="textarea"
+            id="message"
+            name="message"
+            placeholder="Your Message"
+            disabled={isSubmitting}
+          />
+          <ErrorMessage name="message" component="p" className="error" />
+
+          <label className="captcha-label">
+            <input
+              type="checkbox"
+              checked={captchaChecked}
+              onChange={handleCaptchaChange}
+              disabled={isSubmitting}
+            />{' '}
+            I'm not a robot
+          </label>
+          {errors.captcha && <p className="error">{errors.captcha}</p>}
+
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Sending...' : 'Send Message'}
+          </button>
+
+          {errors.submit && <p className="error">{errors.submit}</p>}
+          {success && <p className="success">{success}</p>}
+        </Form>
+      )}
+    </Formik>
   );
 };
 
