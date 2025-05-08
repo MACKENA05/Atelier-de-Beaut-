@@ -28,3 +28,10 @@ def me():
     if user_data:
         return jsonify(user_data), 200
     return jsonify({"error": "User not found"}), 404
+
+@auth_bp.route('/logout', methods=['POST'])
+@jwt_required()
+def logout():
+    # Since JWT tokens are stateless, logout can be handled client-side by discarding the token.
+    # Optionally, implement token revocation here if using a token blacklist.
+    return jsonify({"message": "Logout successful"}), 200

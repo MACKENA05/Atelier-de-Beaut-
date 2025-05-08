@@ -413,8 +413,6 @@ def seed_data():
             description="Long-lasting matte lipstick by L’Oréal",
             price=15.99,
             stock=50,
-            sku="LOREAL-LIP-001",
-            brand="L’Oréal",
             image_urls=["https://i.pinimg.com/736x/7c/a2/30/7ca23058ebcda12889f4f26f60e9704d.jpg","https://i.pinimg.com/736x/f2/ca/c0/f2cac007b7bba1374c7bad53c87d583f.jpg","https://i.pinimg.com/736x/35/73/1a/35731ab409042621f52698e21742eaa7.jpg"],
             is_active=True,
             is_featured=True
