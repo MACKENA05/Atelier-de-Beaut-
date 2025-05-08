@@ -31,6 +31,13 @@ const MyOrders = () => {
 
   const selectedOrder = orders.find(order => order.id === selectedOrderId);
 
+  const formatStatus = (status) => {
+    if (!status) return 'Unknown';
+    const key = status.toLowerCase();
+    const className = statusClassMap[key] || '';
+    return <span className={className}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>;
+  };
+
   if (loading) return <div>Loading your orders...</div>;
   if (error) return <div>Error loading orders: {error}</div>;
   if (!orders.length) return (
@@ -81,6 +88,10 @@ const MyOrders = () => {
                 <div><p>{selectedOrder.payment_method || 'N/A'}</p></div>
                 <h4>Transaction ID</h4>
                 <div><p>{selectedOrder.transaction_id || 'N/A'}</p></div>
+                <h4>Payment Status</h4>
+                <div>{formatStatus(selectedOrder.payment_status)}</div>
+                <h4>Delivery Status</h4>
+                <div>{formatStatus(selectedOrder.delivery_status)}</div>
                 <h4>Description</h4>
                 <div><p>{selectedOrder.description || 'N/A'}</p></div>
                 <h4>Items</h4>
