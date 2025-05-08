@@ -39,10 +39,12 @@ const AuthForm = () => {
     try {
       if (isLogin) {
         await dispatch(login(values)).unwrap(); // Use updated login thunk
+        navigate('/'); // Redirect to home page after successful login
       } else {
         await dispatch(register(values)).unwrap();
       }
       // Redirect logic...
+      navigate('/'); // Redirect to home page after successful registration
     } catch (err) {
       // Error handling...
     } finally {
