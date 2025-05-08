@@ -26,13 +26,6 @@ const Checkout = () => {
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     dispatch(fetchCart());
-  //   } else {
-  //     dispatch(loadCartFromStorage());
-  //   }
-  // }, [user, dispatch]);
 
   useEffect(() => {
     if (!cartLoading) {
@@ -73,7 +66,9 @@ const Checkout = () => {
 
   const validationSchema = Yup.object({
     fullName: Yup.string().required('Full Name is required'),
-    phoneNumber: Yup.string().required('Phone Number is required'),
+    phoneNumber: Yup.string()
+      .matches(/^254\d{9}$/, 'Phone number must be 12 digits and start with 254')
+      .required('Phone Number is required'),
     postalAddress: Yup.string().required('Postal Address is required'),
     city: Yup.string().required('City is required'),
     country: Yup.string().required('Country is required'),
@@ -216,8 +211,8 @@ const Checkout = () => {
             </div>
             <div>
               <label>Phone Number:</label>
-              <Field name="phoneNumber" type="text" />
-              <ErrorMessage name="phoneNumber" component="div" className="error" />
+              <Field name="phoneNumber" type="text" placeholder="+254712345678" />
+              <ErrorMessage name="phoneNumber must start with 254" component="div" className="error" />
             </div>
             <div>
               <label>Postal Address:</label>

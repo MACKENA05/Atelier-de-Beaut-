@@ -1,4 +1,3 @@
-
 from flask import Blueprint, request, jsonify
 from utils.decorators import customer_required
 from models.order import Order, PaymentStatus
@@ -9,16 +8,53 @@ from datetime import datetime, timezone
 from sqlalchemy.exc import SQLAlchemyError
 from flask_jwt_extended import get_jwt_identity
 import os
+import threading
+import time
 
 payments_bp = Blueprint('payments', __name__)
 logger = logging.getLogger(__name__)
+
+def simulate_payment_callback(order_id, checkout_request_id):
+    # Simulate delay for payment confirmation in sandbox environment
+    time.sleep(10)  # 10 seconds delay to simulate user completing payment
+
+    callback_data = {
+        "Body": {
+            "stkCallback": {
+                "ResultCode": 0,
+                "CheckoutRequestID": checkout_request_id,
+                "CallbackMetadata": {
+                    "Item": [
+                        {"Name": "Amount", "Value": 1000},
+                        {"Name": "MpesaReceiptNumber", "Value": f"SIMULATED{order_id}"}
+                    ]
+                }
+            }
+        }
+    }
+
+    with payments_bp.app.app_context():
+        try:
+            order = Order.query.filter_by(id=order_id).first()
+            if not order:
+                logger.error(f"Simulated callback: Order {order_id} not found")
+                return
+
+            order.payment_status = PaymentStatus.COMPLETED.value
+            order.transaction_id = callback_data['Body']['stkCallback']['CallbackMetadata']['Item'][1]['Value']
+            order.invoice.status = PaymentStatus.COMPLETED.value
+            order.invoice.transaction_id = order.transaction_id
+            order.updated_at = datetime.now(timezone.utc)
+            db.session.commit()
+            logger.info(f"Simulated payment completed for order {order_id}")
+        except Exception as e:
+            logger.error(f"Error in simulated payment callback for order {order_id}: {str(e)}")
 
 @payments_bp.route('/payment/checkout/<int:order_id>', methods=['POST'])
 @customer_required
 def initiate_mpesa_payment(order_id):
     try:
         current_user_id = get_jwt_identity()
-        # Verify order exists and belongs to the current user
         order = Order.query.filter_by(id=order_id, user_id=current_user_id).first()
         if not order:
             logger.error(f"Order {order_id} not found or does not belong to user {current_user_id}")
@@ -27,25 +63,20 @@ def initiate_mpesa_payment(order_id):
         if order.payment_status == PaymentStatus.COMPLETED.value:
             return jsonify({'error': 'Payment already completed'}), 400
 
-        # Get payment details from request or order
         data = request.get_json() or {}
-        phone_number = data.get('phone_number', order.address.phone.replace('+', ''))  # Use order address phone
-        simulate_mpesa = os.getenv('MPESA_ENVIRONMENT', 'sandbox') == 'local'
+        phone_number = data.get('phone_number', order.address.phone.replace('+', ''))
+        mpesa_env = os.getenv('MPESA_ENVIRONMENT', 'sandbox')
 
-        # Validate phone number format
         if not phone_number.startswith('254') or len(phone_number) != 12:
             logger.error(f"Invalid phone number format: {phone_number}")
             return jsonify({'error': 'Invalid phone number', 'details': 'Must be 12 digits starting with 254'}), 400
 
-        # Validate and format amount
         amount_float = float(order.total + order.shipping_cost)
         if amount_float <= 0:
             logger.error(f"Invalid order total for order {order_id}: {amount_float}")
             return jsonify({'error': 'Invalid order total', 'details': 'Order total must be positive'}), 400
 
-        # Handle M-Pesa payment
-        if simulate_mpesa:
-            # Simulate M-Pesa payment
+        if mpesa_env == 'local':
             logger.info(f"Simulating M-Pesa payment for order {order_id} to {phone_number}")
             response_data = {
                 "CheckoutRequestID": f"simulated_ws_CO_{order_id}",
@@ -53,8 +84,8 @@ def initiate_mpesa_payment(order_id):
                 "ResponseDescription": "Simulated success",
                 "CustomerMessage": "Simulated M-Pesa request accepted"
             }
+            threading.Thread(target=simulate_payment_callback, args=(order_id, response_data["CheckoutRequestID"])).start()
         else:
-            # Initialize MpesaGateway for real payment
             mpesa = MpesaGateway()
             response_data = mpesa.stk_push(
                 phone=phone_number,
@@ -72,7 +103,6 @@ def initiate_mpesa_payment(order_id):
                 'message': 'Sorry, your payment didn’t go through. Please try again.'
             }), 400
 
-        # Save M-Pesa transaction details
         order.checkout_request_id = response_data.get('CheckoutRequestID')
         order.payment_status = PaymentStatus.INITIATED.value
         order.invoice.checkout_request_id = response_data.get('CheckoutRequestID')
@@ -158,25 +188,20 @@ def retry_mpesa_payment(order_id):
         if order.payment_status == PaymentStatus.COMPLETED.value:
             return jsonify({'error': 'Payment already completed'}), 400
 
-        # Get payment details from request or order
         data = request.get_json() or {}
-        phone_number = data.get('phone_number', order.address.phone.replace('+', ''))  # Use order address phone
-        simulate_mpesa = os.getenv('MPESA_ENVIRONMENT', 'sandbox') == 'local'
+        phone_number = data.get('phone_number', order.address.phone.replace('+', ''))
+        mpesa_env = os.getenv('MPESA_ENVIRONMENT', 'sandbox')
 
-        # Validate phone number format
         if not phone_number.startswith('254') or len(phone_number) != 12:
             logger.error(f"Invalid phone number format: {phone_number}")
             return jsonify({'error': 'Invalid phone number', 'details': 'Must be 12 digits starting with 254'}), 400
 
-        # Validate and format amount
         amount_float = float(order.total + order.shipping_cost)
         if amount_float <= 0:
             logger.error(f"Invalid order total for order {order_id}: {amount_float}")
             return jsonify({'error': 'Invalid order total', 'details': 'Order total must be positive'}), 400
 
-        # Handle M-Pesa payment
-        if simulate_mpesa:
-            # Simulate M-Pesa payment
+        if mpesa_env == 'local':
             logger.info(f"Simulating M-Pesa retry for order {order_id} to {phone_number}")
             response_data = {
                 "CheckoutRequestID": f"simulated_ws_CO_{order_id}_retry",
@@ -184,8 +209,8 @@ def retry_mpesa_payment(order_id):
                 "ResponseDescription": "Simulated success",
                 "CustomerMessage": "Simulated M-Pesa request accepted"
             }
+            threading.Thread(target=simulate_payment_callback, args=(order_id, response_data["CheckoutRequestID"])).start()
         else:
-            # Initialize MpesaGateway for real payment
             mpesa = MpesaGateway()
             response_data = mpesa.stk_push(
                 phone=phone_number,
@@ -204,7 +229,6 @@ def retry_mpesa_payment(order_id):
                 'message': 'Sorry, your payment didn’t go through. Please try again.'
             }), 400
 
-        # Save M-Pesa transaction details
         order.checkout_request_id = response_data.get('CheckoutRequestID')
         order.payment_status = PaymentStatus.INITIATED.value
         order.invoice.checkout_request_id = response_data.get('CheckoutRequestID')

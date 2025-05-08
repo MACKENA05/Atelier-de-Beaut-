@@ -208,3 +208,28 @@ class Cart_Services:
             db.session.rollback()
             logger.error(f"Error merging guest cart for user {user_id}: {str(e)}")
             raise
+
+
+    
+    @staticmethod
+    def clear_cart(user_id):
+        if user_id:
+            user = User.query.get(user_id)
+            if not user:
+                raise ValueError("User not found")
+            cart = Cart.query.filter_by(user_id=user_id).first()
+            if not cart:
+                return  # No cart exists, nothing to clear
+            # Delete all cart items
+            CartItem.query.filter_by(cart_id=cart.id).delete()
+            try:
+                db.session.commit()
+                logger.info(f"Cleared cart for user {user_id}")
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                logger.error(f"Error clearing cart for user {user_id}: {str(e)}")
+                raise
+        else:
+            # Guest cart is cleared client-side
+            logger.info("Guest cart clear requested; handled client-side")
+            pass
