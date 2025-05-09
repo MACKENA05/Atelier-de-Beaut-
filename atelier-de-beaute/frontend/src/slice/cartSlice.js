@@ -33,21 +33,15 @@ export const fetchCart = createAsyncThunk(
 // Async thunk to fetch cart for authenticated user
 export const syncMergedCart = createAsyncThunk(
   'cart/syncMergedCart',
-    async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     const guestCartItems = JSON.parse(localStorage.getItem('guest_cart')) || [];
     console.log('syncMergedCart guestCartItems:', guestCartItems);
     if (guestCartItems.length === 0) {
       return [];
     }
 
-    // Map guestCartItems to only include product_id and quantity
-    const simplifiedItems = guestCartItems.map(item => ({
-      product_id: item.id || item.product_id,
-      quantity: item.quantity
-    }));
-
     try {
-      const response = await axios.post('http://localhost:5000/api/cart/merge', simplifiedItems.length ? { items: simplifiedItems } : {}, {
+      const response = await axios.post('http://localhost:5000/api/cart/merge', guestCartItems.length ? { items: guestCartItems } : {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
