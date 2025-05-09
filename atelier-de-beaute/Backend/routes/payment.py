@@ -7,6 +7,7 @@ import logging
 from datetime import datetime, timezone
 from sqlalchemy.exc import SQLAlchemyError
 from flask_jwt_extended import get_jwt_identity
+from datetime import timezone as dt_timezone
 import os
 import threading
 import time
@@ -185,17 +186,39 @@ def payment_callback():
             metadata = data['Body']['stkCallback'].get('CallbackMetadata', {}).get('Item', [])
             amount = next((item['Value'] for item in metadata if item['Name'] == 'Amount'), 0)
             receipt = next((item['Value'] for item in metadata if item['Name'] == 'MpesaReceiptNumber'), 'SIMULATED')
-            order.payment_status = PaymentStatus.COMPLETED.value
-            order.transaction_id = receipt
-            order.invoice.status = PaymentStatus.COMPLETED.value
-            order.invoice.transaction_id = receipt
-            order.updated_at = datetime.now(timezone.utc)
-            db.session.commit()
-            logger.info(f"Payment completed for order {order.id}: receipt {receipt}")
-            return jsonify({
-                'status': 'success',
-                'message': 'Your payment was successful! Your order has been placed.'
-            }), 200
+            # Additional check for ResultDesc to detect wrong PIN or failed payment
+            result_desc = data['Body']['stkCallback'].get('ResultDesc', '')
+            if 'cancelled' in result_desc.lower() or 'failed' in result_desc.lower() or 'incorrect' in result_desc.lower():
+                order.payment_status = PaymentStatus.FAILED.value
+                order.invoice.status = PaymentStatus.FAILED.value
+                db.session.commit()
+                logger.error(f"Payment failed for order {order.id}: {result_desc}")
+
+                # Provide user-friendly feedback messages based on failure reason
+                user_message = "Sorry, your payment didn’t go through. Please try again."
+                if 'cancelled' in result_desc.lower():
+                    user_message = "Payment was cancelled. Please try again if you wish to complete the purchase."
+                elif 'incorrect' in result_desc.lower():
+                    user_message = "Incorrect PIN entered. Please try again with the correct PIN."
+
+                return jsonify({
+                    'status': 'error',
+                    'message': user_message,
+                    'order_id': order.id,
+                    'details': result_desc
+                }), 200
+            else:
+                order.payment_status = PaymentStatus.COMPLETED.value
+                order.transaction_id = receipt
+                order.invoice.status = PaymentStatus.COMPLETED.value
+                order.invoice.transaction_id = receipt
+                order.updated_at = datetime.now(timezone.utc)
+                db.session.commit()
+                logger.info(f"Payment completed for order {order.id}: receipt {receipt}")
+                return jsonify({
+                    'status': 'success',
+                    'message': 'Your payment was successful! Your order has been placed.'
+                }), 200
         else:
             # Failure
             result_desc = data['Body']['stkCallback']['ResultDesc']
@@ -292,6 +315,41 @@ def retry_mpesa_payment(order_id):
         logger.error(f"Unexpected error retrying M-Pesa payment for order {order_id}: {str(e)}")
         return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
 
+@payments_bp.route('/payment/mpesa/retry/confirm/<int:order_id>', methods=['GET'])
+@customer_required
+def confirm_retry_payment(order_id):
+    try:
+        current_user_id = get_jwt_identity()
+        order = Order.query.filter_by(id=order_id, user_id=current_user_id).first()
+        if not order:
+            logger.error(f"Order {order_id} not found or does not belong to user {current_user_id}")
+            return jsonify({'error': 'Order not found or unauthorized'}), 404
+
+        if order.payment_status == PaymentStatus.COMPLETED.value:
+            return jsonify({
+                'status': 'success',
+                'message': 'Your retry payment was successful! Your order has been placed.',
+                'order_id': order.id,
+                'transaction_id': order.transaction_id
+            }), 200
+        elif order.payment_status == PaymentStatus.INITIATED.value:
+            return jsonify({
+                'status': 'pending',
+                'message': 'Your retry payment is still pending. Please complete the payment on your phone.',
+                'order_id': order.id,
+                'checkout_request_id': order.checkout_request_id
+            }), 200
+        else:
+            return jsonify({
+                'status': 'failed',
+                'message': 'Your retry payment failed or expired. Please try again.',
+                'order_id': order.id
+            }), 200
+
+    except Exception as e:
+        logger.error(f"Error confirming retry payment for order {order_id}: {str(e)}")
+        return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
+
 @payments_bp.route('/payment/mpesa/status/<int:order_id>', methods=['GET'])
 @customer_required
 def check_payment_status(order_id):
@@ -302,6 +360,24 @@ def check_payment_status(order_id):
             logger.error(f"Order {order_id} not found or does not belong to user {current_user_id}")
             return jsonify({'error': 'Order not found or unauthorized'}), 404
 
+        # Timeout for initiated payments (e.g., 15 seconds for testing)
+        timeout_seconds = 15
+        if order.payment_status == PaymentStatus.INITIATED.value:
+            # Ensure order.updated_at is timezone-aware for subtraction
+            updated_at = order.updated_at
+            if updated_at.tzinfo is None or updated_at.tzinfo.utcoffset(updated_at) is None:
+                updated_at = updated_at.replace(tzinfo=dt_timezone.utc)
+            elapsed = (datetime.now(timezone.utc) - updated_at).total_seconds()
+            if elapsed > timeout_seconds:
+                order.payment_status = PaymentStatus.FAILED.value
+                order.invoice.status = PaymentStatus.FAILED.value
+                db.session.commit()
+                return jsonify({
+                    'status': 'failed',
+                    'message': 'Payment session expired. Please try again.',
+                    'order_id': order.id
+                }), 200
+
         if order.payment_status == PaymentStatus.COMPLETED.value:
             return jsonify({
                 'status': 'completed',
@@ -309,10 +385,10 @@ def check_payment_status(order_id):
                 'order_id': order.id,
                 'transaction_id': order.transaction_id
             }), 200
-        elif order.payment_status in [PaymentStatus.INITIATED.value, PaymentStatus.FAILED.value]:
+        elif order.payment_status == PaymentStatus.FAILED.value:
             return jsonify({
-                'status': order.payment_status,
-                'message': 'Sorry, your payment didn’t go through. Please try again.' if order.payment_status == PaymentStatus.FAILED.value else 'Your payment is still pending. Please complete the payment on your phone.',
+                'status': 'failed',
+                'message': 'Sorry, your payment didn’t go through. Please try again.',
                 'order_id': order.id,
                 'checkout_request_id': order.checkout_request_id
             }), 200
