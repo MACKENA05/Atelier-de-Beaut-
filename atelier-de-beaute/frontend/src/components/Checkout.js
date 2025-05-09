@@ -179,7 +179,7 @@ const Checkout = () => {
         setShowPinPrompt(false);
         clearInterval(interval);
       }
-    }, 5000);
+    }, 10000);
 
   };
 
@@ -305,16 +305,28 @@ const Checkout = () => {
           <button onClick={handlePlaceOrder} disabled={paymentLoading}>Place Order</button>
         </div>
       )}
-      {step === 3 && (
+   {step === 3 && (
         <div>
-          <h1>Thank you for your order!</h1>
-          <p>Your order has been placed successfully.</p>
-          <button onClick={() => navigate('/shop')}>Continue Shopping</button>
-          <button onClick={() => navigate('/my-orders')}>View My Orders</button>
+          {paymentStatus === 'failed' || paymentStatus === 'error' ? (
+            <div>
+              <h1>Payment Failed</h1>
+              <p>We're sorry, but your payment could not be processed. Please try again or choose a different payment method.</p>
+              <button onClick={() => setStep(2)}>Try Again</button>
+              <button onClick={() => navigate('/shop')}>Return to Shop</button>
+            </div>
+          ) : (
+            <div>
+              <h1>Thank you for your order!</h1>
+              <p>Your order has been placed successfully.</p>
+              <button onClick={() => navigate('/shop')}>Continue Shopping</button>
+              <button onClick={() => navigate('/my-orders')}>View My Orders</button>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 };
+
 
 export default Checkout;

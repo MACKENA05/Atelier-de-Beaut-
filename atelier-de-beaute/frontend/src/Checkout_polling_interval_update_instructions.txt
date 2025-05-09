@@ -1,0 +1,27 @@
+To manually increase the polling interval for payment status in your Checkout.js component, please follow these steps:
+
+1. Open your frontend/src/components/Checkout.js file.
+
+2. Locate the pollPaymentStatus function. It should look like this:
+
+   const pollPaymentStatus = (orderId, intervalTime = 5000) => {
+     const interval = setInterval(async () => {
+       // ... existing code ...
+     }, intervalTime);
+   };
+
+3. Change the default intervalTime value from 5000 (5 seconds) to your desired value, for example 10000 (10 seconds):
+
+   const pollPaymentStatus = (orderId, intervalTime = 10000) => { ... }
+
+4. Also, when calling pollPaymentStatus in your handleNext function, pass the new interval time:
+
+   pollPaymentStatus(createdOrder.id, 10000);
+
+5. Save the file and restart your frontend development server if needed.
+
+This will increase the waiting time between each payment status check, reducing the frequency of API calls.
+
+If you want, I can help you with further assistance or provide a patch file.
+
+Please let me know if you need more help.
