@@ -173,8 +173,12 @@ class Cart_Services:
     
         logger.info(f"Received guest cart for merge: {guest_cart}")
     
+        if not guest_cart or 'items' not in guest_cart:
+            logger.warning("Guest cart is empty or missing 'items' key")
+    
         for item in guest_cart.get('items', []):
             try:
+                logger.info(f"Processing guest cart item: {item}")
                 product_id = item['product_id']
                 quantity = item['quantity']
                 product = Product.query.get(product_id)
