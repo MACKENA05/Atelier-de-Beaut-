@@ -25,7 +25,7 @@ const Checkout = () => {
   const [paymentMessage, setPaymentMessage] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
-
+  const [showPinPrompt, setShowPinPrompt] = useState(false);
 
   useEffect(() => {
     if (!cartLoading) {
@@ -47,10 +47,6 @@ const Checkout = () => {
     return <div className="error">Error loading cart: {cartError}</div>;
   }
 
-  // if (!cartItems || cartItems.length === 0) {
-  //   return <div>Your cart is empty. Add products before checkouT.</div>;
-  // }
-
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   const initialValues = {
@@ -67,7 +63,7 @@ const Checkout = () => {
   const validationSchema = Yup.object({
     fullName: Yup.string().required('Full Name is required'),
     phoneNumber: Yup.string()
-      .matches(/^254\d{9}$/, 'Phone number must be 12 digits and start with 254')
+      .matches(/^2547\d{8}$/, 'Phone number must be 12 digits and start with 2547')
       .required('Phone Number is required'),
     postalAddress: Yup.string().required('Postal Address is required'),
     city: Yup.string().required('City is required'),
@@ -85,6 +81,7 @@ const Checkout = () => {
     setStep(1);
     setError(null);
     setPaymentMessage(null);
+    setShowPinPrompt(false);
   };
 
   const handlePlaceOrder = async () => {
@@ -92,6 +89,7 @@ const Checkout = () => {
     setPaymentMessage(null);
     setPaymentLoading(true);
     setPaymentStatus(null);
+    setShowPinPrompt(false);
     try {
       // Construct payload matching backend expectations
       const payload = {
@@ -110,13 +108,13 @@ const Checkout = () => {
       if (orderData.paymentMethod === 'pay_on_delivery') {
         payload.cod_phone = orderData.phoneNumber;
       } else if (orderData.paymentMethod === 'mpesa') {
-        // Ensure phone number starts with '254' and is 12 digits
+        // Ensure phone number starts with '2547' and is 12 digits
         let phone = orderData.phoneNumber;
-        if (!phone.startsWith('254')) {
+        if (!phone.startsWith('2547')) {
           if (phone.startsWith('0')) {
-            phone = '254' + phone.slice(1);
+            phone = '2547' + phone.slice(1);
           } else {
-            phone = '254' + phone;
+            phone = '2547' + phone;
           }
         }
         payload.phone_number = phone;
@@ -127,6 +125,7 @@ const Checkout = () => {
       const orderId = orderResponse.data.id;
   
       if (orderData.paymentMethod === 'mpesa') {
+        setShowPinPrompt(true);
         const paymentResponse = await api.post(`/payment/checkout/${orderId}`, {
           phone_number: payload.phone_number,
         });
@@ -143,11 +142,11 @@ const Checkout = () => {
       dispatch(clearCart());
       dispatch(fetchUserOrders()); // Fetch updated orders after placing order
       setStep(3);
-      // navigate('/orders'); // Navigate to orders page to refresh view
       
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to place order');
       setPaymentStatus('failed');
+      setShowPinPrompt(false);
     } finally {
       setPaymentLoading(false);
     }
@@ -161,24 +160,29 @@ const Checkout = () => {
         if (statusData.status === 'completed') {
           setPaymentMessage('Payment successful! Your order has been placed.');
           setPaymentStatus('completed');
+          setShowPinPrompt(false);
           clearInterval(interval);
         } else if (statusData.status === 'failed') {
           setPaymentMessage('Payment failed. Please try again.');
           setPaymentStatus('failed');
+          setShowPinPrompt(false);
           clearInterval(interval);
         } else {
           // Still pending, continue polling
           setPaymentMessage('Payment pending. Please complete the payment on your phone.');
           setPaymentStatus('pending');
+          setShowPinPrompt(true);
         }
       } catch (error) {
         setPaymentMessage('Error checking payment status.');
         setPaymentStatus('error');
+        setShowPinPrompt(false);
         clearInterval(interval);
       }
-    }, 5000); // Poll every 5 seconds
+    }, 5000);
+
   };
-  
+
   return (
     <div className="checkout-container">
       <h1>Checkout</h1>
@@ -211,8 +215,8 @@ const Checkout = () => {
             </div>
             <div>
               <label>Phone Number:</label>
-              <Field name="phoneNumber" type="text" placeholder="+254712345678" />
-              <ErrorMessage name="phoneNumber must start with 254" component="div" className="error" />
+              <Field name="phoneNumber" type="text" placeholder="254712345678" />
+              <ErrorMessage name="phoneNumber" component="div" className="error" />
             </div>
             <div>
               <label>Postal Address:</label>
@@ -292,6 +296,11 @@ const Checkout = () => {
           {error && <div className="error">{error}</div>}
           {paymentMessage && <div className={`payment-message ${paymentStatus}`}>{paymentMessage}</div>}
           {paymentLoading && <div>Processing payment, please wait...</div>}
+          {showPinPrompt && (
+            <div className="pin-prompt">
+              <p>Please check your phone and enter your M-Pesa PIN to complete the payment.</p>
+            </div>
+          )}
           <button onClick={handleBack}>Back</button>
           <button onClick={handlePlaceOrder} disabled={paymentLoading}>Place Order</button>
         </div>

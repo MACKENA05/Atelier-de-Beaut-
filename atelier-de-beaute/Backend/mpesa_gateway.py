@@ -68,48 +68,66 @@ class MpesaGateway:
         return password, timestamp
 
     def stk_push(self, phone, amount, account_reference, description):
-        """Initiate STK push payment request."""
+        """Initiate STK push payment request with retry on 500 errors using exponential backoff."""
+        import time
+
         endpoint = f'{self.base_url}/mpesa/stkpush/v1/processrequest'
-        try:
-            password, timestamp = self.generate_password()
-            headers = {
-                'Authorization': f'Bearer {self.access_token}',
-                'Content-Type': 'application/json'
-            }
-            # Round amount to integer for M-Pesa API
-            rounded_amount = str(int(round(float(amount))))
-            payload = {
-                "BusinessShortCode": self.business_shortcode,
-                "Password": password,
-                "Timestamp": timestamp,
-                "TransactionType": "CustomerPayBillOnline",
-                "Amount": rounded_amount,
-                "PartyA": phone,
-                "PartyB": self.business_shortcode,
-                "PhoneNumber": phone,
-                "CallBackURL": self.callback_url,
-                "AccountReference": account_reference[:24],  # Truncate to 24 chars
-                "TransactionDesc": description[:20]  # Truncate to 20 chars
-            }
+        max_retries = 3
+        base_retry_delay = 2  # seconds
 
-            logger.info(f"Sending STK Push request to {phone}: {payload}")
-            response = requests.post(endpoint, json=payload, headers=headers, timeout=10)
+        for attempt in range(1, max_retries + 1):
             try:
-                response.raise_for_status()
-            except requests.exceptions.HTTPError as e:
-                logger.error(f"HTTP Error: {e}, Response: {response.text}")
-                raise
-            response_data = response.json()
+                password, timestamp = self.generate_password()
+                headers = {
+                    'Authorization': f'Bearer {self.access_token}',
+                    'Content-Type': 'application/json'
+                }
+                # Round amount to integer for M-Pesa API
+                rounded_amount = str(int(round(float(amount))))
+                payload = {
+                    "BusinessShortCode": self.business_shortcode,
+                    "Password": password,
+                    "Timestamp": timestamp,
+                    "TransactionType": "CustomerPayBillOnline",
+                    "Amount": rounded_amount,
+                    "PartyA": phone,
+                    "PartyB": self.business_shortcode,
+                    "PhoneNumber": phone,
+                    "CallBackURL": self.callback_url,
+                    "AccountReference": account_reference[:24],  # Truncate to 24 chars
+                    "TransactionDesc": description[:20]  # Truncate to 20 chars
+                }
 
-            if response_data.get('ResponseCode') == '0':
-                logger.info(f"STK Push initiated successfully for {phone}: {response_data}")
-                return response_data
-            else:
-                logger.error(f"STK Push failed for {phone}: {response_data}")
-                raise ValueError(f"STK Push failed: {response_data.get('ResponseDescription')}")
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Error initiating STK Push for {phone}: {e}")
-            raise Exception(f"STK Push request failed: {e}")
-        except ValueError as e:
-            logger.error(f"STK Push error for {phone}: {e}")
-            raise
+                logger.info(f"Sending STK Push request to {phone}, attempt {attempt}: {payload}")
+                response = requests.post(endpoint, json=payload, headers=headers, timeout=10)
+                try:
+                    response.raise_for_status()
+                except requests.exceptions.HTTPError as e:
+                    logger.error(f"HTTP Error on attempt {attempt}: {e}, Response: {response.text}")
+                    if response.status_code == 500 and attempt < max_retries:
+                        retry_delay = base_retry_delay * (2 ** (attempt - 1))  # Exponential backoff
+                        logger.info(f"Retrying STK Push request in {retry_delay} seconds...")
+                        time.sleep(retry_delay)
+                        continue
+                    raise
+                response_data = response.json()
+
+                if response_data.get('ResponseCode') == '0':
+                    logger.info(f"STK Push initiated successfully for {phone}: {response_data}")
+                    return response_data
+                else:
+                    logger.error(f"STK Push failed for {phone}: {response_data}")
+                    raise ValueError(f"STK Push failed: {response_data.get('ResponseDescription')}")
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Error initiating STK Push for {phone} on attempt {attempt}: {e}")
+                if attempt < max_retries:
+                    retry_delay = base_retry_delay * (2 ** (attempt - 1))  # Exponential backoff
+                    logger.info(f"Retrying STK Push request in {retry_delay} seconds...")
+                    time.sleep(retry_delay)
+                    continue
+                raise Exception(f"STK Push request failed after {max_retries} attempts: {e}")
+            except ValueError as e:
+                logger.error(f"STK Push error for {phone}: {e}")
+                raise
+        # If all retries fail, raise an exception
+        raise Exception(f"STK Push request failed after {max_retries} attempts")
