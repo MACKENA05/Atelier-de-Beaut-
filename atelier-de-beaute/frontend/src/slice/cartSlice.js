@@ -162,6 +162,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const product = action.payload;
+      console.log('addToCart called, authenticated:', state.authenticated, 'product:', product);
       const existingItemIndex = state.items.findIndex(item => item.id === product.id);
       if (existingItemIndex !== -1) {
         // Create a new array with updated quantity to ensure immutability
@@ -172,14 +173,22 @@ const cartSlice = createSlice({
         state.items = [...state.items, { ...product, quantity: 1 }];
       }
       if (!state.authenticated) {
-        saveGuestCart(state.items);
+        const simplifiedItems = state.items.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity
+        }));
+        saveGuestCart(simplifiedItems);
       }
     },
     removeFromCart: (state, action) => {
       const id = action.payload;
       state.items = state.items.filter(item => item.id !== id);
       if (!state.authenticated) {
-        saveGuestCart(state.items);
+        const simplifiedItems = state.items.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity
+        }));
+        saveGuestCart(simplifiedItems);
       }
     },
     updateQuantity: (state, action) => {
@@ -193,13 +202,21 @@ const cartSlice = createSlice({
         }
       }
       if (!state.authenticated) {
-        saveGuestCart(state.items);
+        const simplifiedItems = state.items.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity
+        }));
+        saveGuestCart(simplifiedItems);
       }
     },
     clearCart: (state) => {
       state.items = [];
       if (!state.authenticated) {
-        saveGuestCart(state.items);
+        const simplifiedItems = state.items.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity
+        }));
+        saveGuestCart(simplifiedItems);
       }
     },
     setAuthenticated: (state, action) => {
