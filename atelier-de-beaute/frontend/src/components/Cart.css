@@ -142,7 +142,7 @@
   background-color: #cc6c9c;
   color: white;
   border: none;
-  padding: 14px 30px;
+  padding: 5px 5px;
   border-radius: 10px;
   font-size: 1.1rem;
   font-weight: 700;
@@ -178,3 +178,31 @@
 .continue-shopping-button:hover {
   background-color: darkblue;
 }
+/* Responsive styles */
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .cart-item {
+  flex-direction: column;
+  align-items: flex-start;
+  }
+  .cart-item img {
+  width: 100%;
+  max-width: 200px;
+  margin-bottom: 10px;
+  }
+  .cart-item-details {
+  margin-left: 0;
+  width: 100%;
+  }
+  .cart-actions {
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 10px;
+  }
+  .cart-button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 1rem;
+  }
+  }

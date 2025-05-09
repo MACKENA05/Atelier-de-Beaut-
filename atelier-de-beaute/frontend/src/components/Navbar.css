@@ -27,7 +27,10 @@
 }
 
 .navbar-item:hover {
-  background-color: #f0f0f0;
+  color: blue;
+  background-color: #f0f8ff;
+  box-shadow: inset 0 -2px 0 black;
+  text-decoration: none;
 }
 
 .dropdown-menu {
@@ -148,3 +151,4 @@
     margin-left: 0;
   }
 }
+

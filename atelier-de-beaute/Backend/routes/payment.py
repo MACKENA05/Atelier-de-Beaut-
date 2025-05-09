@@ -7,7 +7,6 @@ import logging
 from datetime import datetime, timezone
 from sqlalchemy.exc import SQLAlchemyError
 from flask_jwt_extended import get_jwt_identity
-from datetime import timezone as dt_timezone
 import os
 import threading
 import time
@@ -366,6 +365,8 @@ def check_payment_status(order_id):
             # Ensure order.updated_at is timezone-aware for subtraction
             updated_at = order.updated_at
             if updated_at.tzinfo is None or updated_at.tzinfo.utcoffset(updated_at) is None:
+                # Alternative: localize using datetime.replace with timezone.utc from standard library
+                from datetime import timezone as dt_timezone
                 updated_at = updated_at.replace(tzinfo=dt_timezone.utc)
             elapsed = (datetime.now(timezone.utc) - updated_at).total_seconds()
             if elapsed > timeout_seconds:
