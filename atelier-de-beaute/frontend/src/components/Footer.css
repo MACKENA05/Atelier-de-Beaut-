@@ -1,5 +1,5 @@
 .footer {
-  background-color: #d0eaff;
+  background-color: #daeeff;
   color: black;
   padding: 2rem 3rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -43,7 +43,7 @@
 .footer-section.links ul li a {
   color: black;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   padding: 4px 8px;
   border-radius: 4px;
   transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;

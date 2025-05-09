@@ -149,7 +149,17 @@ const paymentSlice = createSlice({
       })
       .addCase(initiatePayment.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.error || 'Payment initiation failed';
+        // Improve error message for temporary system issue
+        if (
+          action.payload &&
+          (action.payload.error === 'Temporary system issue' ||
+            action.payload.error === 'M-Pesa system is busy. Please try again in few minutes.')
+        ) {
+          state.error =
+            'The payment system is currently busy. Please try again in a few minutes.';
+        } else {
+          state.error = action.payload?.error || 'Payment initiation failed';
+        }
         state.status = 'FAILED';
       })
       .addCase(retryPayment.pending, (state) => {

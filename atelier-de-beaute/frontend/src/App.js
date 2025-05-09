@@ -20,6 +20,7 @@ import SalesRepPanel from './components/SalesRepPanel';
 import ManagerPanel from './components/ManagerPanel';
 import MyOrders from './components/MyOrders';
 
+
 function ProtectedRoute({ children, allowedRoles }) {
   const user = useSelector(state => state.auth.user);
   if (!user || !allowedRoles.includes(user.role.toLowerCase())) {
