@@ -128,30 +128,26 @@ def initiate_mpesa_payment(order_id):
         logger.error(f"Unexpected error initiating M-Pesa payment for order {order_id}: {str(e)}")
         # Check if error message contains retry failure indication
         if "STK Push request failed after" in str(e):
-            # Fallback: simulate payment success to improve user experience during downtime
             try:
                 order = Order.query.filter_by(id=order_id).first()
                 if order:
-                    order.payment_status = PaymentStatus.COMPLETED.value
-                    order.transaction_id = f"SIMULATED{order_id}"
-                    order.invoice.status = PaymentStatus.COMPLETED.value
-                    order.invoice.transaction_id = order.transaction_id
+                    order.payment_status = PaymentStatus.FAILED.value
+                    order.invoice.status = PaymentStatus.FAILED.value
                     order.updated_at = datetime.now(timezone.utc)
                     db.session.commit()
-                    logger.info(f"Simulated payment success fallback for order {order_id} due to system busy")
+                    logger.info(f"Marked payment as failed for order {order_id} due to STK Push failure")
                     return jsonify({
-                        'message': 'Payment processed successfully (simulated due to system busy).',
-                        'order_id': order_id,
-                        'transaction_id': order.transaction_id
-                    }), 200
+                        'error': 'Payment initiation failed',
+                        'details': 'M-Pesa system is busy or subscriber locked. Please retry payment from your orders page.',
+                        'message': 'Sorry, your payment didn’t go through. Please retry from your orders.'
+                    }), 400
             except Exception as fallback_error:
-                logger.error(f"Fallback simulation failed for order {order_id}: {str(fallback_error)}")
-            # If fallback fails, return original error response
-            return jsonify({
-                'error': 'Temporary system issue',
-                'details': 'M-Pesa system is busy. Please try again in a few minutes.',
-                'message': 'Sorry, the payment system is temporarily unavailable. Please try again shortly.'
-            }), 503
+                logger.error(f"Failed to mark payment as failed for order {order_id}: {str(fallback_error)}")
+                return jsonify({
+                    'error': 'Temporary system issue',
+                    'details': 'Failed to update payment status. Please try again later.',
+                    'message': 'Sorry, the payment system is temporarily unavailable. Please try again shortly.'
+                }), 503
         return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
 
 @payments_bp.route('/payment/callback', methods=['POST'])
@@ -187,7 +183,9 @@ def payment_callback():
             receipt = next((item['Value'] for item in metadata if item['Name'] == 'MpesaReceiptNumber'), 'SIMULATED')
             # Additional check for ResultDesc to detect wrong PIN or failed payment
             result_desc = data['Body']['stkCallback'].get('ResultDesc', '')
-            if 'cancelled' in result_desc.lower() or 'failed' in result_desc.lower() or 'incorrect' in result_desc.lower():
+            failure_keywords = ['cancelled', 'failed', 'incorrect', 'timeout', 'expired']
+            result_desc_lower = result_desc.lower()
+            if any(keyword in result_desc_lower for keyword in failure_keywords):
                 order.payment_status = PaymentStatus.FAILED.value
                 order.invoice.status = PaymentStatus.FAILED.value
                 db.session.commit()
@@ -195,10 +193,12 @@ def payment_callback():
 
                 # Provide user-friendly feedback messages based on failure reason
                 user_message = "Sorry, your payment didn’t go through. Please try again."
-                if 'cancelled' in result_desc.lower():
+                if 'cancelled' in result_desc_lower:
                     user_message = "Payment was cancelled. Please try again if you wish to complete the purchase."
-                elif 'incorrect' in result_desc.lower():
+                elif 'incorrect' in result_desc_lower:
                     user_message = "Incorrect PIN entered. Please try again with the correct PIN."
+                elif 'timeout' in result_desc_lower or 'expired' in result_desc_lower:
+                    user_message = "Payment session expired. Please try again."
 
                 return jsonify({
                     'status': 'error',

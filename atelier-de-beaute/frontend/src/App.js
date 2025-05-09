@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from './slice/authSlice';
-import { loadCartFromStorage } from './slice/cartSlice';
+import { loadCartFromStorage, setAuthenticated } from './slice/cartSlice';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Shop from './components/Shop';
@@ -46,6 +46,12 @@ function App() {
       dispatch(loadCartFromStorage());
     }
   }, [dispatch]);
+
+  const isAuthenticated = useSelector(state => state.auth.authenticated);
+
+  useEffect(() => {
+    dispatch(setAuthenticated(isAuthenticated));
+  }, [isAuthenticated, dispatch]);
 
   const handleCategorySelect = (categoryId) => {
     setSelectedCategoryId(categoryId);
