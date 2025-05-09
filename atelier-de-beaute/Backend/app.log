@@ -3375,3 +3375,17 @@ DETAIL:  Failing row contains (9, 120, 27, 6, Invalid rating test, 2025-05-03 20
 2025-05-09 13:43:47,134 - __main__ - DEBUG - Looking up user with identity: 6
 2025-05-09 13:43:50,650 - __main__ - DEBUG - Looking up user with identity: 6
 2025-05-09 13:43:50,778 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,024 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,183 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,320 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,421 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,508 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,547 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,585 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,622 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,654 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,676 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,695 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,721 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,748 - __main__ - DEBUG - Looking up user with identity: 6
+2025-05-09 14:43:04,762 - __main__ - DEBUG - Looking up user with identity: 6
