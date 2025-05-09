@@ -1,24 +1,39 @@
-import React, { useState } from 'react';
-import Analytics from './admin/Analytics';
-import OrdersChart from './charts/OrdersChart';
-import Products from './admin/Products';
-import Invoices from './admin/Invoices';
+import React, { useState, useEffect } from 'react';
 
 const ManagerPanel = () => {
   const [activeTab, setActiveTab] = useState('analytics');
+  const [summary, setSummary] = useState({
+    analyticsSales: 0,
+    analyticsGrowth: '',
+    ordersCount: 0,
+    productsCount: 0,
+  });
+
+  useEffect(() => {
+    setSummary({
+      analyticsSales: 20000,
+      analyticsGrowth: '15%',
+      ordersCount: 45,
+      productsCount: 60,
+    });
+  }, []);
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'analytics':
-        return <Analytics />;
+        return (
+          <div>
+            <h3>Analytics</h3>
+            <p>Sales: ${summary.analyticsSales}</p>
+            <p>Growth: {summary.analyticsGrowth}</p>
+          </div>
+        );
       case 'orders':
-        return <OrdersChart />;
+        return <div><h3>Orders List</h3><p>Display orders here.</p></div>;
       case 'products':
-        return <Products />;
-      case 'invoices':
-        return <Invoices />;
+        return <div><h3>Products List</h3><p>Display products here.</p></div>;
       default:
-        return <Analytics />;
+        return <div><h3>Welcome to Manager Panel</h3></div>;
     }
   };
 
@@ -26,6 +41,10 @@ const ManagerPanel = () => {
     <div style={{ display: 'flex', height: '100vh' }}>
       <nav style={{ width: '200px', background: '#f0f0f0', padding: '1rem' }}>
         <h2>Manager Panel</h2>
+        <div style={{ marginBottom: '1rem' }}>
+          <p><strong>Orders:</strong> {summary.ordersCount}</p>
+          <p><strong>Products:</strong> {summary.productsCount}</p>
+        </div>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           <li
             style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'analytics' ? '#ddd' : 'transparent' }}
@@ -44,12 +63,6 @@ const ManagerPanel = () => {
             onClick={() => setActiveTab('products')}
           >
             Products
-          </li>
-          <li
-            style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'invoices' ? '#ddd' : 'transparent' }}
-            onClick={() => setActiveTab('invoices')}
-          >
-            Invoices
           </li>
         </ul>
       </nav>

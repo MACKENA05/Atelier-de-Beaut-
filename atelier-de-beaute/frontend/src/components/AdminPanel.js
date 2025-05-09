@@ -1,24 +1,43 @@
-import React, { useState } from 'react';
-import Users from './admin/Users';
-import Products from './admin/Products';
-import Invoices from './admin/Invoices';
-import Analytics from './admin/Analytics';
+import React, { useState, useEffect } from 'react';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('users');
+  const [summary, setSummary] = useState({
+    usersCount: 0,
+    productsCount: 0,
+    invoicesCount: 0,
+    sales: 0,
+    growth: ''
+  });
+
+  useEffect(() => {
+    setSummary({
+      usersCount: 120,
+      productsCount: 58,
+      invoicesCount: 34,
+      sales: 15000,
+      growth: '12%'
+    });
+  }, []);
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'users':
-        return <Users />;
+        return <div><h3>Users List</h3><p>Display user management here.</p></div>;
       case 'products':
-        return <Products />;
+        return <div><h3>Products List</h3><p>Display product management here.</p></div>;
       case 'invoices':
-        return <Invoices />;
+        return <div><h3>Invoices List</h3><p>Display invoices here.</p></div>;
       case 'analytics':
-        return <Analytics />;
+        return (
+          <div>
+            <h3>Analytics</h3>
+            <p>Sales: ${summary.sales}</p>
+            <p>Growth: {summary.growth}</p>
+          </div>
+        );
       default:
-        return <Users />;
+        return <div><h3>Welcome to Admin Panel</h3></div>;
     }
   };
 
@@ -26,6 +45,11 @@ const AdminPanel = () => {
     <div style={{ display: 'flex', height: '100vh' }}>
       <nav style={{ width: '200px', background: '#f0f0f0', padding: '1rem' }}>
         <h2>Admin Panel</h2>
+        <div style={{ marginBottom: '1rem' }}>
+          <p><strong>Users:</strong> {summary.usersCount}</p>
+          <p><strong>Products:</strong> {summary.productsCount}</p>
+          <p><strong>Invoices:</strong> {summary.invoicesCount}</p>
+        </div>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           <li
             style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'users' ? '#ddd' : 'transparent' }}

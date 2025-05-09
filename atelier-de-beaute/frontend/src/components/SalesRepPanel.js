@@ -1,43 +1,40 @@
-import React, { useState } from 'react';
-import Products from './admin/Products';
-import OrdersChart from './charts/OrdersChart';
+import React, { useState, useEffect } from 'react';
 
 const SalesRepPanel = () => {
-  const [activeTab, setActiveTab] = useState('products');
+  const [orders, setOrders] = useState([]);
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'products':
-        return <Products />;
-      case 'orders':
-        return <OrdersChart />;
-      default:
-        return <Products />;
-    }
-  };
+  useEffect(() => {
+    // Simulate fetching orders data
+    setOrders([
+      { id: 1, customer: 'John Doe', total: 150, status: 'Pending' },
+      { id: 2, customer: 'Jane Smith', total: 200, status: 'Completed' },
+      { id: 3, customer: 'Alice Johnson', total: 300, status: 'Shipped' },
+    ]);
+  }, []);
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <nav style={{ width: '200px', background: '#f0f0f0', padding: '1rem' }}>
-        <h2>Sales Representative Panel</h2>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          <li
-            style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'products' ? '#ddd' : 'transparent' }}
-            onClick={() => setActiveTab('products')}
-          >
-            Products
-          </li>
-          <li
-            style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'orders' ? '#ddd' : 'transparent' }}
-            onClick={() => setActiveTab('orders')}
-          >
-            Orders
-          </li>
-        </ul>
-      </nav>
-      <main style={{ flexGrow: 1, padding: '1rem', overflowY: 'auto' }}>
-        {renderTabContent()}
-      </main>
+    <div style={{ padding: '1rem' }}>
+      <h2>Sales Representative Panel - Orders</h2>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Order ID</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Customer</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Total</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map(order => (
+            <tr key={order.id}>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{order.id}</td>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{order.customer}</td>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>${order.total}</td>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{order.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

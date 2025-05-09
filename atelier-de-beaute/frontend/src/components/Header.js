@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation,useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../slice/authSlice';
 import { FiLogOut } from 'react-icons/fi';
@@ -7,12 +7,14 @@ import './Header.css';
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const cartItemsCount = useSelector(state => state.cart.items.length);
   const user = useSelector(state => state.auth.user);
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate('/', { replace: true });
   };
 
 
@@ -33,7 +35,8 @@ const Header = () => {
             Cart
             {cartItemsCount > 0 && <span className="cart-count">{cartItemsCount}</span>}
           </Link>
-          {user && (
+          
+          {user && user.role.toLowerCase() === 'customer' && (
             <Link to="/my-orders" className="nav-link">
               My Orders
             </Link>
