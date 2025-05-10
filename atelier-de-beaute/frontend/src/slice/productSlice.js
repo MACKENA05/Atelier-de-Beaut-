@@ -52,7 +52,8 @@ export const addProduct = createAsyncThunk('products/addProduct', async (product
 });
 
 export const updateProduct = createAsyncThunk('products/updateProduct', async (product) => {
-  const response = await api.put(`/products/${product.slug}`, product);
+  const { slug, ...productData } = product;
+  const response = await api.put(`/products/${slug}`, productData);
   return response.data;
 });
 
@@ -74,6 +75,7 @@ const productSlice = createSlice({
     per_page: 20,
     loading: false,
     error: null,
+    status: null,  // Added status field
   },
   reducers: {
     setSelectedCategory(state, action) {
@@ -88,6 +90,7 @@ const productSlice = createSlice({
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = null;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.products = action.payload.items;
@@ -96,26 +99,32 @@ const productSlice = createSlice({
         state.current_page = action.payload.current_page;
         state.per_page = action.payload.per_page;
         state.loading = false;
+        state.status = null;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = null;
       })
       .addCase(fetchCategories.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = null;
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.categories = action.payload;
         state.loading = false;
+        state.status = null;
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = null;
       })
       .addCase(fetchProductsByCategory.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = null;
       })
       .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
         state.products = action.payload.products.items;
@@ -124,14 +133,17 @@ const productSlice = createSlice({
         state.current_page = action.payload.products.current_page;
         state.per_page = action.payload.products.per_page;
         state.loading = false;
+        state.status = null;
       })
       .addCase(fetchProductsByCategory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = null;
       })
       .addCase(fetchProductsBySearch.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = null;
       })
       .addCase(fetchProductsBySearch.fulfilled, (state, action) => {
         state.products = action.payload.items;
@@ -140,22 +152,51 @@ const productSlice = createSlice({
         state.current_page = action.payload.current_page;
         state.per_page = action.payload.per_page;
         state.loading = false;
+        state.status = null;
       })
       .addCase(fetchProductsBySearch.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = null;
+      })
+      .addCase(addProduct.pending, (state) => {
+        state.status = null;
+        state.error = null;
       })
       .addCase(addProduct.fulfilled, (state, action) => {
         state.products.push(action.payload);
+        state.status = 'add_success';
+      })
+      .addCase(addProduct.rejected, (state, action) => {
+        state.status = 'add_error';
+        state.error = action.error.message;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.status = null;
+        state.error = null;
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         const index = state.products.findIndex(p => p.slug === action.payload.slug);
         if (index !== -1) {
           state.products[index] = action.payload;
         }
+        state.status = 'update_success';
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.status = 'update_error';
+        state.error = action.error.message;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.status = null;
+        state.error = null;
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = state.products.filter(p => p.slug !== action.payload);
+        state.status = 'delete_success';
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.status = 'delete_error';
+        state.error = action.error.message;
       });
   },
 });

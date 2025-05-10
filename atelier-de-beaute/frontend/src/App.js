@@ -146,7 +146,7 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <AdminPanel>
-                <ShopDisplay />
+                <Shop/>
               </AdminPanel>
             </ProtectedRoute>
           }

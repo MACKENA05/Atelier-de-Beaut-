@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ConfirmDialog from './ConfirmDialog';
 import './UsersTable.css';
 
 const toSnakeCase = (obj) => {
@@ -61,6 +64,10 @@ const UsersTable = () => {
     isActive: true,
   });
 
+  // Confirmation dialog state
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -110,11 +117,14 @@ const UsersTable = () => {
         });
         setShowAddForm(false);
         setError(null);
+        toast.success('User added successfully');
       } else {
         setError(`Failed to add user: ${response.statusText || response.status}`);
+        toast.error(`Failed to add user: ${response.statusText || response.status}`);
       }
     } catch (err) {
       setError(`Failed to add user: ${err.message}`);
+      toast.error(`Failed to add user: ${err.message}`);
     }
   };
 
@@ -172,33 +182,53 @@ const UsersTable = () => {
           isActive: true,
         });
         setError(null);
+        toast.success('User updated successfully');
       } else {
         setError(`Failed to update user: ${response.statusText || response.status}`);
+        toast.error(`Failed to update user: ${response.statusText || response.status}`);
       }
     } catch (err) {
       setError(`Failed to update user: ${err.message}`);
+      toast.error(`Failed to update user: ${err.message}`);
     }
   };
 
-  const handleDelete = async (userId) => {
+  const confirmDelete = async () => {
+    if (!userToDelete) return;
     try {
-      // Send empty JSON body with DELETE request to satisfy backend expecting JSON content
-      const response = await api.delete(`/admin/users/${userId}`, {
+      const response = await api.delete(`/admin/users/${userToDelete}`, {
         headers: {
           'Content-Type': 'application/json',
         },
         data: {},
       });
       if (response.status === 200) {
-        setUsers(users.filter(u => u.id !== userId));
+        setUsers(users.filter(u => u.id !== userToDelete));
         setError(null);
+        toast.success('User deleted successfully');
       } else {
         setError(`Failed to delete user: ${response.statusText || response.status}`);
+        toast.error(`Failed to delete user: ${response.statusText || response.status}`);
       }
     } catch (err) {
       setError(`Failed to delete user: ${err.message}`);
+      toast.error(`Failed to delete user: ${err.message}`);
+    } finally {
+      setConfirmDialogOpen(false);
+      setUserToDelete(null);
     }
   };
+
+  const cancelDelete = () => {
+    setConfirmDialogOpen(false);
+    setUserToDelete(null);
+  };
+
+  const handleDelete = (userId) => {
+    setUserToDelete(userId);
+    setConfirmDialogOpen(true);
+  };
+
 
   if (loading) return <div>Loading users...</div>;
   if (error) return <div className="error-message">{error}</div>;
@@ -343,6 +373,14 @@ const UsersTable = () => {
           ))}
         </tbody>
       </table>
+      <ConfirmDialog
+        title="Confirm Delete"
+        message="Are you sure you want to delete this user?"
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        open={confirmDialogOpen}
+      />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

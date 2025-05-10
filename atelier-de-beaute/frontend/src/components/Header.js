@@ -48,6 +48,11 @@ const Header = () => {
               My Orders
             </Link>
           )}
+          {user && user.role.toLowerCase() === 'admin' && (
+            <Link to="/admin" className="nav-link">
+              Admin Panel
+            </Link>
+          )}
         </div>
         <div className="header-nav-auth">
           {user ? (

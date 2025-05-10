@@ -16,4 +16,23 @@ api.interceptors.request.use(config => {
   return config;
 });
 
+let logoutHandler = null;
+
+// Add a response interceptor to catch 401 errors and trigger logout
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      if (logoutHandler) {
+        logoutHandler();
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+export function setLogoutHandler(handler) {
+  logoutHandler = handler;
+}
+
 export default api;
