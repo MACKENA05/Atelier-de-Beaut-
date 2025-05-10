@@ -161,16 +161,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/admin/reviews"
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminPanel>
-                <ReviewsTable />
-              </AdminPanel>
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path="/admin/invoices"
           element={

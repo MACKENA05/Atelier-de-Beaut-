@@ -8,7 +8,6 @@ from services.cart_services import Cart_Services
 from schemas.order_schema import InvoiceSchema, OrderSchema
 import logging
 
-
 logger = logging.getLogger(__name__)
 
 def get_shipping_cost(shipping_method):
@@ -153,14 +152,13 @@ def get_invoice_data(order_id):
         raise
 
 from sqlalchemy.orm import joinedload
-
-from sqlalchemy.orm import joinedload
 from sqlalchemy import desc
 
 def get_user_orders():
     user_id = get_jwt_identity()
     orders = Order.query.options(
-        joinedload(Order.items).joinedload(OrderItem.product)
+        joinedload(Order.items).joinedload(OrderItem.product),
+        joinedload(Order.user)
     ).filter_by(user_id=user_id).order_by(desc(Order.created_at)).all()
     schema = OrderSchema(many=True)
     orders_data = schema.dump(orders)
@@ -172,13 +170,29 @@ def get_user_orders():
             order_dict['order_status'] = 'pending'
     return orders_data
 
+def get_all_orders(page=1, per_page=10):
+    pagination = Order.query.options(
+        joinedload(Order.user),
+        joinedload(Order.items).joinedload(OrderItem.product)
+    ).order_by(desc(Order.created_at)).paginate(page=page, per_page=per_page, error_out=False)
 
-
-
-def get_all_orders():
-    orders = Order.query.all()
+    orders = pagination.items
     schema = OrderSchema(many=True)
-    return schema.dump(orders)
+    orders_data = schema.dump(orders)
+    for order_obj, order_dict in zip(orders, orders_data):
+        try:
+            order_obj.update_order_status()
+            order_dict['order_status'] = order_obj.order_status
+        except Exception:
+            order_dict['order_status'] = 'pending'
+
+    return {
+        'items': orders_data,
+        'total': pagination.total,
+        'pages': pagination.pages,
+        'current_page': pagination.page,
+        'per_page': pagination.per_page
+    }
 
 def update_order_status(order_id, delivery_status=None, payment_status=None):
     order = Order.query.get(order_id)

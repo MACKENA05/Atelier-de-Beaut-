@@ -33,7 +33,7 @@ const InvoicesTable = () => {
               <td>{invoice.id}</td>
               <td>{invoice.user?.username || invoice.user?.email || 'N/A'}</td>
               <td>{invoice.order?.id || 'N/A'}</td>
-              <td>${invoice.amount}</td>
+              <td>KES {invoice.amount}</td>
               <td>{new Date(invoice.date).toLocaleDateString()}</td>
             </tr>
           ))}

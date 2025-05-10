@@ -35,11 +35,6 @@ const AdminPanel = ({ children }) => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/reviews" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Reviews
-            </NavLink>
-          </li>
-          <li>
             <NavLink to="/admin/invoices" className={({ isActive }) => (isActive ? 'active' : '')}>
               Invoices
             </NavLink>

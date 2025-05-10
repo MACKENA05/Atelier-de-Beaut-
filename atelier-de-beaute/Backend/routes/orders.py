@@ -9,6 +9,7 @@ from mpesa_gateway import MpesaGateway
 from flask_jwt_extended import get_jwt_identity
 import logging
 import os
+from flask_cors import cross_origin
 
 orders_bp = Blueprint('orders', __name__)
 logger = logging.getLogger(__name__)
@@ -168,8 +169,10 @@ def get_my_orders():
 @staff_required
 def get_orders():
     try:
-        orders = get_all_orders()
-        return jsonify(orders), 200
+        page = request.args.get('page', default=1, type=int)
+        per_page = request.args.get('per_page', default=10, type=int)
+        paginated_orders = get_all_orders(page=page, per_page=per_page)
+        return jsonify(paginated_orders), 200
     except Exception as e:
         logger.error(f"Error fetching orders: {str(e)}")
         return jsonify({"error": str(e)}), 500

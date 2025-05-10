@@ -55,10 +55,6 @@ def create_app(config_name='development'):
             logger.error(f"Invalid identity format: {identity}")
             return None
 
-    # from models.category import Category
-    # from models.product import Product
-    # from models.user import User
-    # from models.cart import Cart,CartItem
 
     # Register blueprints and error handlers
     with app.app_context():

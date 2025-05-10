@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, validates, ValidationError
 from models.order import PaymentStatus, DeliveryStatus
 from schemas.product_schema import ProductSchema
+from schemas.user import UserResponseSchema
 
 class AddressSchema(Schema):
     full_name = fields.Str(required=True)
@@ -9,8 +10,6 @@ class AddressSchema(Schema):
     city = fields.Str(required=True)
     country = fields.Str(required=True)
     cod_phone = fields.Str(required=False, allow_none=True)  # Optional for pay_on_delivery
-
-
 
 class OrderItemSchema(Schema):
     product_id = fields.Int(required=True)
@@ -22,6 +21,7 @@ class OrderItemSchema(Schema):
 class OrderSchema(Schema):
     id = fields.Int(dump_only=True)
     user_id = fields.Int(dump_only=True)
+    user = fields.Nested(UserResponseSchema, dump_only=True)  # Added nested user field
     total = fields.Float(dump_only=True)
     shipping_cost = fields.Float(dump_only=True)
     payment_status = fields.Str(dump_only=True)

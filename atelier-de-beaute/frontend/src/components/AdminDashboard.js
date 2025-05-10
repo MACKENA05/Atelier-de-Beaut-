@@ -49,7 +49,7 @@ const AdminDashboard = () => {
       <section className="summary-cards">
         <div className="summary-card">
           <h3>Total Revenue</h3>
-          <p>${overview.total_revenue?.toFixed(2)}</p>
+          <p>KES {overview.total_revenue?.toFixed(2)}</p>
         </div>
         <div className="summary-card">
           <h3>Total Orders</h3>
@@ -63,7 +63,7 @@ const AdminDashboard = () => {
 
       <section>
         <h2>Sales Analytics (Period: {sales.period})</h2>
-        <p>Total Revenue: ${sales.total_revenue?.toFixed(2)}</p>
+        <p>Total Revenue: KES {sales.total_revenue?.toFixed(2)}</p>
         <p>Start Date: {sales.start_date}</p>
       </section>
 

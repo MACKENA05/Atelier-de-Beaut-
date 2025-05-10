@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../services/api';
 
 const initialState = {
-  orders: [],
+  orders: {},
   loading: false,
   error: null,
 };
@@ -22,9 +22,11 @@ export const fetchUserOrders = createAsyncThunk(
 
 export const fetchOrders = createAsyncThunk(
   'orders/fetchOrders',
-  async (_, { rejectWithValue }) => {
+  async ({ page = 1, per_page = 10 } = {}, { rejectWithValue }) => {
     try {
-      const response = await api.get('/admin/orders');
+      const response = await api.get('/orders', {
+        params: { page, per_page }
+      });
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || err.message);
@@ -36,7 +38,7 @@ export const updateOrder = createAsyncThunk(
   'orders/updateOrder',
   async (order, { rejectWithValue }) => {
     try {
-      const response = await api.put(`/admin/orders/${order.id}`, order);
+      const response = await api.put(`/orders/${order.id}/status`, order);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || err.message);
@@ -49,7 +51,7 @@ const orderSlice = createSlice({
   initialState,
   reducers: {
     clearOrders: (state) => {
-      state.orders = [];
+      state.orders = {};
       state.loading = false;
       state.error = null;
     },
@@ -81,9 +83,9 @@ const orderSlice = createSlice({
         state.error = action.payload || action.error.message;
       })
       .addCase(updateOrder.fulfilled, (state, action) => {
-        const index = state.orders.findIndex(o => o.id === action.payload.id);
+        const index = state.orders.items.findIndex(o => o.id === action.payload.id);
         if (index !== -1) {
-          state.orders[index] = action.payload;
+          state.orders.items[index] = action.payload;
         }
       });
   },

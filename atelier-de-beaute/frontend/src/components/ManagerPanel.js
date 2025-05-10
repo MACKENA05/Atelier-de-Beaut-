@@ -24,7 +24,7 @@ const ManagerPanel = () => {
         return (
           <div>
             <h3>Analytics</h3>
-            <p>Sales: ${summary.analyticsSales}</p>
+            <p>Sales: KES {summary.analyticsSales}</p>
             <p>Growth: {summary.analyticsGrowth}</p>
           </div>
         );

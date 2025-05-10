@@ -19,7 +19,7 @@ const Account = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Submitted: ${JSON.stringify(formData)}`);
+    alert(`Submitted: KES {JSON.stringify(formData)}`);
   };
 
   return (

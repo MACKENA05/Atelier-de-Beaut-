@@ -1,0 +1,41 @@
+/* Status color styles for OrdersTable */
+
+.status-initiated {
+  color: #007bff; /* Blue */
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #ffc107; /* Amber */
+  font-weight: bold;
+}
+
+.status-completed {
+  color: #28a745; /* Green */
+  font-weight: bold;
+}
+
+.status-failed {
+  color: #dc3545; /* Red */
+  font-weight: bold;
+}
+
+.status-shipped {
+  color: #17a2b8; /* Teal */
+  font-weight: bold;
+}
+
+.status-delivered {
+  color: #20c997; /* Light Green */
+  font-weight: bold;
+}
+
+.status-cancelled {
+  color: #6c757d; /* Gray */
+  font-weight: bold;
+}
+
+.status-processing {
+  color: #fd7e14; /* Orange */
+  font-weight: bold;
+}
