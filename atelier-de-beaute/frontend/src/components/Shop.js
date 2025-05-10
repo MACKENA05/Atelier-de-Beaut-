@@ -7,6 +7,7 @@ import {
 } from '../slice/productSlice';
 import { addToCart, removeFromCart, updateQuantity, addToCartBackend } from '../slice/cartSlice';
 import { Link } from 'react-router-dom';
+import StarRating from './StarRating';
 import './Shop.css';
 
 const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
@@ -124,34 +125,37 @@ const Shop = ({ selectedCategoryId, searchTerm, priceFilter }) => {
 
           return (
             <div key={product.id} className="product-card">
-              <Link
-                to={`/product/${product.id}`}
-                className="product-card-link"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <div className="product-image-wrapper">
-                  {imageUrl ? (
-                    <img src={imageUrl} alt={productName} className="product-image" />
+              <div className="product-card-main">
+                <Link
+                  to={`/product/${product.id}`}
+                  className="product-card-link"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div className="product-image-wrapper">
+                    {imageUrl ? (
+                      <img src={imageUrl} alt={productName} className="product-image" />
+                    ) : (
+                      <div className="no-image">No Image</div>
+                    )}
+                    {discountPercent > 0 && <div className="discount-badge">{discountPercent}% OFF</div>}
+                    {isOutOfStock && <div className="out-of-stock-badge">Out of Stock</div>}
+                  </div>
+                  <h3 className="product-name">{productName}</h3>
+                  {discountedPrice && discountedPrice < productPrice ? (
+                    <p>
+                      <span style={{ textDecoration: 'line-through', color: 'red', marginRight: '8px' }}>
+                        KES {productPrice}
+                      </span>
+                      <span style={{ fontWeight: 'bold', color: 'green' }}>
+                        KES {discountedPrice}
+                      </span>
+                    </p>
                   ) : (
-                    <div className="no-image">No Image</div>
+                    <p className="product-price">KES {productPrice}</p>                 
                   )}
-                  {discountPercent > 0 && <div className="discount-badge">{discountPercent}% OFF</div>}
-                  {isOutOfStock && <div className="out-of-stock-badge">Out of Stock</div>}
-                </div>
-                <h3 className="product-name">{productName}</h3>
-                {discountedPrice && discountedPrice < productPrice ? (
-                  <p>
-                    <span style={{ textDecoration: 'line-through', color: 'red', marginRight: '8px' }}>
-                      KES {productPrice}
-                    </span>
-                    <span style={{ fontWeight: 'bold', color: 'green' }}>
-                      KES {discountedPrice}
-                    </span>
-                  </p>
-                ) : (
-                  <p className="product-price">KES {productPrice}</p>
-                )}
-              </Link>
+                  <StarRating rating={product.average_rating || 0} />
+                </Link>
+              </div>
               {!isOutOfStock &&
                 (showQuantityControls ? (
                   <div className="quantity-control" onClick={(e) => e.stopPropagation()}>

@@ -76,6 +76,38 @@ button:hover {
   border-radius: 4px;
 }
 
+/* .payment-message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  } */
+  
+  .payment-message.completed {
+  background-color: #dff0d8;
+  color: #3c763d;
+  border: 1px solid #3c763d;
+  }
+  
+  .payment-message.failed {
+  background-color: #f2dede;
+  color: #a94442;
+  border: 1px solid #a94442;
+  }
+  
+  .payment-message.pending {
+  background-color: #fcf8e3;
+  color: #8a6d3b;
+  border: 1px solid #8a6d3b;
+  }
+  
+  .payment-message.error {
+  background-color: #f2dede;
+  color: #a94442;
+  border: 1px solid #a94442;
+  }
+
 .review-section p {
   margin: 6px 0;
   color: #444;

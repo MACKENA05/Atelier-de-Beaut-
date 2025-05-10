@@ -77,6 +77,7 @@ const AuthForm = () => {
   };
 
   return (
+    
     <div className="auth-container">
       <h2 className="auth-title">{isLogin ? 'Login' : 'Create Account'}</h2>
       <Formik
