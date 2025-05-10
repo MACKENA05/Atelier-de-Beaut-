@@ -1,6 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../services/api';
 
+// Async thunk to fetch all reviews
+export const fetchReviews = createAsyncThunk(
+  'reviews/fetchReviews',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/admin/reviews');
+      return response.data;
+    } catch (err) {
+      if (!err.response) {
+        return rejectWithValue('Failed to fetch reviews: Network error or server is down');
+      }
+      const { status, data } = err.response;
+      if (status === 500) {
+        return rejectWithValue('Failed to fetch reviews: Server error');
+      }
+      return rejectWithValue(data?.error || `Failed to fetch reviews: ${err.message}`);
+    }
+  }
+);
+
 // Async thunk to fetch reviews for a product
 export const fetchReviewsByProduct = createAsyncThunk(
   'reviews/fetchReviewsByProduct',

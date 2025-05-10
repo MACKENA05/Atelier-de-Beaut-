@@ -109,8 +109,14 @@ def get_all_users(current_user: User, query_args: dict) -> Tuple[Dict[str, Any],
         # Debug log the received parameters
         logger.debug(f"Pagination params - page: {page}, per_page: {per_page}")
 
-        # Get paginated results
-        users_query = User.query.filter(User.deleted_at == None)
+        # Filter users by role to include only manager, sales representative, and admin
+        allowed_roles = [UserRole.MANAGER, UserRole.SALES_REPRESENTATIVE, UserRole.ADMIN]
+
+        # Get paginated results with role filter
+        users_query = User.query.filter(
+            User.deleted_at == None,
+            User.role.in_(allowed_roles)
+        )
         users = users_query.order_by(User.created_at.desc()).paginate(
             page=page,
             per_page=per_page,
@@ -231,8 +237,10 @@ def delete_user(current_user: User, user_id: int, data: dict = None) -> Tuple[Di
             logger.warning(f"Self-deletion attempt by {current_user.username} from {request.remote_addr}")
             return {"error": "Cannot delete your own account", "details": {}, "status": 403}, 403
 
+        # Add explicit flush before commit to catch DB errors early
         user.is_active = False
         user.deleted_at = datetime.utcnow()
+        db.session.flush()
         db.session.commit()
 
         logger.info(f"User {current_user.username} deleted user ID {user_id} from {request.remote_addr}")

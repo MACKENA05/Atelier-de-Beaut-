@@ -1,0 +1,31 @@
+.admin-panel-container {
+  display: flex;
+  height: 100vh;
+}
+
+.admin-sidebar {
+  width: 220px;
+  background: #f0f0f0;
+  padding: 1rem;
+}
+
+.admin-main {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  
+}
+
+.admin-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-sidebar ul li {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.admin-sidebar ul li.active {
+  background: #ddd;
+}

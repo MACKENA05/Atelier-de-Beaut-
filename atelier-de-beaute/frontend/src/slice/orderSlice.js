@@ -20,6 +20,30 @@ export const fetchUserOrders = createAsyncThunk(
   }
 );
 
+export const fetchOrders = createAsyncThunk(
+  'orders/fetchOrders',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/admin/orders');
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || err.message);
+    }
+  }
+);
+
+export const updateOrder = createAsyncThunk(
+  'orders/updateOrder',
+  async (order, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/admin/orders/${order.id}`, order);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error || err.message);
+    }
+  }
+);
+
 const orderSlice = createSlice({
   name: 'orders',
   initialState,
@@ -43,6 +67,24 @@ const orderSlice = createSlice({
       .addCase(fetchUserOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
+      })
+      .addCase(fetchOrders.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.orders = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(updateOrder.fulfilled, (state, action) => {
+        const index = state.orders.findIndex(o => o.id === action.payload.id);
+        if (index !== -1) {
+          state.orders[index] = action.payload;
+        }
       });
   },
 });

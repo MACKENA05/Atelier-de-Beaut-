@@ -26,8 +26,20 @@ const MyOrders = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
+    console.log('Dispatching fetchUserOrders');
     dispatch(fetchUserOrders());
   }, [dispatch]);
+
+  console.log('Orders state:', ordersState);
+
+  if (loading) return <div>Loading your orders...</div>;
+  if (error) return <div>Error loading orders: {error}</div>;
+  if (!orders.length) return (
+    <div className="no-orders-message">
+      <p>You have no orders yet.</p>
+      <Link to="/shop" className="go-to-shop-link">Go to Shopping</Link>
+    </div>
+  );
 
   const selectedOrder = orders.find(order => order.id === selectedOrderId);
 

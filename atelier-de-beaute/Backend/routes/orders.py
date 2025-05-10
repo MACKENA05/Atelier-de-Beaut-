@@ -154,11 +154,14 @@ def checkout():
 @orders_bp.route('/orders/my-orders', methods=['GET'])
 @customer_required
 def get_my_orders():
+    user_id = get_jwt_identity()
+    logger.info(f"Fetching orders for user_id: {user_id}")
     try:
         orders = get_user_orders()
+        logger.info(f"Found {len(orders)} orders for user_id: {user_id}")
         return jsonify(orders), 200
     except Exception as e:
-        logger.error(f"Error fetching user orders: {str(e)}")
+        logger.error(f"Error fetching user orders for user_id {user_id}: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @orders_bp.route('/orders', methods=['GET'])

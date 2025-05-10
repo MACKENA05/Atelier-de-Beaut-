@@ -8,7 +8,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
-    JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 3600))
+    JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 7200))
     ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'fallback@example.com')
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'fallback_password')
 

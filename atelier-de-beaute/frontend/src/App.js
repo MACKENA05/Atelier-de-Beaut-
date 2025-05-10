@@ -15,10 +15,17 @@ import Contact from './components/Contact';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import AuthPage from './components/AuthPage';
 import LandingPage from './components/LandingPage';
+import AdminDashboard from './components/AdminDashboard';
 import AdminPanel from './components/AdminPanel';
 import SalesRepPanel from './components/SalesRepPanel';
 import ManagerPanel from './components/ManagerPanel';
 import MyOrders from './components/MyOrders';
+import UsersTable from './components/UsersTable';
+import ProductsTable from './components/ProductsTable';
+import ShopDisplay from './components/ShopDisplay';
+import OrdersTable from './components/OrdersTable';
+import ReviewsTable from './components/ReviewsTable';
+import InvoicesTable from './components/InvoicesTable';
 
 
 function ProtectedRoute({ children, allowedRoles }) {
@@ -102,9 +109,75 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route
           path="/admin"
+          element={<Navigate to="/admin/dashboard" replace />}
+        />
+        <Route
+          path="/admin/dashboard"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
-              <AdminPanel />
+              <AdminPanel>
+                <AdminDashboard />
+              </AdminPanel>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPanel>
+                <UsersTable />
+              </AdminPanel>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/products"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPanel>
+                <ProductsTable />
+              </AdminPanel>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/shop"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPanel>
+                <ShopDisplay />
+              </AdminPanel>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPanel>
+                <OrdersTable />
+              </AdminPanel>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reviews"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPanel>
+                <ReviewsTable />
+              </AdminPanel>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/invoices"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminPanel>
+                <InvoicesTable />
+              </AdminPanel>
             </ProtectedRoute>
           }
         />

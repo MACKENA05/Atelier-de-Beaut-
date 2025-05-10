@@ -6,6 +6,8 @@ import userReducer from './userSlice';
 import analyticsReducer from './analyticsSlice';
 import reviewReducer from './reviewSlice';
 import orderReducer from './orderSlice';
+import userAdminReducer from './userAdminSlice';
+
 
 
 export default configureStore({
@@ -17,5 +19,6 @@ export default configureStore({
     analytics: analyticsReducer,
     reviews: reviewReducer,
     orders: orderReducer,
+    userAdmin: userAdminReducer,
   },
 });
