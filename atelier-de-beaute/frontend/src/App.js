@@ -23,11 +23,14 @@ import MyOrders from './components/MyOrders';
 
 function ProtectedRoute({ children, allowedRoles }) {
   const user = useSelector(state => state.auth.user);
+  console.log('ProtectedRoute user:', user);
+  console.log('ProtectedRoute user role:', user?.role);
   if (!user || !allowedRoles.includes(user.role.toLowerCase())) {
-    return <Navigate to="/auth" replace />;
+  return ;
   }
   return children;
-}
+  }
+
 
 function App() {
   const dispatch = useDispatch();
@@ -108,7 +111,7 @@ function App() {
         <Route
           path="/sales-rep"
           element={
-            <ProtectedRoute allowedRoles={['sales_rep']}>
+            <ProtectedRoute allowedRoles={['sales-representative']}>
               <SalesRepPanel />
             </ProtectedRoute>
           }

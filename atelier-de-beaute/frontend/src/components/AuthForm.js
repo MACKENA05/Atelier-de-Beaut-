@@ -33,22 +33,39 @@ const AuthForm = () => {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     const filteredValues = isLogin
-      ? { username: values.username, password: values.password }
-      : values;
-
+    ? { username: values.username, password: values.password }
+    : values;
+    
     try {
-      if (isLogin) {
-        await dispatch(login(filteredValues)).unwrap();
-      } else {
-        await dispatch(register(filteredValues)).unwrap();
-      }
-      navigate('/');
-    } catch (err) {
-      setErrors({ login: err?.error || 'Login failed Invalid credentials' });
-    } finally {
-      setSubmitting(false);
+    if (isLogin) {
+    const user = await dispatch(login(filteredValues)).unwrap();
+    const role = user.role ? user.role.toLowerCase() : '';
+    switch (role) {
+    case 'admin':
+    navigate('/admin');
+    break;
+    case 'sales-representative':
+    navigate('/sales-rep');
+    break;
+    case 'manager':
+    navigate('/manager');
+    break;
+    case 'customer':
+    navigate('/my-orders');
+    break;
+    default:
+    navigate('/');
     }
-  };
+    } else {
+    await dispatch(register(filteredValues)).unwrap();
+    navigate('/');
+    }
+    } catch (err) {
+    setErrors({ login: err?.error || 'Login failed Invalid credentials' });
+    } finally {
+    setSubmitting(false);
+    }
+    };
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
@@ -60,6 +77,7 @@ const AuthForm = () => {
   };
 
   return (
+    
     <div className="auth-container">
       <h2 className="auth-title">{isLogin ? 'Login' : 'Create Account'}</h2>
       <Formik

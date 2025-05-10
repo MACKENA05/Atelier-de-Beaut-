@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation,useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../slice/authSlice';
 import { FiLogOut } from 'react-icons/fi';
@@ -7,12 +7,18 @@ import './Header.css';
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const cartItemsCount = useSelector(state => state.cart.items.length);
   const user = useSelector(state => state.auth.user);
+  const hideLinksForRoles = ['admin', 'manager', 'sales-representative'];
+  const userRole = user?.role ? user.role.toLowerCase() : '';
+  const hideLinks = hideLinksForRoles.includes(userRole);
+
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate('/', { replace: true });
   };
 
 
@@ -27,13 +33,17 @@ const Header = () => {
       </div>
       <nav className="header-nav">
         <div className="header-nav-main">
-          <Link to="/" className="nav-link">Home</Link>
-          <Link to="/shop" className="nav-link">Shop</Link>
-          <Link to="/cart" className="nav-link">
-            Cart
-            {cartItemsCount > 0 && <span className="cart-count">{cartItemsCount}</span>}
-          </Link>
-          {user && (
+          {!hideLinks && (
+            <>
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/shop" className="nav-link">Shop</Link>
+            <Link to="/cart" className="nav-link">
+              Cart
+              {cartItemsCount > 0 && <span className="cart-count">{cartItemsCount}</span>}
+            </Link>
+            </>
+          )}
+          {user && user.role.toLowerCase() === 'customer' && (
             <Link to="/my-orders" className="nav-link">
               My Orders
             </Link>

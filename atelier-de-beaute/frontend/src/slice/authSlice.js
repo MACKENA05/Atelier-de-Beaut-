@@ -1,14 +1,13 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../services/api';
 import { fetchCart, syncMergedCart } from './cartSlice';
-
 
 export const login = createAsyncThunk(
   'auth/login',
   async (credentials, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.post('/auth/login', credentials);
+      console.log('Login response:', response.data);  // Debug log
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
@@ -63,6 +62,7 @@ const authSlice = createSlice({
       state.loading = false;
     },
     setUser: (state, action) => {
+      console.log('setUser called with:', action.payload);  // Debug log
       state.user = action.payload;
       state.authenticated = !!action.payload;
       if (action.payload) {
@@ -79,6 +79,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
+        console.log('login.fulfilled with:', action.payload);  // Debug log
         state.user = action.payload;
         state.authenticated = true;
         state.loading = false;
