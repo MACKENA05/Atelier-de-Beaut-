@@ -63,6 +63,14 @@ def initiate_mpesa_payment(order_id):
         if order.payment_status == PaymentStatus.COMPLETED.value:
             return jsonify({'error': 'Payment already completed'}), 400
 
+        if order.payment_status == PaymentStatus.INITIATED.value:
+            logger.info(f"Payment already initiated for order {order_id}")
+            return jsonify({
+                'message': 'Payment is already in process. Please complete the payment on your phone.',
+                'order_id': order_id,
+                'status': 'INITIATED'
+            }), 200
+
         data = request.get_json() or {}
         phone_number = data.get('phone_number', order.address.phone.replace('+', ''))
         mpesa_env = os.getenv('MPESA_ENVIRONMENT', 'sandbox')
@@ -131,18 +139,17 @@ def initiate_mpesa_payment(order_id):
             try:
                 order = Order.query.filter_by(id=order_id).first()
                 if order:
-                    order.payment_status = PaymentStatus.FAILED.value
-                    order.invoice.status = PaymentStatus.FAILED.value
-                    order.updated_at = datetime.now(timezone.utc)
-                    db.session.commit()
-                    logger.info(f"Marked payment as failed for order {order_id} due to STK Push failure")
+                    # Instead of marking as failed immediately, keep status as INITIATED
+                    logger.info(f"Payment initiation failed due to subscriber lock for order {order_id}, keeping status as INITIATED")
                     return jsonify({
                         'error': 'Payment initiation failed',
                         'details': 'M-Pesa system is busy or subscriber locked. Please retry payment from your orders page.',
-                        'message': 'Sorry, your payment didn’t go through. Please retry from your orders.'
+                        'message': 'Payment is already in process. Please complete the payment on your phone or retry later.',
+                        'order_id': order_id,
+                        'status': 'INITIATED'
                     }), 400
             except Exception as fallback_error:
-                logger.error(f"Failed to mark payment as failed for order {order_id}: {str(fallback_error)}")
+                logger.error(f"Failed to handle subscriber lock for order {order_id}: {str(fallback_error)}")
                 return jsonify({
                     'error': 'Temporary system issue',
                     'details': 'Failed to update payment status. Please try again later.',
@@ -199,6 +206,8 @@ def payment_callback():
                     user_message = "Incorrect PIN entered. Please try again with the correct PIN."
                 elif 'timeout' in result_desc_lower or 'expired' in result_desc_lower:
                     user_message = "Payment session expired. Please try again."
+
+                logger.info(f"User message for payment failure: {user_message}")
 
                 return jsonify({
                     'status': 'error',
@@ -359,8 +368,8 @@ def check_payment_status(order_id):
             logger.error(f"Order {order_id} not found or does not belong to user {current_user_id}")
             return jsonify({'error': 'Order not found or unauthorized'}), 404
 
-        # Timeout for initiated payments (e.g., 15 seconds for testing)
-        timeout_seconds = 15
+        # Timeout for initiated payments (e.g., 60 seconds for testing)
+        timeout_seconds = 60
         if order.payment_status == PaymentStatus.INITIATED.value:
             # Ensure order.updated_at is timezone-aware for subtraction
             updated_at = order.updated_at

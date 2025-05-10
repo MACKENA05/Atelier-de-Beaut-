@@ -72,8 +72,8 @@ class MpesaGateway:
         import time
 
         endpoint = f'{self.base_url}/mpesa/stkpush/v1/processrequest'
-        max_retries = 3
-        base_retry_delay = 2  # seconds
+        max_retries = 2  # Reduced retries to 2 to avoid multiple concurrent requests
+        base_retry_delay = 3  # Increased base delay to 3 seconds
 
         for attempt in range(1, max_retries + 1):
             try:

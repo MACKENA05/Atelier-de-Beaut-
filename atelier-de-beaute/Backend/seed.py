@@ -710,7 +710,7 @@ def seed_data():
         maybelline_eyeliner = Product(
             name="Maybelline Hyper Easy Eyeliner",
             description="Liquid eyeliner with precision tip by Maybelline",
-            price=9.99,
+            price=1.00,
             stock_quantity=60,
             sku="MAYBELLINE-EYE-002",
             brand="Maybelline",
