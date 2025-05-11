@@ -1,4 +1,4 @@
-/* Styling for OrdersTable component */
+
 
 .OrdersTable-container {
   margin: 1rem auto;
@@ -7,7 +7,9 @@
   background: white;
 }
 
-/* Status color styles for OrdersTable */
+.admin-main {
+  background: linear-gradient(90deg, #a6a6a6, #ffffff);
+}
 
 .status-initiated {
   color: #007bff; 

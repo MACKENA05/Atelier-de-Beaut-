@@ -1,31 +1,30 @@
-.users-table-container {
-  padding: 30px;
+/* Add borders to UsersTable for better visual separation */
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(90deg, #a6a6a6, #ffffff);
-  border-radius: 10px;
-  max-width: 2500px;
-  margin: 40px auto;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  color: black;
-
 }
 
-.users-table-container h2 {
-  margin-bottom: 25px;
-  color: black;
+.users-table th,
+.users-table td {
+  border: 1px solid #ccc;
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.users-table th {
+  background-color: #f0f4fb;
+  color: #333;
   font-weight: 700;
-  font-size: 2rem;
-  text-align: center;
 }
 
-.users-table-container button.add-user-btn {
-  margin-bottom: 20px;
-  padding: 12px 24px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background-color:linear-gradient(90deg, #000000, #c89116);
+.users-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.users-table tr:hover {
+  background-color: #e6f0ff;
   color: white;
   border: none;
   border-radius: 8px;
@@ -37,6 +36,7 @@
   background-color: #1d4ed8;
   transform: scale(1.03);
 }
+
 
 /* ✅ Modern, responsive form styling */
 .users-table-container form.add-user-form {
@@ -80,7 +80,7 @@
 .users-table-container form.add-user-form button.submit-btn {
   grid-column: span 2;
   padding: 12px 24px;
-  background-color: #16a34a;
+  background-color: #cc6c9c;
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -91,7 +91,7 @@
 }
 
 .users-table-container form.add-user-form button.submit-btn:hover {
-  background-color: #15803d;
+  background-color: #2563eb;
   transform: scale(1.02);
 }
 

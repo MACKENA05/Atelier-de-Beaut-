@@ -149,6 +149,8 @@ class AnalyticsService:
             ).join(product_category, product_category.c.category_id == Category.id)\
              .join(Product, Product.id == product_category.c.product_id)\
              .join(OrderItem, OrderItem.product_id == Product.id)\
+             .join(Order, Order.id == OrderItem.order_id)\
+             .filter(Order.order_status == OrderStatus.COMPLETED.value)\
              .group_by(Category.name).all()
             
             result = [{"category": name, "total_revenue": float(revenue)} for name, revenue in revenue_by_category]
