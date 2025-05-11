@@ -22,9 +22,7 @@ import ManagerPanel from './components/ManagerPanel';
 import MyOrders from './components/MyOrders';
 import UsersTable from './components/UsersTable';
 import ProductsTable from './components/ProductsTable';
-import ShopDisplay from './components/ShopDisplay';
 import OrdersTable from './components/OrdersTable';
-import ReviewsTable from './components/ReviewsTable';
 import InvoicesTable from './components/InvoicesTable';
 
 

@@ -19,9 +19,10 @@
 
 .navbar-item {
   position: relative;
-  padding: 10px 15px;
+  padding: 10px 20px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 1.1rem;
   color: black;
   user-select: none;
 }
