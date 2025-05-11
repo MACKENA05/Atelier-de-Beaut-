@@ -5,13 +5,27 @@ import './SalesRepPanel.css';
 
 const SalesRepPanel = () => {
   const [activeTab, setActiveTab] = useState('orders');
+  const [searchTerm, setSearchTerm] = useState('');
+ 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'orders':
         return <OrdersTable />;
       case 'shop':
-        return <Shop />;
+        return <div>
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{ marginBottom: '1rem', padding: '0.5rem', width: '100%', maxWidth: '400px' }}
+          />
+          <Shop searchTerm={searchTerm} />
+        </div>;
       default:
         return <OrdersTable />;
     }
