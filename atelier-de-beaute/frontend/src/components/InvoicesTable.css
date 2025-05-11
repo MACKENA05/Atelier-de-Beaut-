@@ -170,23 +170,23 @@
   color: #d9534f;
 }
 
-/.status-initiated {
-  color: #0d6efd; /* Bootstrap primary blue */
+.status-initiated {
+  color: #0d6efd; 
   font-weight: 600;
 }
 
 .status-completed {
-  color: #198754; /* Bootstrap success green */
+  color: #198754;
   font-weight: 600;
 }
 
 .status-failed {
-  color: #dc3545; /* Bootstrap danger red */
+  color: #dc3545;
   font-weight: 600;
 }
 
 .status-pending {
-  color: #ffc107; /* Bootstrap warning yellow */
+  color: #ffc107; 
   font-weight: 600;
 }
 

@@ -1,0 +1,75 @@
+/* Modern styling for SalesRepPanel */
+
+:root {
+  --primary-color: #4a90e2;
+  --secondary-color: #f5f7fa;
+  --text-color: #333;
+  --nav-bg-color: #ffffff;
+  --nav-hover-bg-color: #e1e8f7;
+  --nav-active-bg-color: #d0d9f9;
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+}
+
+.salesrep-panel {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+  background-color: var(--secondary-color);
+}
+
+.salesrep-nav {
+  width: 220px;
+  background-color: var(--nav-bg-color);
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 1.5rem 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.salesrep-nav h2 {
+  margin: 0 0 1.5rem 0;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.salesrep-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.salesrep-nav ul li {
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--primary-color);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+  user-select: none;
+}
+
+.salesrep-nav ul li:hover {
+  background-color: var(--nav-hover-bg-color);
+}
+
+.salesrep-nav ul li.active {
+  background-color: var(--nav-active-bg-color);
+  color: #1a3d8f;
+  box-shadow: inset 3px 0 0 var(--primary-color);
+}
+
+.salesrep-main {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 15px rgba(0,0,0,0.05);
+}

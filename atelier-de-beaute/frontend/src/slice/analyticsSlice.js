@@ -14,9 +14,14 @@ export const fetchSales = createAsyncThunk('analytics/fetchSales', async (period
   return response.data;
 });
 
-export const fetchOrders = createAsyncThunk('analytics/fetchOrders', async () => {
-  const response = await fetchOrderAnalytics();
-  return response.data;
+export const fetchOrders = createAsyncThunk('analytics/fetchOrders', async (_, { rejectWithValue }) => {
+  try {
+    const response = await fetchOrderAnalytics();
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching order analytics:', error);
+    return rejectWithValue(error.response?.data || error.message);
+  }
 });
 
 export const fetchUsers = createAsyncThunk('analytics/fetchUsers', async () => {
@@ -82,7 +87,7 @@ const analyticsSlice = createSlice({
       })
       .addCase(fetchOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload || action.error.message;
       })
       .addCase(fetchUsers.pending, (state) => {
         state.loading = true;

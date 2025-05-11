@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, addProduct, updateProduct, deleteProduct } from '../slice/productSlice';
+import { fetchProducts, fetchProductsBySearch, addProduct, updateProduct, deleteProduct } from '../slice/productSlice';
 import { FaTrash, FaSave, FaEdit, FaTimes } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,9 +35,28 @@ const ProductsTable = () => {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
+  // Search term state
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Debounce search input to reduce API calls
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+
+  // Fetch products on page, pageSize, or searchTerm change
   useEffect(() => {
-    dispatch(fetchProducts({ page: currentPage, per_page: pageSize }));
-  }, [dispatch, currentPage, pageSize]);
+    if (searchTerm.trim() === '') {
+      dispatch(fetchProducts({ page: currentPage, per_page: pageSize }));
+    } else {
+      dispatch(fetchProductsBySearch({ searchTerm, page: currentPage, per_page: pageSize }));
+    }
+  }, [dispatch, currentPage, pageSize, searchTerm]);
 
   // Effect to show toast notifications on add, update, delete success or error
   const productStatus = useSelector(state => state.products.status);
@@ -144,9 +163,27 @@ const ProductsTable = () => {
     }
   };
 
+  // Debounced search input handler
+  const debouncedSearch = useCallback(debounce((value) => {
+    setCurrentPage(1); // Reset to first page on new search
+    setSearchTerm(value);
+  }, 500), []);
+
+  const handleSearchChange = (e) => {
+    debouncedSearch(e.target.value);
+  };
+
   return (
     <div className="products-table-container">
       <h2>Products</h2>
+
+      {/* Search bar */}
+      <input
+        type="text"
+        placeholder="Search products by name..."
+        onChange={handleSearchChange}
+        style={{ marginBottom: '1rem', padding: '0.5rem', width: '100%', maxWidth: '400px' }}
+      />
 
       {/* Add Product Form at top */}
       {editingProductId === 'new' ? (

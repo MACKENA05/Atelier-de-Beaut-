@@ -48,31 +48,38 @@ class Order(db.Model):
 
     
     def update_order_status(self):
-        """Automatically set order_status based on payment_status and delivery_status."""
         logger.debug(f"Updating order_status for order_id={self.id or 'new'}: "
                      f"payment_status={self.payment_status}, delivery_status={self.delivery_status}")
         try:
+            # Default to PENDING if statuses are missing or invalid
             if not self.payment_status or not self.delivery_status:
                 self.order_status = OrderStatus.PENDING.value
                 logger.warning(f"Set order_status={self.order_status} for order_id={self.id or 'new'} "
                                f"(missing payment or delivery status)")
                 return
-            if self.payment_status not in [status.value for status in PaymentStatus]:
+
+            # Validate payment_status and delivery_status
+            valid_payment_statuses = [status.value for status in PaymentStatus]
+            valid_delivery_statuses = [status.value for status in DeliveryStatus]
+            if self.payment_status not in valid_payment_statuses:
                 logger.error(f"Invalid payment_status: {self.payment_status}")
                 raise ValueError(f"Invalid payment_status: {self.payment_status}")
-            if self.delivery_status not in [status.value for status in DeliveryStatus]:
+            if self.delivery_status not in valid_delivery_statuses:
                 logger.error(f"Invalid delivery_status: {self.delivery_status}")
                 raise ValueError(f"Invalid delivery_status: {self.delivery_status}")
+
+            #  order_status based on conditions
             if self.payment_status == PaymentStatus.FAILED.value:
                 self.order_status = OrderStatus.CANCELLED.value
             elif (self.payment_status == PaymentStatus.COMPLETED.value and 
                   self.delivery_status == DeliveryStatus.DELIVERED.value):
                 self.order_status = OrderStatus.COMPLETED.value
-            elif (self.payment_status in [PaymentStatus.INITIATED.value, PaymentStatus.COMPLETED.value] or 
-                  self.delivery_status in [DeliveryStatus.SHIPPED.value, DeliveryStatus.DELIVERED.value]):
+            elif (self.payment_status in [PaymentStatus.INITIATED.value, PaymentStatus.COMPLETED.value] and 
+                  self.delivery_status in [DeliveryStatus.PENDING.value, DeliveryStatus.SHIPPED.value]):
                 self.order_status = OrderStatus.PROCESSING.value
             else:
                 self.order_status = OrderStatus.PENDING.value
+
             logger.info(f"Set order_status={self.order_status} for order_id={self.id or 'new'}")
         except Exception as e:
             logger.error(f"Error in update_order_status for order_id={self.id or 'new'}: {str(e)}")

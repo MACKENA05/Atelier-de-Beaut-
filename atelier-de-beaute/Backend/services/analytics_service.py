@@ -3,7 +3,7 @@ from sqlalchemy.sql import text
 from sqlalchemy import Table, MetaData
 from datetime import datetime, timedelta
 from extensions import db
-from models.user import User
+from models.user import User,UserRole
 from models.order import Order, PaymentStatus, OrderStatus
 from models.order import OrderItem
 from models.product import Product
@@ -64,6 +64,9 @@ class AnalyticsService:
     def get_order_analytics():
         """Returns order-related statistics."""
         try:
+            logger.info("get_order_analytics called")
+            db.session.commit()
+            db.session.expire_all()
             order_stats = db.session.query(
                 Order.order_status,
                 db.func.count(Order.id).label('count')
@@ -98,8 +101,12 @@ class AnalyticsService:
     def get_user_analytics():
         """Returns user-related statistics."""
         try:
-            total_users = db.session.query(db.func.count(User.id)).scalar() or 0
+            # Count only users with role UserRole.CUSTOMER enum
+            total_users = db.session.query(db.func.count(User.id))\
+                .filter(User.role == UserRole.CUSTOMER)\
+                .scalar() or 0
             new_users = db.session.query(db.func.count(User.id))\
+                .filter(User.role == UserRole.CUSTOMER)\
                 .filter(User.created_at >= datetime.utcnow() - timedelta(days=30))\
                 .scalar() or 0
             

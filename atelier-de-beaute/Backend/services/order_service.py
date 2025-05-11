@@ -208,5 +208,7 @@ def update_order_status(order_id, delivery_status=None, payment_status=None):
         if payment_status == PaymentStatus.COMPLETED.value and order.payment_method == 'pay_on_delivery':
             order.transaction_id = f"POD-{uuid.uuid4().hex[:8].upper()}"
     
+    order.update_order_status()  # Update order_status based on payment and delivery status
+    
     db.session.commit()
     return OrderSchema().dump(order)

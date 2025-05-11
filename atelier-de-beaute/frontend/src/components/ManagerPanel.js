@@ -1,72 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import ProductsTable from './ProductsTable';
+import OrdersTable from './OrdersTable';
+import Shop from './Shop';
+import './ManagerPanel.css';
 
 const ManagerPanel = () => {
-  const [activeTab, setActiveTab] = useState('analytics');
-  const [summary, setSummary] = useState({
-    analyticsSales: 0,
-    analyticsGrowth: '',
-    ordersCount: 0,
-    productsCount: 0,
-  });
-
-  useEffect(() => {
-    setSummary({
-      analyticsSales: 20000,
-      analyticsGrowth: '15%',
-      ordersCount: 45,
-      productsCount: 60,
-    });
-  }, []);
+  const [activeTab, setActiveTab] = useState('products');
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'analytics':
-        return (
-          <div>
-            <h3>Analytics</h3>
-            <p>Sales: KES {summary.analyticsSales}</p>
-            <p>Growth: {summary.analyticsGrowth}</p>
-          </div>
-        );
-      case 'orders':
-        return <div><h3>Orders List</h3><p>Display orders here.</p></div>;
       case 'products':
-        return <div><h3>Products List</h3><p>Display products here.</p></div>;
+        return <ProductsTable />;
+      case 'orders':
+        return <OrdersTable />;
+      case 'shop':
+        return <Shop />;
       default:
-        return <div><h3>Welcome to Manager Panel</h3></div>;
+        return <ProductsTable />;
     }
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <nav style={{ width: '200px', background: '#f0f0f0', padding: '1rem' }}>
+    <div className="manager-panel">
+      <nav className="manager-nav">
         <h2>Manager Panel</h2>
-        <div style={{ marginBottom: '1rem' }}>
-          <p><strong>Orders:</strong> {summary.ordersCount}</p>
-          <p><strong>Products:</strong> {summary.productsCount}</p>
-        </div>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <ul>
           <li
-            style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'analytics' ? '#ddd' : 'transparent' }}
-            onClick={() => setActiveTab('analytics')}
+            className={activeTab === 'products' ? 'active' : ''}
+            onClick={() => setActiveTab('products')}
           >
-            Analytics
+            Products
           </li>
           <li
-            style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'orders' ? '#ddd' : 'transparent' }}
+            className={activeTab === 'orders' ? 'active' : ''}
             onClick={() => setActiveTab('orders')}
           >
             Orders
           </li>
           <li
-            style={{ padding: '0.5rem', cursor: 'pointer', background: activeTab === 'products' ? '#ddd' : 'transparent' }}
-            onClick={() => setActiveTab('products')}
+            className={activeTab === 'shop' ? 'active' : ''}
+            onClick={() => setActiveTab('shop')}
           >
-            Products
+            Shop
           </li>
         </ul>
       </nav>
-      <main style={{ flexGrow: 1, padding: '1rem', overflowY: 'auto' }}>
+      <main className="manager-main">
         {renderTabContent()}
       </main>
     </div>

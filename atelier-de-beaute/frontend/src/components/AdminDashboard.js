@@ -37,6 +37,18 @@ const AdminDashboard = () => {
     dispatch(fetchTopProductsThunk());
     dispatch(fetchRevenueByCategoryThunk());
     dispatch(fetchOverviewThunk());
+
+    // Set interval to refresh analytics data every 30 seconds for real-time updates
+    const intervalId = setInterval(() => {
+      dispatch(fetchSales());
+      dispatch(fetchOrders());
+      dispatch(fetchUsers());
+      dispatch(fetchTopProductsThunk());
+      dispatch(fetchRevenueByCategoryThunk());
+      dispatch(fetchOverviewThunk());
+    }, 5000);
+
+    return () => clearInterval(intervalId);
   }, [dispatch]);
 
   if (loading) return <div>Loading analytics...</div>;
@@ -57,7 +69,7 @@ const AdminDashboard = () => {
         </div>
         <div className="summary-card">
           <h3>Total Users</h3>
-          <p>{overview.total_users}</p>
+          <p>{users.total_users}</p>
         </div>
       </section>
 

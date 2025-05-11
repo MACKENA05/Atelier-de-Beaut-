@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 
 import './AdminPanel.css';
 
@@ -16,12 +16,12 @@ const AdminPanel = ({ children }) => {
           </li>
           <li>
             <NavLink to="/admin/users" className={({ isActive }) => (isActive ? 'active' : '')}>
-              User Management
+              Users
             </NavLink>
           </li>
           <li>
             <NavLink to="/admin/products" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Products Management
+              Products
             </NavLink>
           </li>
           <li>
@@ -31,7 +31,7 @@ const AdminPanel = ({ children }) => {
           </li>
           <li>
             <NavLink to="/admin/orders" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Order Management
+              Orders
             </NavLink>
           </li>
           <li>

@@ -41,6 +41,7 @@ def get_order_analytics():
 def get_user_analytics():
     """Returns user-related statistics."""
     try:
+        # Call the updated get_user_analytics method that filters customers only
         result = AnalyticsService.get_user_analytics()
         logger.info(f"User analytics retrieved: {result}")
         return jsonify(result), HTTPStatus.OK
