@@ -100,7 +100,7 @@ const OrdersTable = () => {
             <th>Username</th>
             <th>Phone Number</th>
             <th>No. of Items</th>
-            <th>Total</th>
+            <th>Total Amount</th>
             <th>Payment Status</th>
             <th>Delivery Status</th>
             <th>Shipping Method</th>
@@ -118,7 +118,7 @@ const OrdersTable = () => {
               <tr key={order.id}>
                 <td>{order.id}</td>
                 <td>{order.user?.username || order.user?.email || 'N/A'}</td>
-                <td>{order.user?.phone || 'N/A'}</td>
+                <td>{order.address?.phone || 'N/A'}</td>
                 <td>{numberOfItems}</td>
                 <td>KES {order.total}</td>
                 <td className={getStatusClass(order.payment_status)}>
