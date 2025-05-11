@@ -201,14 +201,15 @@ const Cart = () => {
         <div className="cart-actions">
           <button className="proceed-checkout-button" onClick={handleProceedToCheckout}>Proceed to Checkout</button>
           <Link to="/shop" className="continue-shopping-button">Continue Shopping</Link>
-        </div>
-      </div>
-      {showConfirmClear && (
-        <ConfirmDialog
-          message="Are you sure you want to clear the cart?"
-          onConfirm={confirmClearCart}
-          onCancel={cancelClearCart}
-        />
+          </div>
+       </div>
+       {showConfirmClear && (
+         <ConfirmDialog
+          open={showConfirmClear}
+           message="Are you sure you want to clear the cart?"
+           onConfirm={confirmClearCart}
+           onCancel={cancelClearCart}
+         />
       )}
     </div>
   );

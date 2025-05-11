@@ -6,6 +6,12 @@ import './ManagerPanel.css';
 
 const ManagerPanel = () => {
   const [activeTab, setActiveTab] = useState('products');
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+      };
+    
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -14,7 +20,16 @@ const ManagerPanel = () => {
       case 'orders':
         return <OrdersTable />;
       case 'shop':
-        return <Shop />;
+        return <div>
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{ marginBottom: '1rem', padding: '0.5rem', width: '100%', maxWidth: '400px' }}
+          />
+          <Shop searchTerm={searchTerm} />
+        </div>;
       default:
         return <ProductsTable />;
     }

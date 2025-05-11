@@ -1,9 +1,23 @@
-import React from 'react';
-import { NavLink} from 'react-router-dom';
-
+import React, { useState } from 'react';
+import { NavLink, useLocation, cloneElement } from 'react-router-dom';
 import './AdminPanel.css';
 
 const AdminPanel = ({ children }) => {
+  const location = useLocation();
+  const [searchTerm, setSearchTerm] = useState('');
+  
+    const handleSearchChange = (e) => {
+      setSearchTerm(e.target.value);
+    };
+  
+    // Check if current path is /admin/shop
+    const isAdminShop = location.pathname === '/admin/shop';
+  
+    // Clone children and pass searchTerm prop if on /admin/shop
+    const childrenWithProps = isAdminShop && React.isValidElement(children)
+      ? React.cloneElement(children, { searchTerm })
+      : children;
+  
   return (
     <div className="admin-panel-container">
       <nav className="admin-sidebar">
@@ -42,10 +56,19 @@ const AdminPanel = ({ children }) => {
         </ul>
       </nav>
       <main className="admin-main">
-        {children}
+      {isAdminShop && (
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{ marginBottom: '1rem', padding: '0.5rem', width: '100%', maxWidth: '400px' }}
+          />
+        )}
+        {childrenWithProps}
       </main>
-    </div>
-  );
-};
-
+     </div>
+   );
+ };
+ 
 export default AdminPanel;

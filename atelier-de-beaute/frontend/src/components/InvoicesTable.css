@@ -102,6 +102,23 @@
   }
 }
 
+.invoices-table tbody tr:nth-child(odd) {
+  background: repeating-linear-gradient(
+  45deg,
+  #ffe7e9 10px,
+  #ffe7e9 20px
+  );
+  }
+  
+  .invoices-table tbody tr:nth-child(even) {
+  background-color: #fff0f6;
+  }
+
+  .invoices-table-container table.invoices-table tbody tr tr:hover {
+    background-color: #ffccdd;
+    cursor: pointer;
+    }
+
 .invoices-container h2 {
   font-size: 2rem;
   font-weight: 600;
