@@ -37,6 +37,29 @@
   transform: scale(1.03);
 }
 
+.users-table-container table.users-table th,
+.users-table-container table.users-table td {
+padding: 8px 12px;
+border: 1px solid #ddd;
+}
+
+.users-table-container table.users-table tbody tr:nth-child(odd) {
+background: repeating-linear-gradient(
+45deg,
+#ffe7e9 10px,
+#ffe7e9 20px
+);
+}
+
+.users-table-container table.users-table tbody tr:nth-child(even) {
+background-color: #fff0f6;
+}
+
+.users-table-container table.users-table tbody tr:hover {
+background-color: #ffccdd;
+cursor: pointer;
+}
+
 
 /* ✅ Modern, responsive form styling */
 .users-table-container form.add-user-form {

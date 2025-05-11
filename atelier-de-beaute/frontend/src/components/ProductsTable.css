@@ -24,6 +24,23 @@ h2 {
   font-weight: 700;
 }
 
+.products-table tbody tr:nth-child(odd) {
+  background: repeating-linear-gradient(
+  45deg,
+  #ffe7e9 10px,
+  #ffe7e9 20px
+  );
+  }
+  
+  .products-table tbody tr:nth-child(even) {
+  background-color: #fff0f6;
+  }
+  
+  .products-table tbody tr:hover {
+  background-color: #ffccdd;
+  cursor: pointer;
+  }
+
 .products-table tr:nth-child(even) {
   background-color: #fafafa;
 }
