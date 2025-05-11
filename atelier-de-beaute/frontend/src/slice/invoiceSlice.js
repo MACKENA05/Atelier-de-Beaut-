@@ -3,9 +3,13 @@ import api from '../services/api';
 
 export const fetchInvoices = createAsyncThunk(
   'invoices/fetchInvoices',
-  async (_, { rejectWithValue }) => {
+  async ({ status, page = 1, perPage = 10 }, { rejectWithValue }) => {
     try {
-      const response = await api.get('/admin/invoices');
+      const params = {};
+      if (status) params.status = status;
+      if (page) params.page = page;
+      if (perPage) params.per_page = perPage;
+      const response = await api.get('/orders/invoices', { params });
       return response.data;
     } catch (err) {
       if (!err.response) {
@@ -26,6 +30,10 @@ const invoiceSlice = createSlice({
     invoices: [],
     loading: false,
     error: null,
+    total: 0,
+    pages: 0,
+    currentPage: 1,
+    perPage: 10,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -35,7 +43,11 @@ const invoiceSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchInvoices.fulfilled, (state, action) => {
-        state.invoices = action.payload;
+        state.invoices = action.payload.invoices;
+        state.total = action.payload.total;
+        state.pages = action.payload.pages;
+        state.currentPage = action.payload.current_page;
+        state.perPage = action.payload.per_page;
         state.loading = false;
       })
       .addCase(fetchInvoices.rejected, (state, action) => {

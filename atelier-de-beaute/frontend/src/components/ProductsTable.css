@@ -11,7 +11,7 @@
 .products-table-container h2 {
   font-size: 2rem;
   font-weight: 600;
-  color: #333;
+  color: black;
   text-align: center;
   margin-bottom: 1.5rem;
 }
@@ -149,3 +149,99 @@ button[title]:hover {
   color: #555;
   padding: 0 0.5rem;
 }
+
+/* Responsive styles for tables */
+@media (max-width: 768px) {
+  .table-container {
+    padding: 10px;
+  }
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  tbody tr {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #ddd;
+  }
+  tbody td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: left;
+  }
+  tbody td:before {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: 600;
+    content: attr(data-label);
+    color: #374151;
+  }
+}
+
+
+/* Responsive styles for products table */
+@media (max-width: 768px) {
+  .products-table-container {
+    padding: 1rem;
+  }
+  .products-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .products-table thead,
+  .products-table tbody,
+  .products-table th,
+  .products-table td,
+  .products-table tr {
+    display: block;
+  }
+  .products-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .products-table tbody tr {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #ddd;
+  }
+  .products-table tbody td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: left;
+  }
+  .products-table tbody td:before {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: 600;
+    content: attr(data-label);
+    color: #374151;
+  }
+}
+

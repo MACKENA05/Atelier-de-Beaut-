@@ -16,12 +16,12 @@ const AdminPanel = ({ children }) => {
           </li>
           <li>
             <NavLink to="/admin/users" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Users
+              User Management
             </NavLink>
           </li>
           <li>
             <NavLink to="/admin/products" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Products
+              Products Management
             </NavLink>
           </li>
           <li>
@@ -31,7 +31,7 @@ const AdminPanel = ({ children }) => {
           </li>
           <li>
             <NavLink to="/admin/orders" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Orders
+              Order Management
             </NavLink>
           </li>
           <li>

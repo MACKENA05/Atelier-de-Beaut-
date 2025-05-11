@@ -117,6 +117,15 @@
   color: #374151;
 }
 
+/* Decrease width of the Email column */
+.users-table thead th:nth-child(2),
+.users-table tbody td:nth-child(2) {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .users-table tbody tr {
   border-bottom: 1px solid #eee;
   transition: background-color 0.2s ease;
@@ -176,6 +185,54 @@
   font-size: 1rem;
   text-align: center;
 }
+
+/* Responsive styles for tables */
+@media (max-width: 768px) {
+  .table-container {
+    padding: 10px;
+  }
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  tbody tr {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #ddd;
+  }
+  tbody td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: left;
+  }
+  tbody td:before {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: 600;
+    content: attr(data-label);
+    color: #374151;
+  }
+}
+
 
 /* Custom delete confirmation dialog styles */
 .delete-confirm-overlay {

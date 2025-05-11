@@ -176,7 +176,9 @@ function App() {
           path="/sales-rep"
           element={
             <ProtectedRoute allowedRoles={['sales-representative']}>
-              <SalesRepPanel />
+              <SalesRepPanel>
+                <OrdersTable/>
+              </SalesRepPanel>
             </ProtectedRoute>
           }
         />

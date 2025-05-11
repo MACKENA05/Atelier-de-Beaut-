@@ -194,15 +194,31 @@ def get_invoice(order_id):
 @admin_required
 def get_all_invoices():
     try:
-        invoices = Invoice.query.all()
+        status_filter = request.args.get('status', type=str)
+        page = request.args.get('page', default=1, type=int)
+        per_page = request.args.get('per_page', default=10, type=int)
+        query = Invoice.query
+        if status_filter:
+            # Join with Order to filter by order status
+            query = query.join(Order, Invoice.order_id == Order.id).filter(Order.payment_status == status_filter)
+        pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+        invoices = pagination.items
         invoice_data = [{
             "invoice_number": invoice.invoice_number,
             "order_id": invoice.order_id,
             "user_id": Order.query.get(invoice.order_id).user_id,
             "total": invoice.total,
+            "status": Order.query.get(invoice.order_id).payment_status,
             "issued_at": invoice.issued_at.isoformat()
         } for invoice in invoices]
-        return jsonify(invoice_data), 200
+        response = {
+            "invoices": invoice_data,
+            "total": pagination.total,
+            "pages": pagination.pages,
+            "current_page": pagination.page,
+            "per_page": pagination.per_page
+        }
+        return jsonify(response), 200
     except Exception as e:
         logger.error(f"Error fetching all invoices: {str(e)}")
         return jsonify({"error": str(e)}), 500
