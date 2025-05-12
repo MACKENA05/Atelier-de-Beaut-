@@ -137,7 +137,7 @@ body {
   position: absolute;
   top: 12px;
   right: 12px;
-  background-color:yellow;
+  background-color:rgb(8, 11, 168);
   color: white;
   font-weight: 600;
   font-size: 12px;
@@ -210,6 +210,7 @@ body {
 }
 
 /* Quantity Controls */
+/* Quantity Controls */
 .quantity-control {
   display: flex;
   justify-content: center;
@@ -219,20 +220,20 @@ body {
 }
 
 .quantity-button {
-  background-color: #ff80bf;
-  border: none;
+  background: linear-gradient(135deg, #ff4da6, #e60073);
+  border: 1px solid #cc005f;
   color: #fff;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 8px 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 3px 8px rgba(255, 128, 191, 0.4);
+  box-shadow: 0 3px 8px rgba(255, 77, 166, 0.3);
 }
 
 .quantity-button:hover:not(:disabled) {
-  background-color: #ff4d88;
+  background: linear-gradient(135deg, #ff1a8c, #cc0066);
   transform: scale(1.08);
 }
 
@@ -248,7 +249,9 @@ body {
 .quantity-display {
   font-size: 14px;
   font-weight: 500;
+  color: #222;
 }
+
 
 /* Add to Cart - Hidden by default, shows on hover */
 .add-to-cart-button {
