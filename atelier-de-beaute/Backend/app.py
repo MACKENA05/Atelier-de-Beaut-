@@ -9,7 +9,7 @@ import os
 from flask import send_from_directory
 
 def create_app(config_name='development'):
-    app = Flask(__name__, static_folder='../frontend/public', static_url_path='/')
+    app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 
     app.config.from_object(config[config_name])
 
