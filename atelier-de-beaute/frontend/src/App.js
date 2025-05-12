@@ -28,7 +28,6 @@ import InvoicesTable from './components/InvoicesTable';
 
 function ProtectedRoute({ children, allowedRoles }) {
   const user = useSelector(state => state.auth.user);
-  console.log('ProtectedRoute user:', user);
   console.log('ProtectedRoute user role:', user?.role);
   if (!user || !allowedRoles.includes(user.role.toLowerCase())) {
   return ;
@@ -50,7 +49,7 @@ function App() {
     if (storedUser) {
       dispatch(setUser(JSON.parse(storedUser)));
     } else {
-      // Load guest cart from localStorage if no user logged in
+      // get guest cart from localStorage if no user logged in
       dispatch(loadCartFromStorage());
     }
   }, [dispatch]);
