@@ -54,7 +54,7 @@ body {
 /* Product Image */
 .product-image-wrapper {
   position: relative;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .product-image {
@@ -107,13 +107,13 @@ body {
 
 /* Product Content */
 .product-card-content {
-  padding: 0 5px;
+  padding: 0 4px;
 }
 
 .product-name {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  margin: 8px 0;
+  margin: 6px 0 4px;
   transition: color 0.2s ease;
 }
 
@@ -122,9 +122,9 @@ body {
 }
 
 .product-price {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #444;
-  margin-bottom: 10px;
+  margin: 2px 0 8px;
   transition: color 0.2s ease;
 }
 
@@ -214,26 +214,26 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin-top: 10px;
+  gap: 8px;
+  margin: 6px 0;
 }
 
 .quantity-button {
   background-color: #ff80bf;
   border: none;
-  color: white;
-  font-size: 20px;
+  color: #fff;
+  font-size: 16px;
   font-weight: bold;
-  border-radius: 12px;
-  padding: 10px 16px;
+  border-radius: 8px;
+  padding: 6px 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 128, 191, 0.4);
+  box-shadow: 0 3px 8px rgba(255, 128, 191, 0.4);
 }
 
 .quantity-button:hover:not(:disabled) {
   background-color: #ff4d88;
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .quantity-button:active:not(:disabled) {
@@ -246,7 +246,8 @@ body {
 }
 
 .quantity-display {
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 /* Add to Cart - Hidden by default, shows on hover */
@@ -254,14 +255,12 @@ body {
   background: linear-gradient(135deg, #ff4d88, #ff80bf);
   color: white;
   font-weight: 600;
-  padding: 10px 16px;
+  padding: 8px 14px;
   border: none;
-  border-radius: 12px;
-  margin-top: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(255, 77, 136, 0.4);
-
-  /* Hidden state */
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
@@ -272,6 +271,15 @@ body {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+/* Always show Add to Cart on Mobile */
+@media (max-width: 768px) {
+  .add-to-cart-button {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
 }
 
 /* Pagination */
