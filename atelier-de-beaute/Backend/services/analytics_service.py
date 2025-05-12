@@ -7,6 +7,7 @@ from models.user import User,UserRole
 from models.order import Order, PaymentStatus, OrderStatus
 from models.order import OrderItem
 from models.product import Product
+from models.product import product_category
 from models.category import Category
 
 # Set up logging
@@ -15,11 +16,6 @@ logger = logging.getLogger(__name__)
 
 # Define the product_category junction table
 metadata = MetaData()
-product_category = Table(
-    'product_category',
-    metadata,
-    autoload_with=db.engine
-)
 
 class AnalyticsService:
     @staticmethod
