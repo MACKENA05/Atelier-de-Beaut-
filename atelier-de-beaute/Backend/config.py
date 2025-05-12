@@ -12,7 +12,6 @@ class Config:
     ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'fallback@example.com')
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'fallback_password')
 
-    # CORS origins for frontend access, comma separated
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'https://atelier-de-beaut-1.onrender.com')
 
 

@@ -69,6 +69,8 @@ def create_user_as_admin(creator: User, user_data: dict) -> Tuple[Dict[str, Any]
                 "id": new_user.id,
                 "username": new_user.username,
                 "email": new_user.email,
+                "first_name":new_user.first_name,
+                "last_name": new_user.last_name,
                 "phone": new_user.phone,
                 "role": new_user.role.value,
                 "is_active": new_user.is_active

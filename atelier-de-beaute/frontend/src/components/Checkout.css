@@ -76,37 +76,29 @@ button:hover {
   border-radius: 4px;
 }
 
-/* .payment-message {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 1rem;
-  } */
-  
-  .payment-message.completed {
+.payment-message.completed {
   background-color: #dff0d8;
   color: #3c763d;
   border: 1px solid #3c763d;
-  }
-  
-  .payment-message.failed {
+}
+
+.payment-message.failed {
   background-color: #f2dede;
   color: #a94442;
   border: 1px solid #a94442;
-  }
-  
-  .payment-message.pending {
+}
+
+.payment-message.pending {
   background-color: #fcf8e3;
   color: #8a6d3b;
   border: 1px solid #8a6d3b;
-  }
-  
-  .payment-message.error {
+}
+
+.payment-message.error {
   background-color: #f2dede;
   color: #a94442;
   border: 1px solid #a94442;
-  }
+}
 
 .review-section p {
   margin: 6px 0;
@@ -197,4 +189,41 @@ button:hover {
 
 .step.completed:not(:last-child)::after {
   background-color: #007bff;
+}
+
+/* Responsive adjustments for checkout */
+@media (max-width: 768px) {
+  .checkout-container {
+    padding: 15px 10px;
+    margin: 10px;
+  }
+  .step-indicator {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .step {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .step-circle {
+    margin: 0 10px 0 0;
+  }
+  .step-description {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-form input[type="text"],
+  .checkout-form input[type="email"],
+  .checkout-form select,
+  .checkout-form textarea {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+  button {
+    width: 100%;
+    margin: 10px 0;
+  }
 }
