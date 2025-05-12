@@ -12,7 +12,7 @@ const initialState = {
   authenticated: false,
 };
 
-// Async thunk to fetch cart for authenticated user
+
 // Async thunk to fetch cart for authenticated user
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
@@ -41,11 +41,8 @@ export const syncMergedCart = createAsyncThunk(
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/cart/merge', guestCartItems.length ? { items: guestCartItems } : {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        }
-      });
+      // Use the configured api instance with baseURL and auth headers
+      const response = await api.post('/cart/merge', guestCartItems.length ? { items: guestCartItems } : {});
       console.log('syncMergedCart response:', response.data);
 
       localStorage.removeItem('guest_cart');
@@ -57,7 +54,6 @@ export const syncMergedCart = createAsyncThunk(
     }
   }
 );
-
 
 
 // Async thunk to add item to backend cart
