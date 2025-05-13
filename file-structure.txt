@@ -1,6 +1,6 @@
 Atelier-de-beaute Project File Structure (Relevant for Deployment)
 
-atelier-de-beaute/
+Atelier-De-Beaute
 ├── Backend/
 │   ├── app.py                  # Flask app entry point with create_app factory
 │   ├── wsgi.py                 # (Optional) WSGI entry point (not found in your case)
@@ -29,15 +29,7 @@ atelier-de-beaute/
 │   ├── build/                  # React production build output (generated)
 │   └── ...                    # Other frontend files and folders
 │
-├── atelier-de-beaute/README.md # Project README
+├── README.md # Project README
 └── .gitignore                  # Git ignore file
 
-Deployment Notes:
-- Backend service root directory: atelier-de-beaute/Backend
-- Backend build command: pip install -r requirements.txt
-- Backend start command: gunicorn -w 4 -b 0.0.0.0:$PORT app:create_app()
-- Frontend static site root directory: atelier-de-beaute/frontend
-- Frontend build command: npm install && npm run build
-- Frontend publish directory: build
 
-This structure and commands should be used to configure your Render services for deployment.
