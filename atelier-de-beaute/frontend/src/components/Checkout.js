@@ -179,7 +179,7 @@ const Checkout = () => {
         setShowPinPrompt(false);
         clearInterval(interval);
       }
-    }, 5000);
+    }, 15000);
 
 
   };
