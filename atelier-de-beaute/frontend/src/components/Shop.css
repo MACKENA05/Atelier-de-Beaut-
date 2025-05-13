@@ -232,24 +232,24 @@ body {
   box-shadow: 0 3px 8px rgba(255, 77, 166, 0.3);
 }
 
-.quantity-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ff1a8c, #cc0066);
-  transform: scale(1.08);
-}
-
-.quantity-button:active:not(:disabled) {
-  transform: scale(0.95);
+.quantity-button:hover {
+  background-color: #d4af37;
+  border-color: #c09f2e;
 }
 
 .quantity-button:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
+  opacity: 0.5;
+  background-color: #f0e1a1;
+  border-color: #e0c63f;
 }
 
 .quantity-display {
-  font-size: 14px;
-  font-weight: 500;
-  color: #222;
+  min-width: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
 }
 
 

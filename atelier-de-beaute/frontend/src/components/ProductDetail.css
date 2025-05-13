@@ -225,19 +225,16 @@ textarea {
 }
 
 .quantity-button {
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: #cc6c9c;
-  border: 1px solid #ccc;
+  background: linear-gradient(135deg, #ff4da6, #e60073);
+  border: 1px solid #cc005f;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 14px;
   cursor: pointer;
-  border-radius: 10px;
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.3s, border 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(255, 77, 166, 0.3);
 }
 
 .quantity-button:hover {
@@ -257,7 +254,7 @@ textarea {
   text-align: center;
   font-size: 16px;
   font-weight: 600;
-  color: #d4af37;
+  color: black;
 }
 
 /* Mobile Responsiveness */
