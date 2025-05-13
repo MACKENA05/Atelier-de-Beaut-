@@ -296,14 +296,14 @@
 }
 
 .quantity-button:hover:not(:disabled) {
-  background-color: #a52a52;
+  background-color: #b83863;
   border-color: #6e1a36;
   box-shadow: 0 8px 24px rgba(165, 42, 82, 1);
   transform: scale(1.2);
  }
 
 .quantity-button:active:not(:disabled) {
-  background-color: #6e1a36;
+  background-color: #bd184f;
   border-color: #3f0f21;
   box-shadow: 0 3px 8px rgba(110, 26, 54, 1);
   transform: scale(0.9);
