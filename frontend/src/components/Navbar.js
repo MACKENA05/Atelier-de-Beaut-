@@ -80,10 +80,7 @@ const Navbar = ({ onSearch, onFilterPrice, onCategorySelect }) => {
 
   return (
     <nav className="navbar">
-      <button className="menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
-        ☰
-      </button>
-      <ul className={`navbar-list ${menuOpen ? 'open' : ''}`}>
+      <ul className="navbar-list open">
         <li
           key="all-products"
           className="navbar-item"
