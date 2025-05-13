@@ -32,10 +32,6 @@ class CartItemSchema(Schema):
         if not first_url:
             return None
 
-        # Optionally prepend the backend base URL (uncomment if needed)
-        # base_url = "http://localhost:5000"  # Adjust based on your server
-        # if first_url.startswith('/'):
-        #     return f"{base_url}{first_url}"
         return first_url
 
     @post_dump
