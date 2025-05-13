@@ -9,11 +9,7 @@ const AdminPanel = ({ children }) => {
     const handleSearchChange = (e) => {
       setSearchTerm(e.target.value);
     };
-  
-    // Check if current path is /admin/shop
     const isAdminShop = location.pathname === '/admin/shop';
-  
-    // Clone children and pass searchTerm prop if on /admin/shop
     const childrenWithProps = isAdminShop && React.isValidElement(children)
       ? React.cloneElement(children, { searchTerm })
       : children;

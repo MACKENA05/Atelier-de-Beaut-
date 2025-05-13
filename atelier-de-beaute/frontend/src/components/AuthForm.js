@@ -13,7 +13,7 @@ const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Define all possible fields to avoid uncontrolled->controlled issues
+  // possible fields to avoid uncontrolled->controlled issues
   const initialValues = {
     username: '',
     email: '',
@@ -100,7 +100,7 @@ const AuthForm = () => {
             />
             <ErrorMessage name="username" component="div" className="auth-error" />
 
-            {/* Email field (only used in register) */}
+            
             {!isLogin && (
               <>
                 <label className="auth-label" htmlFor="email">Email:</label>
@@ -149,7 +149,7 @@ const AuthForm = () => {
             </div>
             <ErrorMessage name="password" component="div" className="auth-error" />
 
-            {/* Form-level errors */}
+          
             {errors.login && <div className="auth-error">{errors.login}</div>}
 
             {/* Submit button */}

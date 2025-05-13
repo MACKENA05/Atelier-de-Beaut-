@@ -9,8 +9,6 @@ import {
   fetchOverviewThunk,
 } from '../slice/analyticsSlice';
 import './AdminDashboard.css';
-
-// For charts, we can use recharts (assuming it's installed)
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell, ResponsiveContainer,
 } from 'recharts';
@@ -38,7 +36,7 @@ const AdminDashboard = () => {
     dispatch(fetchRevenueByCategoryThunk());
     dispatch(fetchOverviewThunk());
 
-    // Set interval to refresh analytics data every 30 seconds for real-time updates
+    // Setting interval to refresh analytics data every 30 seconds for real-time updates
     const intervalId = setInterval(() => {
       dispatch(fetchSales());
       dispatch(fetchOrders());

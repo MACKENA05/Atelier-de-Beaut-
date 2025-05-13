@@ -178,9 +178,8 @@
 .continue-shopping-button:hover {
   background-color: darkblue;
 }
-/* Responsive styles */
 
-/* Mobile devices */
+/* Responsive styles */
 @media (max-width: 768px) {
   .cart-item {
   flex-direction: column;
