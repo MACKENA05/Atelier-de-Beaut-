@@ -123,7 +123,7 @@ body {
 
 .product-price {
   font-size: 0.9rem;
-  color: #112977;
+  color: #444;
   margin: 2px 0 8px;
   transition: color 0.2s ease;
 }
@@ -209,31 +209,32 @@ body {
   transform: scale(1.05);
 }
 
+
 /* Quantity Controls */
 .quantity-control {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin: 8px 0;
+  gap: 8px;
+  margin: 6px 0;
 }
 
 .quantity-button {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-  border: none;
-  color: white;
+  background: linear-gradient(135deg, #ff4da6, #e60073);
+  border: 1px solid #cc005f;
+  color: #fff;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 10px;
-  padding: 10px 16px;
+  border-radius: 8px;
+  padding: 8px 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 3px 8px rgba(255, 77, 166, 0.3);
 }
 
 .quantity-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #4f46e5, #4338ca);
-  transform: scale(1.1);
+  background: linear-gradient(135deg, #ff1a8c, #cc0066);
+  transform: scale(1.08);
 }
 
 .quantity-button:active:not(:disabled) {
@@ -241,14 +242,14 @@ body {
 }
 
 .quantity-button:disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .quantity-display {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
-  color: #1f2a44;
+  color: #222;
 }
 
 

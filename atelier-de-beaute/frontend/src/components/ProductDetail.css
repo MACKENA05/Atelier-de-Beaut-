@@ -214,48 +214,51 @@ textarea {
   cursor: not-allowed;
 }
 
-/* Quantity Controls */
+/* Quantity Control */
 .quantity-control {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 10px;
-  margin: 8px 0;
+  margin-top: 10px;
+  justify-content: flex-start;
+  padding-left: 20px;
 }
 
 .quantity-button {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-  border: none;
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 10px;
-  padding: 10px 16px;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #cc6c9c;
+  border: 1px solid #ccc;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s, border 0.3s;
 }
 
-.quantity-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #4f46e5, #4338ca);
-  transform: scale(1.1);
-}
-
-.quantity-button:active:not(:disabled) {
-  transform: scale(0.95);
+.quantity-button:hover {
+  background-color: #d4af37;
+  border-color: #c09f2e;
 }
 
 .quantity-button:disabled {
-  opacity: 0.4;
   cursor: not-allowed;
+  opacity: 0.5;
+  background-color: #f0e1a1;
+  border-color: #e0c63f;
 }
 
 .quantity-display {
-  font-size: 15px;
-  font-weight: 500;
-  color: #1f2a44;
+  min-width: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #d4af37;
 }
-
 
 /* Mobile Responsiveness */
 @media (max-width: 1024px) {
