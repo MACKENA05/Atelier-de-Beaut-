@@ -209,7 +209,7 @@ body {
   transform: scale(1.05);
 }
 
-/* Quantity Controls */
+
 /* Quantity Controls */
 .quantity-control {
   display: flex;
@@ -255,7 +255,7 @@ body {
 
 /* Add to Cart - Hidden by default, shows on hover */
 .add-to-cart-button {
-  background: linear-gradient(135deg, #ff4d88, #ff80bf);
+  background: linear-gradient(135deg, #cc6c9c, #ecafce);
   color: white;
   font-weight: 600;
   padding: 8px 14px;

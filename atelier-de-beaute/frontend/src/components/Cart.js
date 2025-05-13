@@ -81,7 +81,7 @@ const Cart = () => {
     }
   };
 
-  // Calculate total price using discount_price if available and less than original price
+  // Calculating the total price using discount_price if available and less than original price
   const totalPrice = deduplicatedCartItems.reduce((total, item) => {
     const price = item.discount_price && item.discount_price < item.price ? item.discount_price : item.price;
     return total + price * item.quantity;
