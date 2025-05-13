@@ -57,21 +57,10 @@ const Navbar = ({ onSearch, onFilterPrice, onCategorySelect }) => {
     setMenuOpen(!menuOpen);
   };
 
-  // New state to track open dropdowns on mobile
-  const [openDropdowns, setOpenDropdowns] = React.useState({});
-
-  const toggleDropdown = (categoryId, e) => {
-    e.stopPropagation();
-    setOpenDropdowns(prev => ({
-      ...prev,
-      [categoryId]: !prev[categoryId]
-    }));
-  };
-
-  const renderSubcategories = (subcategories, parentId) => {
+  const renderSubcategories = (subcategories) => {
     if (!subcategories || subcategories.length === 0) return null;
     return (
-      <ul className="dropdown-menu" style={{ display: openDropdowns[parentId] ? 'block' : 'none' }}>
+      <ul className="dropdown-menu">
         {subcategories.map(subcat => (
           <li
             key={subcat.id}
@@ -82,7 +71,7 @@ const Navbar = ({ onSearch, onFilterPrice, onCategorySelect }) => {
             }}
           >
             {subcat.name}
-            {renderSubcategories(subcat.subcategories, subcat.id)}
+            {renderSubcategories(subcat.subcategories)}
           </li>
         ))}
       </ul>
