@@ -144,7 +144,6 @@ button[title]:hover {
   align-items: center;
   gap: 0.5rem;
   margin-top: 1rem;
-  flex-wrap: wrap;
 }
 
 .pagination button {
@@ -157,7 +156,6 @@ button[title]:hover {
   font-size: 0.9rem;
   font-weight: 600;
   transition: background-color 0.3s ease;
-  min-width: 60px;
 }
 
 .pagination button:disabled {
@@ -173,7 +171,6 @@ button[title]:hover {
   font-size: 0.95rem;
   color: #555;
   padding: 0 0.5rem;
-  white-space: nowrap;
 }
 
 /* Responsive styles for tables */
