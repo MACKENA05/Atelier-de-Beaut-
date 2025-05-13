@@ -17,6 +17,9 @@
   border: none;
   cursor: pointer;
   user-select: none;
+  color: #cc6c9c; /* Make hamburger icon visible with a pinkish color */
+  position: relative;
+  z-index: 1100;
 }
 
 .navbar-list {
