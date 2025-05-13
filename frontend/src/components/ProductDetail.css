@@ -1,0 +1,349 @@
+/* Product Detail Container */
+.product-detail-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffe7e9;
+  color: #333;
+}
+
+/* Product Image Section */
+.product-detail-image-section {
+  flex: 1 1 300px;
+  max-width: 500px;
+  position: relative;
+}
+
+.product-detail-image {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Thumbnail images for product */
+.image-thumbnails {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.thumbnail-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.thumbnail-image.selected {
+  border-color: #007bff;
+}
+
+/* Product Info Section */
+.product-detail-info-section {
+  flex: 2 1 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-detail-name {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color:#333
+}
+
+.product-detail-brand,
+.product-detail-price,
+.product-detail-quantity {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgb(2, 0, 0);
+}
+
+.product-detail-description {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.product-detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.average-rating-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Reviews */
+.product-detail-reviews {
+  margin-top: 2rem;
+}
+
+.review-item {
+  background-color:grey;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.review-comment {
+  margin: 0.5rem 0;
+  font-style: italic;
+}
+
+.review-author {
+  font-size: 0.9rem;
+  color:gold
+  ;
+  text-align: right;
+}
+
+/* Review Form */
+.product-detail-review-form {
+  margin-top: 2rem;
+  background-color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.product-detail-review-form h3 {
+  margin-bottom: 1rem;
+}
+
+.login-to-review {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.login-to-review a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-to-review a:hover {
+  text-decoration: underline;
+}
+
+/* Rating Stars */
+.rating-input {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.rating-input .star.filled {
+  color: #ffc107;
+}
+
+/* Error Message */
+.error-message {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Textarea */
+textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+}
+
+/* Submit Review Button */
+.submit-review-button {
+  margin-top: 1rem;
+  background-color: #cc6c9c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-review-button:hover {
+  background-color: #db4f95;
+}
+
+/* Add to Cart Button */
+.add-to-cart-button-detail {
+  margin-top: 1rem;
+  background-color: #cc6c9c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-button-detail:hover {
+  background-color: #ca4889;
+}
+
+.add-to-cart-button-detail:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Quantity Control */
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+
+.quantity-button {
+  background: linear-gradient(135deg, #ff4da6, #e60073);
+  border: 1px solid #cc005f;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(255, 77, 166, 0.3);
+}
+
+.quantity-button:hover {
+  background-color: #d4af37;
+  border-color: #c09f2e;
+}
+
+.quantity-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: #f0e1a1;
+  border-color: #e0c63f;
+}
+
+.quantity-display {
+  min-width: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  /* Adjust product detail container for medium-sized screens */
+  .product-detail-container {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+
+  .product-detail-image-section {
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .product-detail-info-section {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Adjust layout for smaller screens (tablets and phones) */
+  .product-detail-container {
+    padding: 1rem;
+  }
+
+  .product-detail-image-section,
+  .product-detail-info-section {
+    flex: 1 1 100%;
+  }
+
+  .product-detail-name {
+    font-size: 1.8rem; /* Smaller font for mobile */
+  }
+
+  .product-detail-brand,
+  .product-detail-price,
+  .product-detail-quantity {
+    font-size: 1rem;
+  }
+
+  .product-detail-description {
+    font-size: 0.9rem; /* Adjust description font size */
+  }
+
+  .quantity-control {
+    padding-left: 10px; /* Less padding on mobile */
+  }
+
+  .image-thumbnails {
+    gap: 0.3rem;
+    justify-content: center;
+  }
+
+  .thumbnail-image {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Adjust layout for very small screens (phones) */
+  .product-detail-name {
+    font-size: 1.6rem;
+  }
+
+  .product-detail-rating {
+    font-size: 1rem;
+  }
+
+  .product-detail-description {
+    font-size: 0.85rem;
+  }
+
+  .product-detail-review-form h3 {
+    font-size: 1.1rem;
+  }
+
+  .submit-review-button,
+  .add-to-cart-button-detail {
+    width: 100%; /* Full width for buttons */
+    font-size: 1rem;
+  }
+
+  .quantity-button {
+    font-size: 18px; /* Smaller button size */
+  }
+
+  .quantity-display {
+    font-size: 14px; /* Smaller quantity text */
+  }
+}

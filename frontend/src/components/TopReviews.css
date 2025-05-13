@@ -1,0 +1,56 @@
+.top-reviews-card {
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.top-reviews-list {
+  display: flex;
+  flex-direction: row; 
+  gap: 15px;
+  flex-wrap: wrap; 
+}
+
+.top-review-item {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: white;
+  flex: 1 1 30%; 
+  box-sizing: border-box; 
+}
+
+.top-review-item h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.top-review-item p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.top-review-rating {
+  color: #ffb400;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 4px;
+}
+
+.star {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background: url('data:image/svg+xml;utf8,<svg fill="%23ffb400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.847 1.416 8.23L12 18.896l-7.416 4.604L6 15.27 0 9.423l8.332-1.268z"/></svg>') no-repeat center center;
+  background-size: contain;
+}
+
+.star.empty {
+  background: url('data:image/svg+xml;utf8,<svg fill="%23ccc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.847 1.416 8.23L12 18.896l-7.416 4.604L6 15.27 0 9.423l8.332-1.268z"/></svg>') no-repeat center center;
+  background-size: contain;
+}
+
