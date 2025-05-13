@@ -3,9 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { clearCart, fetchCart, loadCartFromStorage } from '../slice/cartSlice';
+import { clearCart } from '../slice/cartSlice';
 import api from '../services/api';
 import { fetchUserOrders } from '../slice/orderSlice';
+import PaymentStatus from './PaymentStatus';
 import './Checkout.css';
 import './ErrorMessages.css';
 
@@ -24,8 +25,8 @@ const Checkout = () => {
   const [error, setError] = useState(null);
   const [paymentMessage, setPaymentMessage] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState(null);
   const [showPinPrompt, setShowPinPrompt] = useState(false);
+  const [orderId, setOrderId] = useState(null);
 
   useEffect(() => {
     if (!cartLoading) {
@@ -82,13 +83,13 @@ const Checkout = () => {
     setError(null);
     setPaymentMessage(null);
     setShowPinPrompt(false);
+    setOrderId(null);
   };
 
   const handlePlaceOrder = async () => {
     setError(null);
     setPaymentMessage(null);
     setPaymentLoading(true);
-    setPaymentStatus(null);
     setShowPinPrompt(false);
     try {
       // Construct payload matching backend expectations
@@ -122,21 +123,18 @@ const Checkout = () => {
   
       const orderResponse = await api.post('/orders/checkout', payload);
   
-      const orderId = orderResponse.data.id;
+      const newOrderId = orderResponse.data.id;
+      setOrderId(newOrderId);
   
       if (orderData.paymentMethod === 'mpesa') {
         setShowPinPrompt(true);
-        const paymentResponse = await api.post(`/payment/checkout/${orderId}`, {
+        const paymentResponse = await api.post(`/payment/checkout/${newOrderId}`, {
           phone_number: payload.phone_number,
         });
   
         setPaymentMessage(paymentResponse.data.message);
-        setPaymentStatus('initiated');
-        // Start polling payment status
-        pollPaymentStatus(orderId);
       } else {
         setPaymentMessage('Order placed successfully. Please pay on delivery.');
-        setPaymentStatus('completed');
       }
   
       dispatch(clearCart());
@@ -145,43 +143,10 @@ const Checkout = () => {
       
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to place order');
-      setPaymentStatus('failed');
       setShowPinPrompt(false);
     } finally {
       setPaymentLoading(false);
     }
-  };
-
-  const pollPaymentStatus = (orderId) => {
-    const interval = setInterval(async () => {
-      try {
-        const statusResponse = await api.get(`/payment/mpesa/status/${orderId}`);
-        const statusData = statusResponse.data;
-        if (statusData.status === 'completed') {
-          setPaymentMessage('Payment successful! Your order has been placed.');
-          setPaymentStatus('completed');
-          setShowPinPrompt(false);
-          clearInterval(interval);
-        } else if (statusData.status === 'failed') {
-          setPaymentMessage('Payment failed. Please try again.');
-          setPaymentStatus('failed');
-          setShowPinPrompt(false);
-          clearInterval(interval);
-        } else {
-          // Still pending, continue polling
-          setPaymentMessage('Payment pending. Please complete the payment on your phone.');
-          setPaymentStatus('pending');
-          setShowPinPrompt(true);
-        }
-      } catch (error) {
-        setPaymentMessage('Error checking payment status.');
-        setPaymentStatus('error');
-        setShowPinPrompt(false);
-        clearInterval(interval);
-      }
-    }, 15000);
-
-
   };
 
   return (
@@ -295,7 +260,7 @@ const Checkout = () => {
             <p><strong>Total:</strong> KES {(totalPrice + (orderData.shippingMethod === 'express' ? 15.00 : 5.00)).toFixed(2)}</p>
           </div>
           {error && <div className="error">{error}</div>}
-          {paymentMessage && <div className={`payment-message ${paymentStatus}`}>{paymentMessage}</div>}
+          {paymentMessage && <div className={`payment-message`}>{paymentMessage}</div>}
           {paymentLoading && <div>Processing payment, please wait...</div>}
           {showPinPrompt && (
             <div className="pin-prompt">
@@ -306,17 +271,19 @@ const Checkout = () => {
           <button onClick={handlePlaceOrder} disabled={paymentLoading}>Place Order</button>
         </div>
       )}
-   {step === 3 && (
-            <div>
-              <h1>Thank you for your order!</h1>
-              <p>View My order to check the status of your order.</p>
-              <button onClick={() => navigate('/shop')}>Continue Shopping</button>
-              <button onClick={() => navigate('/my-orders')}>View My Orders</button>
-            </div>
+      {step === 3 && orderId && (
+        <div className="confirmation-section">
+          <h2>Order Confirmation</h2>
+          <p>Thank you for your order!</p>
+          {orderData && orderData.paymentMethod === 'mpesa' && (
+            <PaymentStatus orderId={orderId} />
           )}
+          <button onClick={() => navigate('/shop')}>Continue Shopping</button>
+          <button onClick={() => navigate('/my-orders')}>View My Orders</button>
+        </div>
+      )}
     </div>
   );
 };
-
 
 export default Checkout;
