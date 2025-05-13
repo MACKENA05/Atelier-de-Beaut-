@@ -15,7 +15,7 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 24px;
   padding: 24px;
-  background-color: #fdf3f4;
+  background-color: #ffe7e9;
 }
 
 @media (max-width: 768px) {
@@ -122,7 +122,7 @@ body {
   font-size: 1rem;
   font-weight: 600;
   margin: 8px 0 6px;
-  color: #1f2a44;
+  color:black;
   transition: color 0.3s ease;
 }
 
@@ -131,9 +131,9 @@ body {
 }
 
 .product-price {
-  font-size: 0.9rem;
+  font-size: 1.0rem;
   font-weight: 500;
-  color: rgb(4, 4, 90);
+  color: rgb(14, 14, 134);
   margin: 2px 0 8px;
   transition: color 0.2s ease;
 }
