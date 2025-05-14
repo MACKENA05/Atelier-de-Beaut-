@@ -6,7 +6,6 @@ const Navbar = ({ onSearch, onFilterPrice, onCategorySelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [categories, setCategories] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     api.get('/products/categories')
@@ -50,11 +49,6 @@ const Navbar = ({ onSearch, onFilterPrice, onCategorySelect }) => {
     if (onCategorySelect) {
       onCategorySelect(categoryId);
     }
-    setMenuOpen(false); // Close menu on category select
-  };
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
   };
 
   const renderSubcategories = (subcategories) => {
@@ -80,7 +74,7 @@ const Navbar = ({ onSearch, onFilterPrice, onCategorySelect }) => {
 
   return (
     <nav className="navbar">
-      <ul className="navbar-list open">
+      <ul className="navbar-list">
         <li
           key="all-products"
           className="navbar-item"

@@ -59,7 +59,7 @@
   width: 100%;
   height: auto;
   max-height: 150px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 4px;
   transition: opacity 0.2s ease-in-out;
   aspect-ratio: 1 / 1;
@@ -106,4 +106,332 @@
   }
 }
 
-/* ... rest of the CSS remains unchanged ... */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #3d14af; 
+  color: #ee1811; 
+  padding: 1px 5px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: rotate(15deg);
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  line-height: 1;
+}
+
+.discount-badge:hover {
+  transform: rotate(0deg) scale(1.1); /* Straighten and scale on hover */
+}
+
+.discount-percent {
+  font-size: 8px;
+  margin-left: 2px;
+  vertical-align: super;
+}
+
+/* Responsive discount badge */
+@media (max-width: 480px) {
+  .discount-badge {
+    width: 40px;
+    height: 40px;
+    font-size: 10px;
+  }
+  .discount-percent {
+    font-size: 6px;
+  }
+}
+
+.out-of-stock-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4444;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Responsive out-of-stock badge */
+@media (max-width: 480px) {
+  .out-of-stock-badge {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}
+
+.product-card-content {
+  padding: 0 5px;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Change product name color on hover */
+.product-card:hover .product-name {
+  color: #ff69b4;
+}
+
+/* Responsive product name */
+@media (max-width: 480px) {
+  .product-name {
+    font-size: 14px;
+  }
+}
+
+.product-price {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Change product price color on hover */
+.product-card:hover .product-price {
+  color: #d81b60;
+}
+
+/* Responsive product price */
+@media (max-width: 480px) {
+  .product-price {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+}
+
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  flex-wrap: wrap;
+}
+
+/* Responsive filter bar */
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-bar {
+    padding: 10px;
+  }
+}
+
+.filter-bar select,
+.filter-bar input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-bar input {
+  flex-grow: 1;
+}
+
+.filter-bar button {
+  padding: 8px 16px;
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.filter-bar button:hover {
+  background-color: #ff1493;
+  transform: scale(1.05);
+}
+
+/* Quantity Controls */
+.quantity-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.quantity-button {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.quantity-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  transform: scale(1.1);
+}
+
+.quantity-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.quantity-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.quantity-display {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2a44;
+}
+
+
+/* Responsive quantity controls */
+@media (max-width: 480px) {
+  .quantity-button {
+    padding: 4px 8px;
+    font-size: 14px;
+  }
+  .quantity-display {
+    font-size: 14px;
+    min-width: 16px;
+  }
+}
+
+/* Add to Cart Button */
+.add-to-cart-button {
+  background: linear-gradient(135deg, #cc6c9c, #cc6c9c);
+  color: white;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  margin-top: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover .add-to-cart-button {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Always show Add to Cart on Mobile */
+@media (max-width: 768px) {
+  .add-to-cart-button {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* Responsive Add to Cart button */
+@media (max-width: 480px) {
+  .add-to-cart-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 0 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+}
+
+.pagination-next {
+  margin-left: 10px;
+}
+
+.pagination-info {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.pagination-info span {
+  font-size: 14px;
+}
+
+.pagination select {
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Responsive pagination */
+@media (max-width: 768px) {
+  .pagination {
+    flex-direction: column;
+    padding: 0 15px;
+  }
+  .pagination-info {
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    padding: 0 10px;
+  }
+  .pagination button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .pagination-info span {
+    font-size: 12px;
+  }
+  .pagination select {
+    font-size: 12px;
+  }
+}
